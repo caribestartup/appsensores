@@ -136,11 +136,16 @@ class LoteController extends Controller
     {
         $model = $this->findModel($id);
 
+        $query = "SELECT pedido.*"
+        . "FROM pedido WHERE pedido.id=".$model->pedido."";
+        $pedido = Pedido::findBySql($query)->all();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'pedido' => $pedido
             ]);
         }
     }
