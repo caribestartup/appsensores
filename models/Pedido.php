@@ -41,8 +41,7 @@ class Pedido extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'identificador' => Yii::t('app', 'Identifier'),
-            'velocidad' => Yii::t('app', 'Velocidad')
+            'identificador' => Yii::t('app', 'Identifier')
             // 'inicio' => Yii::t('app', 'Begin'),
             // 'fin' => Yii::t('app', 'End'),
         ];

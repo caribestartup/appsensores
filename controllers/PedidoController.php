@@ -99,7 +99,7 @@ class PedidoController extends Controller
         $query_lote = "SELECT lote.*"
                   . "FROM lote WHERE lote.pedido=".$id."";
 
-        $lotes = Pedido::findBySql($query_lote)->all();
+        $lotes = Lote::findBySql($query_lote)->all();
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $lotes,
