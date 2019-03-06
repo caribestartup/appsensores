@@ -1,0 +1,189 @@
+body {
+	background-color: #fff;
+}
+
+.container-main{
+	margin-top: 20px;
+	overflow: hidden;
+}
+
+.kyp-menu{
+	position: fixed;
+	top:3px;
+	height: 130px;
+	width: 80%;
+	left: 10%;
+    z-index: 2000;
+    transition: top 0.5s ease-in-out;
+}
+
+#menu-img-back{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.nav-up {
+    top: -133px;
+}
+
+.nav-showed{
+	top: 20px;
+}
+
+.wrap{
+	margin-top: 120px;
+}
+
+.menu-container {
+	position: absolute;
+	width: 90%;
+	left: 5%;
+	transition: top 0.5s ease-in-out;
+}
+
+.menu-block{
+	text-align: center;
+}
+
+.menu-block label{
+	font-size: 18px;
+}
+
+.menu-img{
+	width: 7%;
+}
+
+.machine-img{
+	width: 10%;
+}
+
+.machine{
+	height: 190px;
+	width: 100%;
+	position: relative;
+	background-size: cover;
+	background-position: center;
+	margin-top: 10px;
+	cursor: pointer;
+	transition: 0.8s ease-out;
+	margin-bottom: 10px;
+}
+
+.machine-container-right{
+	text-align: right;
+}
+
+.machine-description {
+	top: 5px;
+	position: absolute;
+}
+
+.machine-description label{
+	margin-bottom: 0px;
+}
+
+.machine-ok:hover {
+	transform: scale(1.05) translateX(20px);
+}
+
+.machine-off:hover {
+	transform: scale(1.05) translateX(20px);
+}
+
+.machine-error:hover {
+	transform: scale(1.05) translateX(-20px);
+}
+
+.machine-back-img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+}
+
+.menu-shadow-left {
+	content: "";
+	height: 4px;
+	width: 100px;
+	transform: rotate(60deg);
+	position: absolute;
+	top: 27px;
+	left: -5%;
+	box-shadow: 0px 10px 10px #38383833;
+}
+
+.menu-shadow-right {
+	content: "";
+	height: 4px;
+	width: 100px;
+	transform: rotate(-60deg);
+	position: absolute;
+	top: 27px;
+	right: -7%;
+	box-shadow: 0px 10px 10px #38383833;
+}
+
+.sub-menu{
+	position: relative;
+	height: 150px;
+}
+
+.sub-menu::before, .sub-menu::after {
+	z-index: -1;
+	position: absolute;
+	content: "";
+	bottom: -4px;
+	left: 0px;
+	width: 100%;
+	top: 100%;
+	max-width: 49%;
+	box-shadow: 0px 0px 20px #38383833;
+}
+
+.sub-menu::after {
+	right: 10px;
+	left: auto;
+}
+
+.sub-menu-title{
+	text-align: center;	
+}
+
+.img-menu-item{
+	width: 10%;
+}
+
+
+@media(min-width: 1900px){
+	.machine{
+	height: 190px;
+	width: 100%;
+	position: relative;
+	background-size: cover;
+	background-position: center;
+	margin-top: 50px;
+	cursor: pointer;
+	transition: 0.8s ease-out;
+	margin-bottom: 10px;
+}
+
+}
+
+@media(max-width: 1200px){
+	.machine{
+	height: 110px;
+	width: 100%;
+	position: relative;
+	background-size: cover;
+	background-position: center;
+	margin-top: 10px;
+	cursor: pointer;
+	transition: 0.8s ease-out;
+	margin-bottom: 10px;
+}
+
+}
+

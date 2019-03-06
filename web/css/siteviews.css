@@ -1,0 +1,32 @@
+/*LOGIN*/
+.login-head{
+	text-align: center;
+}
+
+.login-head img{
+	width: 30%;
+}
+
+.login-head h2{
+	padding-top: 0px;
+	margin-top: 0px;
+	margin-bottom: 30px;
+	color: #065388;
+}
+
+/*LOCAL INDEX*/
+.plan-container{
+	position: relative;
+}
+.mecha{
+	border: solid 1px #3333;
+}
+.rotator {
+	z-index: 90;
+	background-color: black;
+	width: 16px;
+	height: 16px;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
