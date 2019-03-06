@@ -16,7 +16,7 @@ use app\models\User;
 use app\models\UserTurno;
 use app\helpers\UiHelper;
 use yii\data\ArrayDataProvider;
-use app\models\Drange; 
+use app\models\Drange;
 use yii\filters\AccessControl;
 
 /**
@@ -48,7 +48,7 @@ class TurnoController extends Controller
                         return User::roleInArray($valid_roles) && User::isActive();
                         }
                     ],
-                  
+
                 ],
             ],
             'verbs' => [
@@ -89,8 +89,6 @@ class TurnoController extends Controller
 
         $users = User::findBySql($query)->all();
 
-
-        
         $dataProvider = new ArrayDataProvider([
             'allModels' => $users,
         ]);
@@ -157,7 +155,7 @@ class TurnoController extends Controller
         $user_turno = new UserTurno();
         $user_turno->user = $id;
         if (Yii::$app->request->post('UserTurno')) {
-    
+
             $verify = UserTurno::find()->where(['user' => Yii::$app->request->post('UserTurno')['user'], 'turno' => Yii::$app->request->post('UserTurno')['turno']])->one();
 
             if ($verify != null) {
@@ -185,9 +183,9 @@ class TurnoController extends Controller
             $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
-          
-           
-           
+
+
+
         }else{
             $tday = date('Y-m-d');
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
@@ -199,10 +197,10 @@ class TurnoController extends Controller
         $maqref = new Maquina();
         $drange = new Drange();
 
-       
+
         $last30Graph = [];
         $labelLast30Graph = [];
-  
+
 
         $errorsGraph = [];
         $tempErrors = [];
@@ -225,9 +223,9 @@ class TurnoController extends Controller
 
         foreach($fechas as $date)
             {
-                
+
                 $labelLast30Graph[] = substr($date,5,5);
-            
+
             }
 
 
@@ -261,7 +259,7 @@ class TurnoController extends Controller
                     foreach ($temp as $te) {
                         $hora = Totales::findOne($te['id_totales'])->hora_inicio;
                         $index = array_search(substr($hora, 0,10), $fechas);
-                        $values[$index] = $te['error'];   
+                        $values[$index] = $te['error'];
                     }
                     array_push($toload, $values);
 
@@ -278,7 +276,7 @@ class TurnoController extends Controller
              }
 
          }
-         
+
 
          return $this->render('charts',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph,'errorsGraph' => $errorsGraph,'maqref' => $maqref,'drange' => $drange, 'errorsName' => $errorsName]);
     }
@@ -292,9 +290,9 @@ class TurnoController extends Controller
             $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
-          
-           
-           
+
+
+
         }else{
             $tday = date('Y-m-d');
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
@@ -307,18 +305,18 @@ class TurnoController extends Controller
         $drange = new Drange();
         $turnoref = Turno::findOne($id);
 
-       
+
         $last30Graph = [];
         $labelLast30Graph = [];
-  
+
 
         $errorsGraph = [];
         $tempErrors = [];
         $values = [];
         $toload = [];
         $errorsName = [];
-        
-        
+
+
         $fechas = $this::fechas($last30, $tday);
         $errors = Parciales::find()->groupBy('nombre_ventana')->all();
 
@@ -329,9 +327,9 @@ class TurnoController extends Controller
 
         foreach($fechas as $date)
             {
-                
+
                 $labelLast30Graph[] = substr($date,5,5);
-            
+
             }
 
 
@@ -364,12 +362,12 @@ class TurnoController extends Controller
                     foreach ($temp as $te) {
                         $hora = Totales::findOne($te['id_totales'])->hora_inicio;
                         $index = array_search(substr($hora, 0,10), $fechas);
-                        $values[$index] = $te['error'];   
+                        $values[$index] = $te['error'];
                     }
                     array_push($toload, $values);
 
                 }
-                
+
                     $count = 0;
                     foreach ($toload as $tl) {
                         $color = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
@@ -383,8 +381,8 @@ class TurnoController extends Controller
              }
 
          }
-         
-       
+
+
          return $this->render('performance',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph,'errorsGraph' => $errorsGraph,'maqref' => $maqref,'drange' => $drange, 'turnoref' => $turnoref]);
 
     }
@@ -398,9 +396,9 @@ class TurnoController extends Controller
             $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
-          
-           
-           
+
+
+
         }else{
             $tday = date('Y-m-d');
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
@@ -413,10 +411,10 @@ class TurnoController extends Controller
         $drange = new Drange();
         $turnoref = Turno::findOne($id);
 
-       
+
         $last30Graph = [];
         $labelLast30Graph = [];
-  
+
 
         $errorsGraph = [];
         $tempErrors = [];
@@ -433,9 +431,9 @@ class TurnoController extends Controller
 
         foreach($fechas as $date)
             {
-                
+
                 $labelLast30Graph[] = substr($date,5,5);
-            
+
             }
 
 
@@ -468,7 +466,7 @@ class TurnoController extends Controller
                     foreach ($temp as $te) {
                         $hora = Totales::findOne($te['id_totales'])->hora_inicio;
                         $index = array_search(substr($hora, 0,10), $fechas);
-                        $values[$index] = $te['error'];   
+                        $values[$index] = $te['error'];
                     }
                     array_push($toload, $values);
 
@@ -476,13 +474,13 @@ class TurnoController extends Controller
                     array_push($last30Graph,['label' => Yii::t('app','% Deviation'),'data' => $model->getTotalrech($last30,$today), 'borderColor' => 'rgb(216,76,26)', 'backgroundColor' => 'rgb(216,76,26)']);
                     array_push($last30Graph,['label' => Yii::t('app','Real Production'),'data' => $model->getTotalprod($last30,$today), 'borderColor' => 'rgb(40,45,250)', 'backgroundColor' => 'rgb(40,45,250)']);
                     array_push($last30Graph,['label' => Yii::t('app','Planned Production'),'data' => $model->getTotalprodest($last30,$today),'borderColor' => 'rgb(40,250,40)', 'backgroundColor' => 'rgb(40,250,40)']);
-                   
+
 
              }
 
          }
-         
-       
+
+
          return $this->render('performancebar',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph,'errorsGraph' => $errorsGraph,'maqref' => $maqref,'drange' => $drange, 'turnoref' => $turnoref]);
 
     }
@@ -496,9 +494,9 @@ class TurnoController extends Controller
             $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
-          
-           
-           
+
+
+
         }else{
             $tday = date('Y-m-d');
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
@@ -510,10 +508,10 @@ class TurnoController extends Controller
         $maqref = new Maquina();
         $drange = new Drange();
 
-       
+
         $last30Graph = [];
         $labelLast30Graph = [];
-  
+
 
         $errorsGraph = [];
         $tempErrors = [];
@@ -530,9 +528,9 @@ class TurnoController extends Controller
 
         foreach($fechas as $date)
             {
-                
+
                 $labelLast30Graph[] = substr($date,5,5);
-            
+
             }
 
 
@@ -565,12 +563,12 @@ class TurnoController extends Controller
                     foreach ($temp as $te) {
                         $hora = Totales::findOne($te['id_totales'])->hora_inicio;
                         $index = array_search(substr($hora, 0,10), $fechas);
-                        $values[$index] = $te['error'];   
+                        $values[$index] = $te['error'];
                     }
                     array_push($toload, $values);
 
                 }
-                
+
                    $color = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
                     //array_push($last30Graph,['type' => 'line','label' => 'Producción Estimada','data' => $model->getTotalprodest($last30,$today),'fill' => 'false', 'borderColor' => 'rgb(40,250,40)', 'backgroundColor' => 'rgb(40,250,40)']);
                     array_push($last30Graph,['label' => $model->identificador,'data' => $model->getTotalprod($last30,$today),'fill' => 'false', 'borderColor' => 'rgb('.$color.')', 'backgroundColor' => 'rgb('.$color.')']);
@@ -578,8 +576,8 @@ class TurnoController extends Controller
              }
 
          }
-         
-       
+
+
          return $this->render('performanceall',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph,'errorsGraph' => $errorsGraph,'maqref' => $maqref,'drange' => $drange]);
 
     }
