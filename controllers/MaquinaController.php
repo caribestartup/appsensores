@@ -101,30 +101,30 @@ class MaquinaController extends Controller
         $dataProvider = $searchModel->search(Maquina::getAviableMachines());
 
         $turno_user = (new \yii\db\Query())
-        ->select('user_turno.id, user_turno.turno, turno.identificador')
-        ->leftJoin('turno', 'turno.id = user_turno.turno')
-        ->from('user_turno')
-        ->where([
-          'user_turno.user' => Yii::$app->user->identity->getId(),
-        ])
-        ->all();
+                    ->select('user_turno.id, user_turno.turno, turno.identificador')
+                    ->leftJoin('turno', 'turno.id = user_turno.turno')
+                    ->from('user_turno')
+                    ->where([
+                      'user_turno.user' => Yii::$app->user->identity->getId(),
+                    ])
+                    ->all();
 
         $turnoUsuarioMaquina = new TurnoUsuarioMaquina();
-
 
         if ($turnoUsuarioMaquina->load(Yii::$app->request->post())) {
             $selection = Yii::$app->request->post()['selection'];
             $tur = $turnoUsuarioMaquina->turno_usuario_id;
-            // print_r($turnoUsuarioMaquina);
-            foreach ($selection as $maq) {
-              $turnoUsuarioMaquina->turno_usuario_id = $tur;
-              $turnoUsuarioMaquina->maquina_id = $maq;
-              $turnoUsuarioMaquina->fecha = date("Y-m-d");
 
-              if(!$turnoUsuarioMaquina->exit($tur, $maq, date("Y-m-d"))) {
-                $turnoUsuarioMaquina->save();
-                $turnoUsuarioMaquina = new TurnoUsuarioMaquina();
-              }
+            foreach ($selection as $maq) {
+                $turnoUsuarioMaquina->turno_usuario_id = $tur;
+                $turnoUsuarioMaquina->maquina_id = $maq;
+                $turnoUsuarioMaquina->borrar = 0;
+                $turnoUsuarioMaquina->fecha = date("Y-m-d");
+
+                if(!$turnoUsuarioMaquina->exits($tur, $maq, date("Y-m-d"))) {
+                    $turnoUsuarioMaquina->save();
+                    $turnoUsuarioMaquina = new TurnoUsuarioMaquina();
+                }
             }
             return $this->redirect(['site/index']);
 
@@ -136,7 +136,6 @@ class MaquinaController extends Controller
                 'turnoUsuarioMaquina' => $turnoUsuarioMaquina
             ]);
         }
-
     }
 
      public function actionProduction($id)

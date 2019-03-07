@@ -63,7 +63,7 @@ $this->title = 'WELCOME';
 			</div>
 
 			<div class="col-md-2 col-md-offset-2">
-				<a class="option-reference" href="<?= Url::toRoute('/maquina/charts')?>"><img class="img-responsive" src="<?= Url::to('res/icon_charts.png')?>"><?php echo Yii::t('app','GRAPHS') ?></a>
+				<a class="option-reference" href="<?= Url::toRoute('/asignacion/index')?>"><?php echo Yii::t('app','Assign Machines') ?></a>
 			</div>
 
 			<div class="col-md-2 col-md-offset-2">

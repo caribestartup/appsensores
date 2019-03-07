@@ -49,12 +49,13 @@ class TurnoUsuarioMaquina extends \yii\db\ActiveRecord
         ];
     }
 
-    public function exit($tur, $maq, $fec)
+    public function exits($tur, $maq, $fec)
     {
       $maquina = (new \yii\db\Query())
       ->from('turno_usuario_maquina')
       ->where([
         'turno_usuario_id' => $tur,
+        'borrar' => 0,
         'maquina_id' => $maq,
         'fecha' => $fec
       ])
@@ -65,6 +66,25 @@ class TurnoUsuarioMaquina extends \yii\db\ActiveRecord
       } else {
         return false;
       }
+    }
+
+    public function getMaquinaAssign()
+    {
+
+        $maquina = (new \yii\db\Query())
+        ->select('maquina.maquina_id, maquina.nombre, turno_usuario_maquina.fecha, turno_usuario_maquina.id')
+        ->leftJoin('user_turno', 'user_turno.id = turno_usuario_maquina.turno_usuario_id')
+        ->leftJoin('user', 'user.id = user_turno.user')
+        ->leftJoin('maquina', 'maquina.maquina_id = turno_usuario_maquina.maquina_id')
+        ->from('turno_usuario_maquina')
+        ->where([
+        'user.id' => Yii::$app->user->identity->getId(),
+        'turno_usuario_maquina.borrar' => 0,
+        'turno_usuario_maquina.fecha' => date("Y-m-d")
+        ])
+        ->all();
+
+        return $maquina;
     }
 
 

@@ -9,7 +9,8 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel app\models\MaquinaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Link Machines');
+$this->title = Yii::t('app', 'Assign Machines');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Machines Assigned'), 'url' => ['asignacion/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -81,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         <div class="form-group">
-            <?= Html::submitButton(Yii::t('app', 'Link'), ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(Yii::t('app', 'Assign Machines'), ['class' => 'btn btn-info']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
