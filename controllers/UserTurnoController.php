@@ -66,7 +66,9 @@ class UserTurnoController extends Controller
     {
         $model = new UserTurno();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            // $model->fecha = date("Y-m-d");
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

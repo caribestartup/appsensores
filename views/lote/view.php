@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $model app\models\Turno */
 
 $this->title = $model[0]->identificador;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Orders: '.$model[0]->identificador), 'url' => ['view', 'id'=>$model[0]->id]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Orders: '.$pedido[0]->identificador), 'url' => ['pedido/view', 'id'=>$pedido[0]->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 // print_r($lotes);

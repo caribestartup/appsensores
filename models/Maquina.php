@@ -80,7 +80,7 @@ class Maquina extends \yii\db\ActiveRecord
     }
 
     public function getRealstate()
-    {   
+    {
         $state = -1;
         if ($this->estado == 0) {
             $state = 0;
@@ -136,14 +136,14 @@ class Maquina extends \yii\db\ActiveRecord
                     }
         foreach($recordLast30 as $weight)
                 {
-    
+
                 //Sets weight rounded 2 points
                     $index = array_search(substr($weight['hora_inicio'], 0,10), $fechas);
-                    $weights[$index] = $weight["terror"];              
-                }   
-                
+                    $weights[$index] = $weight["terror"];
+                }
+
         return $weights;
-        
+
     }
 
     public function getPartialerrors($sd, $ed)
@@ -152,7 +152,7 @@ class Maquina extends \yii\db\ActiveRecord
         $queryLast30 = "SELECT parciales.*, SUM(parciales.total_error) AS error, SUM(parciales.total) AS terror " . "FROM totales,parciales WHERE totales.mac ='".$this->maquina_id."' and totales.hora_inicio > '".$sd."' and totales.hora_inicio < '".$ed."' and parciales.id_totales=totales.id GROUP BY totales.fecha, parciales.ventana";
         $sql= Yii::$app->db->createCommand($queryLast30);
         $recordLast30 = $sql->queryAll();
-                
+
         return $recordLast30;
 
     }
@@ -173,14 +173,14 @@ class Maquina extends \yii\db\ActiveRecord
                     }
         foreach($recordLast30 as $weight)
                 {
-    
+
                 //Sets weight rounded 2 points
                     $index = array_search(substr($weight['hora_inicio'], 0,10), $fechas);
-                    $weights[$index] = $weight["totalprev"];              
-                }   
-                
+                    $weights[$index] = $weight["totalprev"];
+                }
+
         return $weights;
-        
+
     }
 
     public function getTotalprod($sd, $ed)
@@ -198,14 +198,14 @@ class Maquina extends \yii\db\ActiveRecord
                     }
         foreach($recordLast30 as $weight)
                 {
-    
+
                 //Sets weight rounded 2 points
                     $index = array_search(substr($weight['hora_inicio'], 0,10), $fechas);
-                    $weights[$index] = $weight["totalprev"];              
-                }   
-                
+                    $weights[$index] = $weight["totalprev"];
+                }
+
         return $weights;
-        
+
     }
 
     public function getTotalrech($sd, $ed)
@@ -223,14 +223,14 @@ class Maquina extends \yii\db\ActiveRecord
                     }
         foreach($recordLast30 as $weight)
                 {
-    
+
                 //Sets weight rounded 2 points
                     $index = array_search(substr($weight['hora_inicio'], 0,10), $fechas);
-                    $weights[$index] = $weight["totalprev"];              
-                }   
-                
+                    $weights[$index] = $weight["totalprev"];
+                }
+
         return $weights;
-        
+
     }
 
     public function fechas($start, $end) {
@@ -261,22 +261,22 @@ class Maquina extends \yii\db\ActiveRecord
         }else{
             return 0;
         }
-  
+
     }
 
     public function getTotalprodn()
     {
-        
+
         $queryLast30 = "SELECT SUM(total) AS totalprev " . "FROM totales WHERE mac ='".$this->maquina_id."' and hora_inicio > '".date('Y-m-d')."'GROUP BY DATE(fecha) ORDER BY DATE(hora_inicio)";
         $sql= Yii::$app->db->createCommand($queryLast30);
         $recordLast30 = $sql->queryAll();
-        
+
         if (count($recordLast30) != 0) {
             return $recordLast30[0]["totalprev"];
         }else{
             return 0;
         }
-        
+
     }
 
      public function getTotalprodestnall()
@@ -291,42 +291,42 @@ class Maquina extends \yii\db\ActiveRecord
         }else{
             return 0;
         }
-  
+
     }
 
     public function getTotalprodnall()
     {
-        
+
         $queryLast30 = "SELECT SUM(total) AS totalprev " . "FROM totales WHERE hora_inicio > '".date('Y-m-d')."'GROUP BY DATE(fecha) ORDER BY DATE(hora_inicio)";
         $sql= Yii::$app->db->createCommand($queryLast30);
         $recordLast30 = $sql->queryAll();
-        
+
         if (count($recordLast30) != 0) {
             return $recordLast30[0]["totalprev"];
         }else{
             return 0;
         }
-        
+
     }
 
     public function getTotalerrornall()
     {
-        
+
         $queryLast30 = "SELECT SUM(total_error) AS totalprev " . "FROM totales WHERE hora_inicio > '".date('Y-m-d')."'GROUP BY DATE(fecha) ORDER BY DATE(hora_inicio)";
         $sql= Yii::$app->db->createCommand($queryLast30);
         $recordLast30 = $sql->queryAll();
-        
+
         if (count($recordLast30) != 0) {
             return $recordLast30[0]["totalprev"];
         }else{
             return 0;
         }
-        
+
     }
 
     public function getLasturno()
     {
-       $queryLast30 = "SELECT turno.* " . "FROM totales,turno WHERE hora_inicio > '".date('Y-m-d')."' and turno.id = totales.turno GROUP BY DATE(hora_inicio) ORDER BY DATE(hora_inicio) DESC LIMIT 1";
+        $queryLast30 = "SELECT turno.* " . "FROM totales,turno WHERE hora_inicio > '".date('Y-m-d')."' and turno.id = totales.turno GROUP BY DATE(hora_inicio) ORDER BY DATE(hora_inicio) DESC LIMIT 1";
         $sql= Yii::$app->db->createCommand($queryLast30);
         $recordLast30 = $sql->queryAll();
 
@@ -336,11 +336,37 @@ class Maquina extends \yii\db\ActiveRecord
     public function getdropdownlocales(){
         $dropdown = Local::find()->asArray()->all();
         return ArrayHelper::map($dropdown, 'local_id', 'nombre');
-    }   
+    }
 
     public function getLocalname(){
         $find_turno = Local::find() ->where(['local_id' => $this->local])->one();
         return $find_turno->nombre;
+    }
+
+    public function getAviableMachines()
+    {
+        // $query = "SELECT * " . "FROM turno_usuario_maquina
+        //                                 join user_turno on turno_usuario_maquina.turno_usuario_id = user_turno.id
+        //                                 join turno on user_turno.turno = turno.id
+        //                                 WHERE turno.inicio < '".date('H:i:s')."' and turno.fin > '".date('H:i:s')."'
+        //                                 and  turno_usuario_maquina.fecha = '".date('Y-m-d')."'";
+        // $sql= Yii::$app->db->createCommand($query);
+        // $record = $sql->queryAll();
+        //
+        //
+        // print_r($record);
+        //
+        // $maquinas = Maquina::find()->all();
+        // $libres = array();
+        //
+        // foreach ($maquinas as $key => $maquina) {
+        //
+        //
+        // }
+
+
+
+        return Maquina::find()->all();
     }
 
 

@@ -23,37 +23,56 @@ $this->title = 'WELCOME';
 </div>
 
 <div class="section-options">
-	<div class="row">
+	<?php if( Yii::$app->user->identity->getRole() != 'Operator' ) { ?>
+		<div class="row">
 
-		<div class="col-md-2 col-md-offset-1">
-			<a class="option-reference"  href="<?= Url::toRoute('/user/index')?>"><img class="img-responsive" src="<?= Url::to('res/icon_profile.png')?>"><?php echo Yii::t('app','USERS') ?></a>
+			<div class="col-md-2 col-md-offset-1">
+				<a class="option-reference"  href="<?= Url::toRoute('/user/index')?>"><img class="img-responsive" src="<?= Url::to('res/icon_profile.png')?>"><?php echo Yii::t('app','USERS') ?></a>
+			</div>
+
+			<div class="col-md-2 col-md-offset-2">
+				<a class="option-reference" href="<?= Url::toRoute('/user/operarios')?>"><img class="img-responsive" src="<?= Url::to('res/icon_operator.png')?>"><?php echo Yii::t('app','OPERATORS\' PERFORMANCE') ?></a>
+			</div>
+
+			<div class="col-md-2 col-md-offset-2">
+				<a class="option-reference" href="<?= Url::toRoute('/turno/index')?>"><img class="img-responsive" src="<?= Url::to('res/icon_gauge.png')?>"><?php echo Yii::t('app','WORK SHIFTS') ?></a>
+			</div>
+
 		</div>
 
-		<div class="col-md-2 col-md-offset-2">
-			<a class="option-reference" href="<?= Url::toRoute('/user/operarios')?>"><img class="img-responsive" src="<?= Url::to('res/icon_operator.png')?>"><?php echo Yii::t('app','OPERATORS\' PERFORMANCE') ?></a>
+		<div class="row">
+
+			<div class="col-md-2 col-md-offset-1">
+				<a class="option-reference" href="<?= Url::toRoute('/site/proccess')?>"><img class="img-responsive" src="<?= Url::to('res/icon_proccess.png')?>"><?php echo Yii::t('app','PROCESS') ?></a>
+			</div>
+
+			<div class="col-md-2 col-md-offset-2">
+				<a class="option-reference" href="<?= Url::toRoute('/maquina/charts')?>"><img class="img-responsive" src="<?= Url::to('res/icon_charts.png')?>"><?php echo Yii::t('app','GRAPHS') ?></a>
+			</div>
+
+			<div class="col-md-2 col-md-offset-2">
+				<a class="option-reference" href="<?= Url::toRoute('/local/index')?>"><img class="img-responsive" src="<?= Url::to('res/icon_map.png')?>"><?php echo Yii::t('app','EDIT PLANE') ?></a>
+			</div>
+
 		</div>
+	<?php } else {?>
+		<div class="row">
 
-		<div class="col-md-2 col-md-offset-2">
-			<a class="option-reference" href="<?= Url::toRoute('/turno/index')?>"><img class="img-responsive" src="<?= Url::to('res/icon_gauge.png')?>"><?php echo Yii::t('app','WORK SHIFTS') ?></a>
+			<div class="col-md-2 col-md-offset-1">
+				<a class="option-reference" href="<?= Url::toRoute('/maquina/assigne')?>"><?php echo Yii::t('app','Link Machine') ?></a>
+			</div>
+
+			<div class="col-md-2 col-md-offset-2">
+				<a class="option-reference" href="<?= Url::toRoute('/maquina/charts')?>"><img class="img-responsive" src="<?= Url::to('res/icon_charts.png')?>"><?php echo Yii::t('app','GRAPHS') ?></a>
+			</div>
+
+			<div class="col-md-2 col-md-offset-2">
+				<a class="option-reference" href="<?= Url::toRoute('/local/index')?>"><img class="img-responsive" src="<?= Url::to('res/icon_map.png')?>"><?php echo Yii::t('app','EDIT PLANE') ?></a>
+			</div>
+
 		</div>
+	<?php }?>
 
-	</div>
-
-	<div class="row">
-
-		<div class="col-md-2 col-md-offset-1">
-			<a class="option-reference" href="<?= Url::toRoute('/site/proccess')?>"><img class="img-responsive" src="<?= Url::to('res/icon_proccess.png')?>"><?php echo Yii::t('app','PROCESS') ?></a>
-		</div>
-
-		<div class="col-md-2 col-md-offset-2">
-			<a class="option-reference" href="<?= Url::toRoute('/maquina/charts')?>"><img class="img-responsive" src="<?= Url::to('res/icon_charts.png')?>"><?php echo Yii::t('app','GRAPHS') ?></a>
-		</div>
-
-		<div class="col-md-2 col-md-offset-2">
-			<a class="option-reference" href="<?= Url::toRoute('/local/index')?>"><img class="img-responsive" src="<?= Url::to('res/icon_map.png')?>"><?php echo Yii::t('app','EDIT PLANE') ?></a>
-		</div>
-
-	</div>
 </div>
 
 </div>

@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\Turno */
 
-$this->title = Yii::t('app', 'New Lot');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Lots'), 'url' => ['index']];
+$this->title = Yii::t('app', 'New Lot for '.$pedido[0]->identificador);
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'order '.$pedido[0]->identificador), 'url' => ['pedido/view', 'id'=>$pedido[0]->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body">
                      <?= $this->render('_form', [
                         'model' => $model,
-												'pedido' => $pedido
+						'pedido' => $pedido
                     ]) ?>
 
 

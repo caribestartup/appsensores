@@ -7,10 +7,14 @@ use yii\helpers\Html;
 
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
     'modelClass' => 'Turno',
-]) . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Work Shifts'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->identificador, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+]) . $lote->id;
+// $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Work Shifts'), 'url' => ['index']];
+// $this->params['breadcrumbs'][] = ['label' => $model->identificador, 'url' => ['view', 'id' => $model->id]];
+// $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+
+$this->title = Yii::t('app', 'Update Lot for '.$pedido[0]->identificador);
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'order '.$pedido[0]->identificador), 'url' => ['pedido/view', 'id'=>$pedido[0]->id]];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="turno-update">
 
@@ -20,7 +24,7 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             </div>
             <div class="box-body">
                  <?= $this->render('_form', [
-                    'model' => $model,
+                    'model' => $lote,
                 ]) ?>
             </div>
         </div>

@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Orders'), 'url' => [
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-2 col-md-offset-5 section-options">
       <?php
 
@@ -25,11 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
        ?>
         <a class="option-reference"  href="<?= $linkUrl ?>"><img class="img-responsive" src="<?= Url::to('res/lote.png')?>"><?php echo Yii::t('app','NEW LOT') ?></a>
     </div>
-</div>
+</div> -->
 
 <div class="turno-view">
 
-
+    <p>
+        <?= Html::a(Yii::t('app', 'New Lot'), ['lote/create', 'id' => $model[0]->id], ['class' => 'btn btn-success']) ?>
+    </p>
 
     <div class="box box-primary box-solid">
                 <div class="box-header with-border">
@@ -68,17 +70,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'kartik\grid\ActionColumn',
                             'dropdown' => false,
                             'vAlign'=>'middle',
-                            'template' => '{performance} {error}',
-                            'urlCreator' => function($action, $model, $key, $index) {
+                            // 'template' => '{detail} {update}',
+                            'template' => '{update}',
+                            'urlCreator' => function($action, $lotes, $key, $index) {
                                     return Url::to([$action,'id'=>$key]);
                             },
                             'buttons'=>[
 
-                                'performance' => function ($url, $model, $key) {
-                                return Html::a('<span class="fa fa-bar-chart "></span>', ['user/performance', 'id'=>$model->id],['title'=> Yii::t('app','Performance')]);
-                                },
-                                'error' => function ($url, $model, $key) {
-                                return Html::a('<span class="fa fa-line-chart "></span>', ['user/errors', 'id'=>$model->id],['title'=> Yii::t('app','Errors')]);
+                                // 'detail' => function ($url, $lotes, $key) {
+                                //     return Html::a('<span class="fa fa-eye "></span>', ['lote/view', 'id'=>$lotes->id],['title'=> Yii::t('app','Detail')]);
+                                // },
+                                'update' => function ($url, $lotes, $key) {
+                                    return Html::a('<span class="fa fa-pencil "></span>', ['lote/update', 'id'=>$lotes->id],['title'=> Yii::t('app','Update')]);
                                 },
                             ],
 

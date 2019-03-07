@@ -24,12 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
             'identificador',
            [
             'class' => 'kartik\grid\ActionColumn',
             'dropdown' => false,
             'vAlign'=>'middle',
-            'template' => '{view}{edit}{performance}',
+            // 'template' => '{view}{edit}{performance}',
+            'template' => '{view} {edit}',
             'urlCreator' => function($action, $model, $key, $index) {
                     return Url::to([$action,'id'=>$key]);
             },

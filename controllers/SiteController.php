@@ -44,8 +44,8 @@ class SiteController extends Controller
                         $valid_roles = ['Production Manager'];
                         return User::roleInArray($valid_roles) && User::isActive();
                         }
-                        ],
-                     
+                    ],
+
                 ],
             ],
             'verbs' => [
@@ -148,7 +148,7 @@ class SiteController extends Controller
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
-           
+
             if ($user = $model->signup()) {
                 $pin = new UserPin();
                 $pin->user = $user->getId();
@@ -156,18 +156,18 @@ class SiteController extends Controller
                 $pin->save();
                UiHelper::alert('<i class="icon fa fa-user"></i> Nuevo usuario registrado', UiHelper::SUCCESS);
                     return $this->redirect(['/user/index']);
-                
+
             }
         }
 
         return $this->render('signup', [
-            'model' => $model, 
+            'model' => $model,
         ]);
     }
 
     public function actionProccess()
     {
-   
+
         $searchModelTotales = new TotalesSearch();
         $dataProviderTotales = $searchModelTotales->search(Yii::$app->request->queryParams);
          $searchModelParciales = new ParcialesSearch();
@@ -180,7 +180,7 @@ class SiteController extends Controller
             'searchModelParciales' => $searchModelParciales,
             'dataProviderParciales' => $dataProviderParciales,
         ]);
-    
+
     }
 
 }

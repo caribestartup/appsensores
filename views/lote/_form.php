@@ -14,12 +14,10 @@ use kartik\time\TimePicker;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'pedido')->hiddenInput(['value' => $pedido[0]->id]) ?>
-    <?= $pedido[0]->identificador ?>
 
     <?= $form->field($model, 'identificador')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'cantidad')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'velocidad')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'estado')->hiddenInput(['value' => "Activo"]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

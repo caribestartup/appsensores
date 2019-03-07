@@ -49,7 +49,7 @@ class Lote extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'Lote ID'),
             'identificador' => Yii::t('app', 'Identifier'),
-            'pedido' => Yii::t('app', 'Pedido'),
+            'pedido' => Yii::t('app', ''),
             'cantidad' => Yii::t('app', 'Cantidad'),
             'velocidad' => Yii::t('app', 'Velocidad'),
             'estado' => Yii::t('app', 'Estado'),

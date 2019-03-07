@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Maquina;
+use app\models\UserTurno;
+use app\models\TurnoUsuarioMaquina;
 use app\models\MaquinaSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -28,10 +30,10 @@ class MaquinaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','view','create','update','delete','production','charts','performance'],
+                'only' => ['index','view','create','update','delete','production','charts','performance', 'assigne'],
                 'rules' => [
                     [
-                        'actions' => ['index','view','production','performance'],
+                        'actions' => ['index','view','production','performance', 'assigne'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -44,7 +46,7 @@ class MaquinaController extends Controller
                         return User::roleInArray($valid_roles) && User::isActive();
                         }
                     ],
-                  
+
                 ],
             ],
             'verbs' => [
@@ -82,6 +84,52 @@ class MaquinaController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    // public function actionAssigne()
+    // {
+    //
+    //     return $this->render('assigne', [
+    //         'maquina' =>
+    //     ]);
+    // }
+
+    public function actionAssigne()
+    {
+        // $maquinas = Maquina::getAviableMachines();
+        // print_r($maquinas);
+        $searchModel = new MaquinaSearch();
+        $dataProvider = $searchModel->search(Maquina::getAviableMachines());
+
+        $query = "SELECT user_turno.*"
+                  . "FROM user_turno WHERE user_turno.user=".Yii::$app->user->identity->getId()."";
+        $turno_user = UserTurno::findBySql($query)->all();
+
+        $tmp = new TurnoUsuarioMaquina();
+
+
+        if (Yii::$app->request->post()) {
+            $selection = Yii::$app->request->post()['selection'];
+            // foreach ($variable as $key => $value) {
+            //     // code...
+            // }
+            //$model->estado = 'Activo';
+            //$model->save();
+            //return $this->redirect(['pedido/view', 'id' => $pedido[0]->id]);
+
+        } else {
+            return $this->render('assigne', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'turnos' => $turno_user,
+                'turnoUsuarioMaquina' => $tmp
+            ]);
+        }
+
+
+        // return $this->render('assigne', [
+        //     'maquinas' => $maquinas,
+        // ]);
     }
 
      public function actionProduction($id)
@@ -164,9 +212,9 @@ class MaquinaController extends Controller
          }
          foreach($fechas as $date)
             {
-                
+
                 $labelLast30Graph[] = substr($date,5,5);
-            
+
             }
         return $this->render('charts',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph]);
     }*/
@@ -180,9 +228,9 @@ class MaquinaController extends Controller
             $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
-          
-           
-           
+
+
+
         }else{
             $tday = date('Y-m-d');
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
@@ -191,14 +239,14 @@ class MaquinaController extends Controller
             $today = date ( 'Y-m-d' , $today );
 
         }
-        
+
         $maqref = new Maquina();
         $drange = new Drange();
 
-       
+
         $last30Graph = [];
         $labelLast30Graph = [];
-  
+
 
         $errorsGraph = [];
         $tempErrors = [];
@@ -206,10 +254,10 @@ class MaquinaController extends Controller
         $toload = [];
         $errorsName = [];
 
-        
+
         $fechas = $this::fechas($last30, $tday);
         $errors = Parciales::find()->groupBy('nombre_ventana')->all();
-        
+
         $count = 0;
         foreach ($errors as $error) {
             $count ++;
@@ -218,12 +266,12 @@ class MaquinaController extends Controller
             $tempErrors[strtolower($error->nombre_ventana)] = [];
             $errorsName[] = strtolower($error->nombre_ventana);
         }
-    
+
         foreach($fechas as $date)
             {
-                
+
                 $labelLast30Graph[] = substr($date,5,5);
-            
+
             }
 
 
@@ -257,7 +305,7 @@ class MaquinaController extends Controller
                     foreach ($temp as $te) {
                         $hora = Totales::findOne($te['id_totales'])->hora_inicio;
                         $index = array_search(substr($hora, 0,10), $fechas);
-                        $values[$index] = $te['error'];   
+                        $values[$index] = $te['error'];
                     }
                     array_push($toload, $values);
 
@@ -274,7 +322,7 @@ class MaquinaController extends Controller
              }
 
          }
-         
+
 
          return $this->render('charts',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph,'errorsGraph' => $errorsGraph,'maqref' => $maqref,'drange' => $drange, 'errorsName' => $errorsName]);
     }
@@ -288,9 +336,9 @@ class MaquinaController extends Controller
             $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
-          
-           
-           
+
+
+
         }else{
             $tday = date('Y-m-d');
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
@@ -302,10 +350,10 @@ class MaquinaController extends Controller
         $maqref = Maquina::findOne($id);
         $drange = new Drange();
 
-       
+
         $last30Graph = [];
         $labelLast30Graph = [];
-  
+
 
         $errorsGraph = [];
         $tempErrors = [];
@@ -316,7 +364,7 @@ class MaquinaController extends Controller
 
         $fechas = $this::fechas($last30, $tday);
         $errors = Parciales::find()->groupBy('nombre_ventana')->all();
-        
+
 
         foreach ($errors as $error) {
             $tempErrors[strtolower($error->nombre_ventana)] = [];
@@ -325,9 +373,9 @@ class MaquinaController extends Controller
 
         foreach($fechas as $date)
             {
-                
+
                 $labelLast30Graph[] = substr($date,5,5);
-            
+
             }
 
 
@@ -360,12 +408,12 @@ class MaquinaController extends Controller
                     foreach ($temp as $te) {
                         $hora = Totales::findOne($te['id_totales'])->hora_inicio;
                         $index = array_search(substr($hora, 0,10), $fechas);
-                        $values[$index] = $te['error'];   
+                        $values[$index] = $te['error'];
                     }
                     array_push($toload, $values);
 
                 }
-                
+
                     $count = 0;
                     foreach ($toload as $tl) {
                         $color = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
@@ -379,8 +427,8 @@ class MaquinaController extends Controller
              }
 
          }
-         
-       
+
+
          return $this->render('performance',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph,'errorsGraph' => $errorsGraph,'maqref' => $maqref,'drange' => $drange]);
 
     }
@@ -394,9 +442,9 @@ class MaquinaController extends Controller
             $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
-          
-           
-           
+
+
+
         }else{
             $tday = date('Y-m-d');
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
@@ -408,10 +456,10 @@ class MaquinaController extends Controller
         $maqref = Maquina::findOne($id);
         $drange = new Drange();
 
-       
+
         $last30Graph = [];
         $labelLast30Graph = [];
-  
+
 
         $errorsGraph = [];
         $tempErrors = [];
@@ -428,9 +476,9 @@ class MaquinaController extends Controller
 
         foreach($fechas as $date)
             {
-                
+
                 $labelLast30Graph[] = substr($date,5,5);
-            
+
             }
 
 
@@ -463,7 +511,7 @@ class MaquinaController extends Controller
                     foreach ($temp as $te) {
                         $hora = Totales::findOne($te['id_totales'])->hora_inicio;
                         $index = array_search(substr($hora, 0,10), $fechas);
-                        $values[$index] = $te['error'];   
+                        $values[$index] = $te['error'];
                     }
                     array_push($toload, $values);
 
@@ -476,81 +524,81 @@ class MaquinaController extends Controller
              }
 
          }
-         
-       
+
+
          return $this->render('performancebar',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph,'errorsGraph' => $errorsGraph,'maqref' => $maqref,'drange' => $drange]);
 
     }
-    
+
     public function actionPerformanceall()
     {
         if (Yii::$app->request->post()) {
-            
+
             $tday = date('Y-m-d', strtotime(substr(Yii::$app->request->post("Drange")["range"], -10)));
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
             $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
-            
-            
-            
+
+
+
         }else{
             $tday = date('Y-m-d');
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
             $last30 = strtotime ( '-10 day' , strtotime ( $tday ) ) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
-            
+
         }
         $drange = new Drange();
-        
-        
+
+
         $last30Graph = [];
         $labelLast30Graph = [];
-        
-        
+
+
         $errorsGraph = [];
         $tempErrors = [];
         $values = [];
         $toload = [];
-        
-        
+
+
         $fechas = $this::fechas($last30, $tday);
         $errors = Parciales::find()->groupBy('nombre_ventana')->all();
-        
+
         foreach ($errors as $error) {
             $tempErrors[strtolower($error->nombre_ventana)] = [];
         }
-        
+
         foreach($fechas as $date)
         {
-            
+
             $labelLast30Graph[] = substr($date,5,5);
-            
+
         }
-        
-        
+
+
         $maquina = Maquina::find()->all();
-        
+
         if (count($maquina) > 0) {
             foreach ($maquina as $model) {
                 unset($tempErrors);
                 unset($values);
                 unset($toload);
                 $toload = [];
-                
+
                 foreach ($errors as $error) {
                     $tempErrors[strtolower($error->nombre_ventana)] = [];
                 }
-                
+
                 foreach ($fechas as $fecha) {
                     $values [] = 0 ;
                 }
-                
+
                 foreach ($model->getPartialerrors($last30,$today) as $merr) {
                     array_push($tempErrors[strtolower($merr['nombre_ventana'])], $merr);
                 }
-                
+
                 foreach ($tempErrors as $temp ) {
                     unset($values);
                     foreach ($fechas as $fecha) {
@@ -562,20 +610,20 @@ class MaquinaController extends Controller
                         $values[$index] = $te['error'];
                     }
                     array_push($toload, $values);
-                    
+
                 }
-                
+
                 $color = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
                 //array_push($last30Graph,['type' => 'line','label' => 'Producción Estimada','data' => $model->getTotalprodest($last30,$today),'fill' => 'false', 'borderColor' => 'rgb(40,250,40)', 'backgroundColor' => 'rgb(40,250,40)']);
                 array_push($last30Graph,['label' => $model->nombre,'data' => $model->getTotalprod($last30,$today),'fill' => 'false', 'borderColor' => 'rgb('.$color.')', 'backgroundColor' => 'rgb('.$color.')']);
-                
+
             }
-            
+
         }
-        
-        
+
+
         return $this->render('performanceall',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph,'errorsGraph' => $errorsGraph,'drange' => $drange]);
-        
+
     }
 
     /**

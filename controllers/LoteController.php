@@ -82,17 +82,14 @@ class LoteController extends Controller
      */
     public function actionView($id)
     {
-        // $model = Lote::findOne($id);
-
-        // $query = "SELECT user.*"
-        //        . " FROM user_turno,user WHERE user_turno.turno=".$id." AND user_turno.user=user.id";
-
         $query = "SELECT lote.*"
                   . "FROM lote WHERE lote.id=".$id."";
 
-        // $users = User::findBySql($query)->all();
-
         $order = Lote::findBySql($query)->all();
+
+        $queryOrder = "SELECT pedido.*"
+                  . "FROM pedido WHERE pedido.id=".$order[0]->pedido."";
+        $pedido = Pedido::findBySql($queryOrder)->all();
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $order,
@@ -101,6 +98,7 @@ class LoteController extends Controller
         return $this->render('view', [
             'dataProvider' => $dataProvider,
             'model' => $order,
+            'pedido' => $pedido,
         ]);
     }
 
@@ -116,8 +114,10 @@ class LoteController extends Controller
         $pedido = Pedido::findBySql($query)->all();
         $model = new Lote();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->estado = 'Activo';
+            $model->save();
+            return $this->redirect(['pedido/view', 'id' => $pedido[0]->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -134,17 +134,18 @@ class LoteController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $lote = $this->findModel($id);
 
         $query = "SELECT pedido.*"
-        . "FROM pedido WHERE pedido.id=".$model->pedido."";
+        . "FROM pedido WHERE pedido.id=".$lote->pedido."";
         $pedido = Pedido::findBySql($query)->all();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($lote->load(Yii::$app->request->post())) {
+            $lote->save();
+            return $this->redirect(['pedido/view', 'id' => $pedido[0]->id]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'lote' => $lote,
                 'pedido' => $pedido
             ]);
         }
