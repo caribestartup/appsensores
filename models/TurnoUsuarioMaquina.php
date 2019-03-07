@@ -49,5 +49,23 @@ class TurnoUsuarioMaquina extends \yii\db\ActiveRecord
         ];
     }
 
+    public function exit($tur, $maq, $fec)
+    {
+      $maquina = (new \yii\db\Query())
+      ->from('turno_usuario_maquina')
+      ->where([
+        'turno_usuario_id' => $tur,
+        'maquina_id' => $maq,
+        'fecha' => $fec
+      ])
+      ->all();
+
+      if (sizeof($maquina) > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
 
 }

@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Maquina;
 use app\models\UserTurno;
+use app\models\Turno;
 use app\models\TurnoUsuarioMaquina;
 use app\models\MaquinaSearch;
 use yii\web\Controller;
@@ -96,40 +97,46 @@ class MaquinaController extends Controller
 
     public function actionAssigne()
     {
-        // $maquinas = Maquina::getAviableMachines();
-        // print_r($maquinas);
         $searchModel = new MaquinaSearch();
         $dataProvider = $searchModel->search(Maquina::getAviableMachines());
 
-        $query = "SELECT user_turno.*"
-                  . "FROM user_turno WHERE user_turno.user=".Yii::$app->user->identity->getId()."";
-        $turno_user = UserTurno::findBySql($query)->all();
+        $turno_user = (new \yii\db\Query())
+        ->select('user_turno.id, user_turno.turno, turno.identificador')
+        ->leftJoin('turno', 'turno.id = user_turno.turno')
+        ->from('user_turno')
+        ->where([
+          'user_turno.user' => Yii::$app->user->identity->getId(),
+        ])
+        ->all();
 
-        $tmp = new TurnoUsuarioMaquina();
+        $turnoUsuarioMaquina = new TurnoUsuarioMaquina();
 
 
-        if (Yii::$app->request->post()) {
+        if ($turnoUsuarioMaquina->load(Yii::$app->request->post())) {
             $selection = Yii::$app->request->post()['selection'];
-            // foreach ($variable as $key => $value) {
-            //     // code...
-            // }
-            //$model->estado = 'Activo';
-            //$model->save();
-            //return $this->redirect(['pedido/view', 'id' => $pedido[0]->id]);
+            $tur = $turnoUsuarioMaquina->turno_usuario_id;
+            // print_r($turnoUsuarioMaquina);
+            foreach ($selection as $maq) {
+              $turnoUsuarioMaquina->turno_usuario_id = $tur;
+              $turnoUsuarioMaquina->maquina_id = $maq;
+              $turnoUsuarioMaquina->fecha = date("Y-m-d");
+
+              if(!$turnoUsuarioMaquina->exit($tur, $maq, date("Y-m-d"))) {
+                $turnoUsuarioMaquina->save();
+                $turnoUsuarioMaquina = new TurnoUsuarioMaquina();
+              }
+            }
+            return $this->redirect(['site/index']);
 
         } else {
             return $this->render('assigne', [
                 'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'turnos' => $turno_user,
-                'turnoUsuarioMaquina' => $tmp
+                'turnoUsuarioMaquina' => $turnoUsuarioMaquina
             ]);
         }
 
-
-        // return $this->render('assigne', [
-        //     'maquinas' => $maquinas,
-        // ]);
     }
 
      public function actionProduction($id)

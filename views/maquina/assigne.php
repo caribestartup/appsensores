@@ -25,21 +25,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($turnoUsuarioMaquina, 'turno_usuario_id')->dropDownList($turnos->getdropdownturnos,['prompt'=> Yii::t('app', '--Seleccione--')]) ?>
-
-    <?php
-        foreach ($turnos as $key => $value) {
-            // code...
-
-    ?>
-        <select class="" name="">
-            <option
-
-             value="<?php echo $value->id ?>"><?php echo $value->turno ?></option>
-        </select>
         <?php
-    }
+            $var=array();
+            foreach ($turnos as $key => $value) {
+                // code...
+                $tur = [ $value['id'] => $value['identificador']];
+
+                array_push($var, $tur);
+            }
         ?>
+
+
+        <?= $form->field($turnoUsuarioMaquina, 'turno_usuario_id')->dropDownList($var, ['prompt' => 'Seleccione Uno' ]); ?>
 
         <div class="box box-primary box-solid">
                     <div class="box-header with-border">
