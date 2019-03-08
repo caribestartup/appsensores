@@ -94,12 +94,19 @@ class PedidoController extends Controller
 
         $order = Pedido::findBySql($query)->all();
 
+        $lotes = (new \yii\db\Query())
+        ->select('lote.id, lote.pedido, lote.identificador, lote.velocidad, lote.cantidad, lote.estado, lote.maquina_id, maquina.nombre as Maquina')
+        ->leftJoin('maquina', 'maquina.maquina_id = lote.maquina_id')
+        ->from('lote')
+        ->where([
+          'lote.pedido' => $id
+        ])
+        ->all();
 
-
-        $query_lote = "SELECT lote.*"
-                  . "FROM lote WHERE lote.pedido=".$id."";
-
-        $lotes = Lote::findBySql($query_lote)->all();
+        // $query_lote = "SELECT lote.*"
+        //           . "FROM lote join maquina on  WHERE lote.pedido=".$id."";
+        //
+        // $lotes = Lote::findBySql($query_lote)->all();
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $lotes,

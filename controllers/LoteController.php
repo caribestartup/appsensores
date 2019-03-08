@@ -8,6 +8,7 @@ use app\models\Pedido;
 use app\models\Lote;
 use app\models\LoteSearch;
 use app\models\Maquina;
+use app\models\MaquinaSearch;
 use app\models\Error;
 use app\models\Totales;
 use yii\web\Controller;
@@ -116,6 +117,7 @@ class LoteController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->estado = 'Activo';
+            $model->maquina_id = 0;
             $model->save();
             return $this->redirect(['pedido/view', 'id' => $pedido[0]->id]);
         } else {
@@ -140,6 +142,9 @@ class LoteController extends Controller
         . "FROM pedido WHERE pedido.id=".$lote->pedido."";
         $pedido = Pedido::findBySql($query)->all();
 
+
+        // echo $lote->pedido;
+
         if ($lote->load(Yii::$app->request->post())) {
             $lote->save();
             return $this->redirect(['pedido/view', 'id' => $pedido[0]->id]);
@@ -159,9 +164,10 @@ class LoteController extends Controller
      */
     public function actionDelete($id)
     {
+        $loteOld = $this->findModel($id);
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['pedido/view', 'id' => $loteOld->pedido]);
     }
 
     /**
@@ -178,6 +184,43 @@ class LoteController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionAssign($id)
+    {
+
+      $lote = $this->findModel($id);
+
+      $searchModel = new MaquinaSearch();
+      $dataProvider = $searchModel->search(Maquina::getMachineForLote());
+
+      if (Yii::$app->request->post()) {
+          $lote->maquina_id = Yii::$app->request->post("radioButtonSelection");
+          $lote->save();
+          return $this->redirect(['pedido/view', 'id' => $lote->pedido]);
+      } else {
+          return $this->render('assign', [
+              'dataProvider' => $dataProvider,
+              'lote' => $lote
+          ]);
+      }
+    }
+
+    public function actionProceso()
+    {
+      // print_r($lote->load(Yii::$app->request->post()));
+      // $searchModel = new MaquinaSearch();
+      // $dataProvider = $searchModel->search(Maquina::getMachineForLote());
+      //
+      // if ($lote->load(Yii::$app->request->post())) {
+      //     $lote->save();
+      //     return $this->redirect(['pedido/view', 'id' => $lote->pedido]);
+      // } else {
+      //     return $this->render('assign', [
+      //         'dataProvider' => $dataProvider,
+      //         'lote' => $lote
+      //     ]);
+      // }
     }
 
     // public function actionAsignar($id)

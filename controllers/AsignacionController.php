@@ -64,18 +64,19 @@ class AsignacionController extends Controller
      */
     public function actionIndex()
     {
+        $query = "SELECT turno_usuario_maquina.*"
+                  . "FROM turno_usuario_maquina ";
+        $assign = TurnoUsuarioMaquina::findBySql($query)->all();
+// print_r($assign);
         $order = TurnoUsuarioMaquina::getMaquinaAssign();
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $order,
         ]);
 
-        // $searchModel = new PedidoSearch()
-        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
-            // 'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'model' => $order,
         ]);
     }
 

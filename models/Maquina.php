@@ -343,6 +343,10 @@ class Maquina extends \yii\db\ActiveRecord
         return $find_turno->nombre;
     }
 
+    public function getMachineForLote(){
+        return Maquina::find()->all();
+    }
+
     public function getAviableMachines()
     {
         // $query = "SELECT * " . "FROM turno_usuario_maquina

@@ -21,8 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
+          'id',
             'nombre',
             'fecha',
 
@@ -30,17 +31,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'kartik\grid\ActionColumn',
             'dropdown' => false,
             'vAlign'=>'middle',
-            'template' => '{view}{edit}{performance}',
+            'template' => '{unassign}{edit}',
             'urlCreator' => function($action, $model, $key, $index) {
                     return Url::to([$action,'id'=>$key]);
             },
             'buttons'=>[
 
-                'view' => function ($url, $model, $key) {
-                return Html::a('<span class="fa fa-eye "></span>', ['view', 'id'=>$model->id],['title'=> Yii::t('app','Workers')]);
+                'unassign' => function ($url, $model, $key) {
+                return Html::a('<span class="fa fa-sign-out"></span>', ['view', 'id'=>$model["id"]],['title'=> Yii::t('app','Transfer')]);
                 },
                 'edit' => function ($url, $model, $key) {
-                return Html::a('<span class="fa fa-pencil "></span>', ['update', 'id'=>$model->id],['title'=> Yii::t('app','Edit')]);
+                return Html::a('<span class="fa fa-close "></span>', ['update', 'id'=>$model["id"]],['title'=> Yii::t('app','Unassign')]);
                 },
                 // 'performance' => function ($url, $model, $key) {
                 // return Html::a('<span class="fa fa-bar-chart "></span>', ['turno/performance', 'id'=>$model->id],['title'=> Yii::t('app','Performance')]);

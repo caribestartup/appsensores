@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              'velocidad',
                              'estado',
                              'cantidad',
+                             'Maquina',
                              // 'surname',
                             //  array(
                             // 'attribute' => 'role',
@@ -71,17 +72,23 @@ $this->params['breadcrumbs'][] = $this->title;
                             'dropdown' => false,
                             'vAlign'=>'middle',
                             // 'template' => '{detail} {update}',
-                            'template' => '{update}',
+                            'template' => '{update} {assign}{delete}',
                             'urlCreator' => function($action, $lotes, $key, $index) {
                                     return Url::to([$action,'id'=>$key]);
                             },
                             'buttons'=>[
 
-                                // 'detail' => function ($url, $lotes, $key) {
-                                //     return Html::a('<span class="fa fa-eye "></span>', ['lote/view', 'id'=>$lotes->id],['title'=> Yii::t('app','Detail')]);
-                                // },
+                                'assign' => function ($url, $lotes, $key) {
+                                    return Html::a('<span class="fa fa-desktop"></span>', ['lote/assign', 'id'=>$lotes["id"]],['title'=> Yii::t('app','Assign Machine')]);
+                                },
                                 'update' => function ($url, $lotes, $key) {
-                                    return Html::a('<span class="fa fa-pencil "></span>', ['lote/update', 'id'=>$lotes->id],['title'=> Yii::t('app','Update')]);
+                                    return Html::a('<span class="fa fa-pencil"></span>', ['lote/update', 'id'=>$lotes["id"]],['title'=> Yii::t('app','Update')]);
+                                },
+                                'delete' => function ($url, $lotes, $key) {
+                                        return Html::a('<span class="fa fa-trash "></span>', ['lote/delete', 'id'=>$lotes["id"]],['data' => [
+                                            'confirm' => Yii::t('app','Do you want to delete lot?'),
+                                            'method' => 'post',
+                                        ],'title'=>Yii::t('app', Yii::t('app','Delete Lot'))]);
                                 },
                             ],
 
