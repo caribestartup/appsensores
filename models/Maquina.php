@@ -343,34 +343,64 @@ class Maquina extends \yii\db\ActiveRecord
         return $find_turno->nombre;
     }
 
-    public function getMachineForLote(){
-        return Maquina::find()->all();
+    public function getMachineForLoteDiferent($estado){
+        $maquinas = (new \yii\db\Query())
+        ->select('maquina.nombre, maquina.modelo, maquina.numero, maquina.maquina_id, local.nombre as local')
+        // ->leftJoin('lote', 'lote.maquina_id = maquina.maquina_id')
+        ->leftJoin('local', 'local.local_id = maquina.local')
+        ->leftJoin('turno_usuario_maquina', 'turno_usuario_maquina.maquina_id = maquina.maquina_id')
+        ->leftJoin('user_turno', 'user_turno.id = turno_usuario_maquina.turno_usuario_id')
+        ->from('maquina')
+        ->where([
+            'turno_usuario_maquina.fecha' => date('Y-m-d'),
+            'turno_usuario_maquina.borrar' => 0,
+            'user_turno.user' => Yii::$app->user->identity->getId(),
+        ])
+        ->all();
+
+        $newMaquinas = array();
+        foreach ($maquinas as $maquina) {
+           $maquinasSelect = (new \yii\db\Query())
+           ->from('lote')
+           ->where([
+               'maquina_id' => $maquina['maquina_id'],
+               'lote.estado' => $estado
+           ])
+           ->all();
+
+           if(sizeof($maquinasSelect) == 0){
+               array_push($newMaquinas, $maquina);
+           }
+       }
+
+       return $newMaquinas;
     }
 
     public function getAviableMachines()
     {
-        // $query = "SELECT * " . "FROM turno_usuario_maquina
-        //                                 join user_turno on turno_usuario_maquina.turno_usuario_id = user_turno.id
-        //                                 join turno on user_turno.turno = turno.id
-        //                                 WHERE turno.inicio < '".date('H:i:s')."' and turno.fin > '".date('H:i:s')."'
-        //                                 and  turno_usuario_maquina.fecha = '".date('Y-m-d')."'";
-        // $sql= Yii::$app->db->createCommand($query);
-        // $record = $sql->queryAll();
-        //
-        //
-        // print_r($record);
-        //
-        // $maquinas = Maquina::find()->all();
-        // $libres = array();
-        //
-        // foreach ($maquinas as $key => $maquina) {
-        //
-        //
-        // }
+        $maquinas = (new \yii\db\Query())
+                    ->select('maquina.*, local.nombre as local')
+                    ->leftJoin('local', 'local.local_id = maquina.local')
+                    ->from('maquina')
+                    ->all();
 
+        $returnMaquina = array();
+        foreach ($maquinas as $maquina) {
+            $tum = (new \yii\db\Query())
+            ->from('turno_usuario_maquina')
+            ->where([
+            'borrar' => 0,
+            'maquina_id' => $maquina['maquina_id'],
+            'fecha' => date('Y-m-d')
+            ])
+            ->all();
 
+            if(sizeof($tum) == 0){
+                array_push($returnMaquina, $maquina);
+            }
+        }
 
-        return Maquina::find()->all();
+        return $returnMaquina;
     }
 
 

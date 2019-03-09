@@ -49,7 +49,7 @@ $turno = Maquina::getLasturno();
 		</div>
 
 		<div class="col-md-4 col-xs-4 menu-block">
-			
+
       <div>
           <a class="option-reference" href="<?= Url::toRoute('site/index')?>"><img class="img-menu-item" src="<?= Url::to('res/icon_home.png')?>"></a>
           <a class="option-reference" href="<?= Url::toRoute('local/index')?>"><img class="img-menu-item" src="<?= Url::to('res/icon_map.png')?>"></a>
@@ -66,7 +66,7 @@ $turno = Maquina::getLasturno();
 
 
 	</div>
-	 
+
 	 <div class="pull-right" style="position: absolute;  right: -9%; top:10px">
 	 <a href="#" >
        		<?php echo Html::beginForm(['/user/changepass'], 'post');
@@ -81,17 +81,23 @@ $turno = Maquina::getLasturno();
         	       echo Html::endForm();?>
        	</a>
 	 </div>
-	
+
 </div>
 
+<style>
 
+</style>
+<!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script> -->
+<!------ Include the above in your HEAD tag ---------->
 
 <div class="wrap">
-   
+
 	<div clas="row">
 
 		<?php foreach ($maquina as $maq) { ?>
-			<?php 
+			<?php
 				switch ($maq->getRealstate()) {
 					case -1:
 						$error[] = $maq;
@@ -102,7 +108,7 @@ $turno = Maquina::getLasturno();
 					case 1:
 						$encendida[] = $maq;
 						break;
-					
+
 					default:
 						break;
 				}
@@ -124,9 +130,9 @@ $turno = Maquina::getLasturno();
 						<a href="<?= Url::toRoute(['/maquina/production', 'id' => $machine->maquina_id])?>"><img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_ok.png')?>"></a>
 					</div>
 				</div>
-    			
+
     		<?php } ?>
-			
+
 
 			<?php if($apagada){ ?>
     			<label style="margin-top:10px"><?php echo Yii::t('app','MACHINES OFF') ?></label>
@@ -141,12 +147,12 @@ $turno = Maquina::getLasturno();
 						<a href="<?= Url::toRoute(['/maquina/production', 'id' => $machine->maquina_id])?>"><img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_login.png')?>"></a>
 					</div>
 				</div>
-    			
+
     		<?php } ?>
 
 		</div>
 
-		
+
     	<div class="col-md-2 machine-container-right pull-right">
 
     		<?php if($error){ ?>
@@ -162,7 +168,7 @@ $turno = Maquina::getLasturno();
 						<a href="<?= Url::toRoute(['/maquina/production', 'id' => $machine->maquina_id])?>"><img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_error.png')?>"></a>
 					</div>
 				</div>
-    			
+
     		<?php } ?>
 
 		</div>
@@ -189,7 +195,7 @@ $turno = Maquina::getLasturno();
          <h4 class="modal-title" id="myModalLabel"> <?php echo strtoupper(Yii::T('app','Information!')) ?> </h4>
        </div>
        <div class="modal-body" id="getCode" style="overflow-x: scroll;">
-            
+
        </div>
        <div class="row">
          <div class="col-md-2 col-md-offset-5">
@@ -224,11 +230,11 @@ setInterval(function() {
 
 function hasScrolled() {
     var st = $(this).scrollTop();
-    
+
     // Make sure they scroll more than delta
     if(Math.abs(lastScrollTop - st) <= delta)
         return;
-    
+
     // If they scrolled down and are past the navbar, add class .nav-up.
     // This is necessary so you never see what is "behind" the navbar.
     if (st > lastScrollTop && st > navbarHeight){
@@ -242,7 +248,7 @@ function hasScrolled() {
             $('.menu-container').removeClass('nav-up').addClass('nav-showed');
         }
     }
-    
+
     lastScrollTop = st;
 }
 
@@ -268,7 +274,7 @@ $('#plan-save').click(function(){
       height = b.css('height');
       matrix = b.css('transform');
 
-       
+
 
       var param = {"id" :id,
               "posx" : posx,
@@ -288,16 +294,16 @@ $('#plan-save').click(function(){
           order();
           $("#getCode").html(info);
           $("#getCodeModal").modal('show');
-          $("#aedit").css("display","block");  
+          $("#aedit").css("display","block");
           $("#asave").css("display","none");
-      
-        },  
-       
+
+        },
+
        });
 
     });
-   
- 
+
+
  });
 
 
@@ -329,8 +335,8 @@ function order(){
                   $('.mecha[value='+info["i"]+']').css('width', width);
                   $('.mecha[value='+info["i"]+']').css('height', height);
                   $('.mecha[value='+info["i"]+']').css('top', vy);
-                  $('.mecha[value='+info["i"]+']').css('left', vx); 
-                  
+                  $('.mecha[value='+info["i"]+']').css('left', vx);
+
 
                   var m = getRotationDegrees(info["m"]);
                   //alert(info["m"]);
@@ -338,21 +344,21 @@ function order(){
                   $('.mecha[value='+info["i"]+']').freetrans({
                   x: vx,
                   y: vy,
-                  angle: m, 
+                  angle: m,
 
-                  })  
-                  
-                  $('.mecha[value='+info["i"]+']').css('transform', info["m"]); 
+                  })
 
-                  $('.mecha[value='+info["i"]+']').freetrans('destroy');  
-                  
-              },  
+                  $('.mecha[value='+info["i"]+']').css('transform', info["m"]);
+
+                  $('.mecha[value='+info["i"]+']').freetrans('destroy');
+
+              },
               dataType:"json",
              });
-        
 
-             
-              
+
+
+
 
         });
 }
@@ -385,8 +391,8 @@ function reorder(){
                   $('.mecha[value='+info["i"]+']').css('width', width);
                   $('.mecha[value='+info["i"]+']').css('height', height);
                   $('.mecha[value='+info["i"]+']').css('top', vy);
-                  $('.mecha[value='+info["i"]+']').css('left', vx); 
-                  
+                  $('.mecha[value='+info["i"]+']').css('left', vx);
+
 
                   var m = getRotationDegrees(info["m"]);
                   //alert(info["m"]);
@@ -394,25 +400,25 @@ function reorder(){
                   $('.mecha[value='+info["i"]+']').freetrans({
                   x: vx,
                   y: vy,
-                  angle: m, 
+                  angle: m,
 
-                  })  
-                  
-                  $('.mecha[value='+info["i"]+']').css('transform', info["m"]); 
-                  
-              },  
+                  })
+
+                  $('.mecha[value='+info["i"]+']').css('transform', info["m"]);
+
+              },
               dataType:"json",
              });
-        
 
-             
-              
+
+
+
 
         });
 }
 
 function getRotationDegrees(matrix) {
-  
+
         var values = matrix.split('(')[1].split(')')[0].split(',');
         var a = values[0];
         var b = values[1];
@@ -425,9 +431,9 @@ $("#locales").change(function() {
   <?php $loading = Url::to('res/cargando.gif')?>
   $('#plan-container').html("<img class='center-block' src='<?php echo $loading;?>' />");
 
-  $("#aedit").css("display","block");  
+  $("#aedit").css("display","block");
   $("#asave").css("display","none");
-  
+
   var sel = $(this).val();
 
   var param = {"id" : sel};
@@ -442,8 +448,8 @@ $("#locales").change(function() {
 
                 $('#plan-container').html(info);
                   order();
-              },  
-             
+              },
+
              });
 });
 
@@ -454,7 +460,7 @@ $("#aedit").click(function(){
     $("#asave").css("display","block");
     $("#aedit").css("display","none");
   }
-  
+
   });
 
 </script>

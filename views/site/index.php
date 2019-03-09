@@ -55,6 +55,15 @@ $this->title = 'WELCOME';
 			</div>
 
 		</div>
+
+		<div class="row">
+
+			<div class="col-md-2 col-md-offset-1">
+				<a class="option-reference" href="<?= Url::toRoute('/pedido/index')?>"><img class="img-responsive" src="<?= Url::to('res/icon_proccess.png')?>"><?php echo Yii::t('app','ORDES') ?></a>
+			</div>
+
+		</div>
+
 	<?php } else {?>
 		<div class="row">
 
@@ -67,7 +76,7 @@ $this->title = 'WELCOME';
 			</div>
 
 			<div class="col-md-2 col-md-offset-2">
-				<a class="option-reference" href="<?= Url::toRoute('/local/index')?>"><img class="img-responsive" src="<?= Url::to('res/icon_map.png')?>"><?php echo Yii::t('app','EDIT PLANE') ?></a>
+				<a class="option-reference" href="<?= Url::toRoute('/pedido/index')?>"><img class="img-responsive"><?php echo Yii::t('app','Manage Orders') ?></a>
 			</div>
 
 		</div>

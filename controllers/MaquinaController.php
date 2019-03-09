@@ -17,6 +17,7 @@ use app\models\Drange;
 use app\models\User;
 use yii\filters\AccessControl;
 use app\models\Parciales;
+use yii\data\ArrayDataProvider;
 
 /**
  * MaquinaController implements the CRUD actions for Maquina model.
@@ -97,8 +98,11 @@ class MaquinaController extends Controller
 
     public function actionAssigne()
     {
-        $searchModel = new MaquinaSearch();
-        $dataProvider = $searchModel->search(Maquina::getAviableMachines());
+        $maquinas = Maquina::getAviableMachines();
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $maquinas,
+        ]);
 
         $turno_user = (new \yii\db\Query())
                     ->select('user_turno.id, user_turno.turno, turno.identificador')
@@ -112,6 +116,7 @@ class MaquinaController extends Controller
         $turnoUsuarioMaquina = new TurnoUsuarioMaquina();
 
         if ($turnoUsuarioMaquina->load(Yii::$app->request->post())) {
+
             $selection = Yii::$app->request->post()['selection'];
             $tur = $turnoUsuarioMaquina->turno_usuario_id;
 
@@ -126,13 +131,13 @@ class MaquinaController extends Controller
                     $turnoUsuarioMaquina = new TurnoUsuarioMaquina();
                 }
             }
-            return $this->redirect(['site/index']);
+            return $this->redirect(['asignacion/index']);
 
         } else {
             return $this->render('assigne', [
-                'searchModel' => $searchModel,
                 'dataProvider' => $dataProvider,
                 'turnos' => $turno_user,
+                'maquinas' => $maquinas,
                 'turnoUsuarioMaquina' => $turnoUsuarioMaquina
             ]);
         }

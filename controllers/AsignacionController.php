@@ -16,6 +16,10 @@ use yii\data\ArrayDataProvider;
 use app\models\Drange;
 use yii\filters\AccessControl;
 use app\models\User;
+use app\models\UserSearch;
+use app\models\Turno;
+use app\models\Lote;
+use app\models\LoteSearch;
 
 /**
  * TurnoController implements the CRUD actions for Turno model.
@@ -33,7 +37,7 @@ class AsignacionController extends Controller
                 'only' => ['index','view','create','update','delete','asignar','charts','performance'],
                 'rules' => [
                     [
-                        'actions' => ['index','view','asignar'],
+                        'actions' => ['index','view','asignar','confirm'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -42,7 +46,7 @@ class AsignacionController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                        $valid_roles = ['Production Manager'];
+                        $valid_roles = ['Operator'];
                         return User::roleInArray($valid_roles) && User::isActive();
                         }
                     ],
@@ -65,10 +69,11 @@ class AsignacionController extends Controller
     public function actionIndex()
     {
         $query = "SELECT turno_usuario_maquina.*"
-                  . "FROM turno_usuario_maquina ";
+                  . "FROM turno_usuario_maquina Where turno_usuario_maquina.borrar = 0";
         $assign = TurnoUsuarioMaquina::findBySql($query)->all();
-// print_r($assign);
+
         $order = TurnoUsuarioMaquina::getMaquinaAssign();
+
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $order,
@@ -78,6 +83,65 @@ class AsignacionController extends Controller
             'dataProvider' => $dataProvider,
             'model' => $order,
         ]);
+    }
+
+    public function actionTransfer($id)
+    {
+        $tum = TurnoUsuarioMaquina::findOne($id);
+
+        $turno = Turno::find()->asArray()->all();
+
+        $users = (new \yii\db\Query())
+                    ->select('user.*, turno.identificador, user_turno.id as ut_id')
+                    ->leftJoin('turno', 'turno.id = user_turno.turno')
+                    ->leftJoin('user', 'user.id = user_turno.user')
+                    ->from('user_turno')
+                    // ->where([
+                    //     '!=','user_turno.user',Yii::$app->user->identity->getId()
+                    // ])
+                    ->orderBy('user.name')
+                    ->all();
+
+
+        $dataProvider = new ArrayDataProvider([
+          'allModels' => $users,
+        ]);
+
+        if (Yii::$app->request->post()) {
+
+            $ut_id = Yii::$app->request->post('radioButtonSelection');
+
+            $newTUM = new TurnoUsuarioMaquina();
+            $newTUM->turno_usuario_id = $ut_id;
+            $newTUM->maquina_id = $tum->maquina_id;
+            $newTUM->fecha = date('Y-m-d');
+            $newTUM->borrar = 0;
+            $newTUM->save();
+
+            $tum->borrar = 1;
+            $tum->save();
+
+            return $this->redirect(['asignacion/index']);
+
+        } else {
+            return $this->render('transfer', [
+                //'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'users' => $users,
+                'tum' => $tum,
+                'turno' => $turno
+            ]);
+        }
+    }
+
+    public function actionConfirm()
+    {
+        if (Yii::$app->request->post()) {
+            return User::confirmPass(Yii::$app->request->post('user_turno'), Yii::$app->request->post('password'));
+        }
+        else{
+            return false;
+        }
     }
 
     /**
@@ -139,19 +203,28 @@ class AsignacionController extends Controller
      */
     public function actionUpdate($id)
     {
-        $asignacion = $this->findModel($id);
+        $tum = TurnoUsuarioMaquina::findOne($id);
 
-        $query = "SELECT pedido.*"
-        . "FROM pedido WHERE pedido.id=".$asignacion->pedido."";
-        $pedido = Pedido::findBySql($query)->all();
+        $lotes = Lote::LotAvailable();
 
-        if ($asignacion->load(Yii::$app->request->post())) {
-            $asignacion->save();
-            return $this->redirect(['pedido/view', 'id' => $pedido[0]->id]);
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $lotes,
+        ]);
+
+        if (Yii::$app->request->post()) {
+            $lote_id = Yii::$app->request->post('radioButtonSelection');
+            $lote = Lote::findOne($lote_id);
+            $lote->maquina_id = $tum->maquina_id;
+            $lote->estado = 'Activo';
+            $lote->save();
+
+            return $this->redirect(['index']);
         } else {
             return $this->render('update', [
-                'asignacion' => $asignacion,
-                'pedido' => $pedido
+                'dataProvider' => $dataProvider,
+                'lotes' => $lotes,
+                'tum' => $tum,
             ]);
         }
     }
@@ -164,8 +237,9 @@ class AsignacionController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $tum = $this->findModel($id);
+        $tum->borrar = 1;
+        $tum->save();
         return $this->redirect(['index']);
     }
 
@@ -178,7 +252,7 @@ class AsignacionController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Asignacion::findOne($id)) !== null) {
+        if (($model = TurnoUsuarioMaquina::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -51,36 +51,37 @@ class TurnoUsuarioMaquina extends \yii\db\ActiveRecord
 
     public function exits($tur, $maq, $fec)
     {
-      $maquina = (new \yii\db\Query())
-      ->from('turno_usuario_maquina')
-      ->where([
+        $maquina = (new \yii\db\Query())
+        ->from('turno_usuario_maquina')
+        ->where([
         'turno_usuario_id' => $tur,
         'borrar' => 0,
         'maquina_id' => $maq,
         'fecha' => $fec
-      ])
-      ->all();
+        ])
+        ->all();
 
-      if (sizeof($maquina) > 0) {
-        return true;
-      } else {
-        return false;
-      }
+        if (sizeof($maquina) > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function getMaquinaAssign()
     {
 
         $maquina = (new \yii\db\Query())
-        ->select('maquina.maquina_id, maquina.nombre, turno_usuario_maquina.fecha, turno_usuario_maquina.id')
+        ->select('maquina.maquina_id, maquina.nombre as name, turno_usuario_maquina.fecha, turno_usuario_maquina.id, lote.identificador as lote, lote.estado')
+        ->leftJoin('turno_usuario_maquina', 'turno_usuario_maquina.maquina_id = maquina.maquina_id')
         ->leftJoin('user_turno', 'user_turno.id = turno_usuario_maquina.turno_usuario_id')
         ->leftJoin('user', 'user.id = user_turno.user')
-        ->leftJoin('maquina', 'maquina.maquina_id = turno_usuario_maquina.maquina_id')
-        ->from('turno_usuario_maquina')
+        ->leftJoin('lote', 'lote.maquina_id = turno_usuario_maquina.maquina_id')
+        ->from('maquina')
         ->where([
-        'user.id' => Yii::$app->user->identity->getId(),
-        'turno_usuario_maquina.borrar' => 0,
-        'turno_usuario_maquina.fecha' => date("Y-m-d")
+            'user.id' => Yii::$app->user->identity->getId(),
+            'turno_usuario_maquina.borrar' => 0,
+            'turno_usuario_maquina.fecha' => date("Y-m-d"),
         ])
         ->all();
 

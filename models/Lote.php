@@ -47,14 +47,30 @@ class Lote extends \yii\db\ActiveRecord
     {
 
         return [
-            'id' => Yii::t('app', 'Lote ID'),
+            'id' => Yii::t('app', 'Lot ID'),
             'identificador' => Yii::t('app', 'Identifier'),
             'pedido' => Yii::t('app', ''),
-            'cantidad' => Yii::t('app', 'Cantidad'),
-            'velocidad' => Yii::t('app', 'Velocidad'),
-            'maquina_id' => Yii::t('app', 'Maquina'),
-            'estado' => Yii::t('app', 'Estado'),
+            'cantidad' => Yii::t('app', 'Amount'),
+            'velocidad' => Yii::t('app', 'Speed'),
+            'maquina_id' => Yii::t('app', 'Machine'),
+            'estado' => Yii::t('app', 'Status'),
         ];
+    }
+
+
+    public function LotAvailable()
+    {
+        $lotes = (new \yii\db\Query())
+        ->select('lote.*, pedido.identificador as order')
+        ->leftJoin('pedido', 'pedido.id = lote.pedido')
+        ->from('lote')
+        ->where([
+            'lote.maquina_id' => 0
+        ])
+        ->orderBy('pedido.identificador')
+        ->all();
+
+        return $lotes;
     }
 
 

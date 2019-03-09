@@ -45,7 +45,7 @@ class LoteController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                        $valid_roles = ['Production Manager'];
+                        $valid_roles = ['Production Manager', 'Shift Manager'];
                         return User::roleInArray($valid_roles) && User::isActive();
                         }
                     ],
@@ -189,21 +189,30 @@ class LoteController extends Controller
     public function actionAssign($id)
     {
 
-      $lote = $this->findModel($id);
+        $lote = $this->findModel($id);
 
-      $searchModel = new MaquinaSearch();
-      $dataProvider = $searchModel->search(Maquina::getMachineForLote());
+        $machines = Maquina::getMachineForLoteDiferent('Activo');
 
-      if (Yii::$app->request->post()) {
-          $lote->maquina_id = Yii::$app->request->post("radioButtonSelection");
-          $lote->save();
-          return $this->redirect(['pedido/view', 'id' => $lote->pedido]);
-      } else {
-          return $this->render('assign', [
-              'dataProvider' => $dataProvider,
-              'lote' => $lote
-          ]);
-      }
+        $dataProvider = new ArrayDataProvider([
+          'allModels' => $machines,
+        ]);
+
+        // print_r($dataProvider);
+
+
+        if (Yii::$app->request->post()) {
+           $lote->maquina_id = Yii::$app->request->post("radioButtonSelection");
+           $lote->estado = 'Activo';
+           $lote->save();
+           // echo Yii::$app->request->post("radioButtonSelection");
+           return $this->redirect(['pedido/view', 'id' => $lote->pedido]);
+        } else {
+            return $this->render('assign', [
+                'dataProvider' => $dataProvider,
+                'machine' => $machines,
+                'lote' => $lote
+            ]);
+        }
     }
 
     public function actionProceso()

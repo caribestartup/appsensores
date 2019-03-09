@@ -59,9 +59,7 @@ class LoteSearch extends Lote
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id
-            // 'inicio' => $this->inicio,
-            // 'fin' => $this->fin,
+            'identificador' => $this->identificador,
         ]);
 
         $query->andFilterWhere(['like', 'identificador', $this->identificador]);

@@ -5,6 +5,7 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use app\models\UserTurno;
 
 /**
  * User model
@@ -30,7 +31,7 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 1;
 
     public $file;
-    
+
     public function attributeLabels(){
 
         return[
@@ -38,11 +39,11 @@ class User extends ActiveRecord implements IdentityInterface
             'email' => Yii::t('app','email'),
             'password' => Yii::t('app','Password'),
             'password_repeat' => Yii::t('app','Rewrite password'),
-            'file' => Yii::t('app', 'Avatar'), 
+            'file' => Yii::t('app', 'Avatar'),
             'name' => Yii::t('app', 'Name'),
-            'surname' => Yii::t('app', 'Surname'), 
-            'role' => Yii::t('app', 'Permission'), 
-            'status' => Yii::t('app', 'Active'), 
+            'surname' => Yii::t('app', 'Surname'),
+            'role' => Yii::t('app', 'Permission'),
+            'status' => Yii::t('app', 'Active'),
         ];
     }
 
@@ -199,25 +200,25 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
-     
+
      /*preguntar si el usuario esta activo*/
     public static function isActive()
     {
      return Yii::$app->user->identity->status == self::STATUS_ACTIVE;
     }
-    
+
      public static function roleInArray($arr_role)
     {
         $find_role = Role::find() ->where(['id' => Yii::$app->user->identity->role])->one();
         $role = $find_role->role;
     return in_array($role, $arr_role);
     }
-    
+
     public function getRole(){
         $find_role = Role::find() ->where(['id' => Yii::$app->user->identity->role])->one();
         return $find_role->role;
     }
-    
+
     public function getR(){
         $find_role = Role::find() ->where(['id' => $this->role])->one();
         return $find_role->role;
@@ -233,7 +234,7 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /*public function getTurnos()
-    {               
+    {
         $query = "SELECT turno.*"."FROM user_turno,turno WHERE user_turno.user=".$this->id." and turno.id=user_turno.turno";
         $sql = Yii::$app->db->createCommand($query);
         return $sql->queryAll();
@@ -246,19 +247,19 @@ class User extends ActiveRecord implements IdentityInterface
         $dataProvider->query->andWhere(['user' => $this->id]);
         return $dataProvider;
     }
-    
+
     public function turnosint(){
         $turno =[];
         $turnos = UserTurno::find()->where(['user' => $this->id])->all();
         foreach ($turnos as $model){
             $turno[] = $model->turno;
         }
-        
+
         return $turno;
     }
-    
+
     public function turnoinarray($turno, $arr){
-        
+
         $exists = FALSE;
         foreach ($arr as $model){
             if (in_array($model, $turno)) {
@@ -283,19 +284,19 @@ class User extends ActiveRecord implements IdentityInterface
                     }
         foreach($recordLast30 as $weight)
                 {
-    
+
                 //Sets weight rounded 2 points
                     $index = array_search(substr($weight['hora_inicio'], 0,10), $fechas);
-                    $weights[$index] = $weight["terror"];              
-                }   
-                
+                    $weights[$index] = $weight["terror"];
+                }
+
         return $weights;
-        
+
     }
     /*Consulta obtener suma de programa agrupando por fecha y sumando los que tengan distinta maquina
     //SELECT SUM(temporal.programa) AS suma FROM (SELECT fecha,mac,programa, COUNT(*) AS contador FROM totales GROUP BY hora_inicio,mac ) AS temporal GROUP BY fecha
     */
-    
+
     public function getTotalprodest($sd, $ed)
     {
         $weights = [];
@@ -311,14 +312,14 @@ class User extends ActiveRecord implements IdentityInterface
                     }
         foreach($recordLast30 as $weight)
                 {
-    
+
                 //Sets weight rounded 2 points
                     $index = array_search(substr($weight['hora_inicio'], 0,10), $fechas);
-                    $weights[$index] = $weight["totalprev"];              
-                }   
-                
+                    $weights[$index] = $weight["totalprev"];
+                }
+
         return $weights;
-        
+
     }
 
     public function getTotalprod($sd, $ed)
@@ -337,14 +338,14 @@ class User extends ActiveRecord implements IdentityInterface
                     }
         foreach($recordLast30 as $weight)
                 {
-    
+
                 //Sets weight rounded 2 points
                     $index = array_search(substr($weight['hora_inicio'], 0,10), $fechas);
-                    $weights[$index] = $weight["totalprev"];              
-                }   
-                
+                    $weights[$index] = $weight["totalprev"];
+                }
+
         return $weights;
-        
+
     }
 
     public function getTotalrech($sd, $ed)
@@ -362,14 +363,14 @@ class User extends ActiveRecord implements IdentityInterface
                     }
         foreach($recordLast30 as $weight)
                 {
-    
+
                 //Sets weight rounded 2 points
                     $index = array_search(substr($weight['hora_inicio'], 0,10), $fechas);
-                    $weights[$index] = $weight["totalprev"];              
-                }   
-                
+                    $weights[$index] = $weight["totalprev"];
+                }
+
         return $weights;
-        
+
     }
 
     public function getPartialerrors($sd, $ed)
@@ -378,40 +379,40 @@ class User extends ActiveRecord implements IdentityInterface
         $queryLast30 = "SELECT parciales.*, SUM(parciales.total_error) AS error, SUM(parciales.total) AS terror " . "FROM totales,parciales WHERE totales.operario ='".$this->id."' and totales.hora_inicio > '".$sd."' and totales.hora_inicio < '".$ed."' and parciales.id_totales=totales.id GROUP BY totales.fecha, parciales.ventana";
         $sql= Yii::$app->db->createCommand($queryLast30);
         $recordLast30 = $sql->queryAll();
-                
+
         return $recordLast30;
 
     }
-    
+
     /*
      * consulta para obtener detalles de operario por maquina
      * SELECT mac,fecha,SUM(temporal.programa) AS suma,SUM(total) AS totals,SUM(temporal.programa)-SUM(total) AS realp FROM (SELECT * FROM totales WHERE operario = 2 AND mac=3 GROUP BY hora_inicio) AS temporal GROUP BY mac,fecha ORDER BY fecha
      * */
-    
+
     public function getTotalprodestmac($sd, $ed, $mac)
     {
         $weights = [];
-        
+
         $queryLast30 = "SELECT *, SUM(temporal.programa) AS totalprev FROM (SELECT * FROM totales WHERE operario ='".$this->id."' and mac ='".$mac."' and hora_inicio > '".$sd."' and hora_inicio < '".$ed."' GROUP BY hora_inicio ) AS temporal GROUP BY fecha ORDER BY fecha";
         /*$queryLast30 = "SELECT * , programa - SUM(total) AS totalprev " . "FROM totales WHERE operario ='".$this->id."' and hora_inicio > '".$sd."' and hora_inicio < '".$ed."' GROUP BY DATE(hora_inicio) ORDER BY DATE(hora_inicio)";*/
         $sql= Yii::$app->db->createCommand($queryLast30);
         $recordLast30 = $sql->queryAll();
-        
+
         $fechas = $this::fechas($sd, $ed);
-        
+
         foreach ($fechas as $fecha) {
             $weights[] = 0 ;
         }
         foreach($recordLast30 as $weight)
         {
-            
+
             //Sets weight rounded 2 points
             $index = array_search(substr($weight['hora_inicio'], 0,10), $fechas);
             $weights[$index] = $weight["totalprev"];
         }
-        
+
         return $weights;
-        
+
     }
 
     public function fechas($start, $end) {
@@ -429,10 +430,27 @@ class User extends ActiveRecord implements IdentityInterface
 
         return $range;
     }
-   
+
+    public function confirmPass($tur_id, $password)
+    {
+        // $user = (new \yii\db\Query())
+        //             ->select('user.*')
+        //             ->leftJoin('user_turno', 'user_turno.user = users.id')
+        //             ->where(['user_turno.id' => $tur_id])
+        //             ->from('user')
+        //             ->all();
+
+        $turno_user = UserTurno::findOne($tur_id);
+        $user = User::findOne($turno_user->user);
+        // Yii::$app->security->
+        // return $user->password_hash;
+        return Yii::$app->security->validatePassword($password, $user->password_hash);
+        // return $user->validatePassword($password);
+    }
 
 
 
-  
+
+
 
 }

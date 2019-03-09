@@ -9,8 +9,8 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel app\models\MaquinaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Assign Machines');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Machines Assigned'), 'url' => ['asignacion/index']];
+$this->title = Yii::t('app', 'Assign Machine to lot');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Order'), 'url' => ['pedido/view', 'id' => $lote->pedido]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -18,43 +18,42 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <!-- <p>
-        <?= Html::a(Yii::t('app', 'New Machine'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p> -->
-
     <div class="maquina-form">
 
-        <?php $form = ActiveForm::begin(); ?>
+        <?php $form = ActiveForm::begin([
+                  'method' => 'post',
+                  'action' => ['asignacion/update', 'id' => $tum->id],
+              ]); ?>
 
         <?php
-            $var=array();
-            foreach ($turnos as $key => $value) {
-                // code...
-                $tur = [ $value['id'] => $value['identificador']];
-
-                array_push($var, $tur);
-            }
+            // $var=array();
+            // foreach ($turnos as $key => $value) {
+            //     // code...
+            //     $tur = [ $value['id'] => $value['identificador']];
+            //
+            //     array_push($var, $tur);
+            // }
         ?>
 
 
-        <?= $form->field($turnoUsuarioMaquina, 'turno_usuario_id')->dropDownList($var, ['prompt' => 'Seleccione Uno' ]); ?>
+        <?php // $form->field($lote, 'turno_usuario_id')->dropDownList($var, ['prompt' => 'Seleccione Uno' ]); ?>
 
         <div class="box box-primary box-solid">
                     <div class="box-header with-border">
-                        <h3 class="box-title"><?=Yii::t('app','Machines') ?></h3>
+                        <h3 class="box-title"><?=Yii::t('app','Lots') ?></h3>
                     </div>
                     <div class="box-body">
                           <?= GridView::widget([
                                 'dataProvider' => $dataProvider,
-                                //'filterModel' => $searchModel,
+                                // 'filterModel' => $searchModel,
                                 'columns' => [
                                     ['class' => 'yii\grid\SerialColumn'],
                                     // 'maquina_id',
                                     //'maquina_id',
-                                    'nombre',
-                                    'modelo',
-                                    'numero',
-                                    'local',
+                                    'identificador',
+                                    'cantidad',
+                                    'velocidad',
+                                    'order',
                                     // array(
                                     // 'attribute' => 'local',
                                     // 'value'=> 'localname',
@@ -68,13 +67,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     //'intervalo',
                                     //'fecha',
                                     //'estado',
-
                                     [
-                                        'class' => 'yii\grid\CheckboxColumn',
-                                        'checkboxOptions' => function ($maquinas, $key, $index, $column) {
-                                            return ['value' => $maquinas['maquina_id']];
+                                        'class' => 'yii\grid\RadioButtonColumn',
+                                        'radioOptions' => function ($lotes, $key, $index, $column) {
+                                            return ['value' => $lotes['id']];
                                         }
                                     ],
+                                    // [
+                                    //
+                                    //     'class' => 'yii\grid\RadioButtonColumn',
+                                    // ],
                                 ],
                             ]); ?>
 

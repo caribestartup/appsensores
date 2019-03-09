@@ -26,7 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $form = ActiveForm::begin([
                   'method' => 'post',
-                  'action' => ['lote/assign', 'id' => $lote->id],
+                  'action' => ['asignacion/transfer', 'id' => $tum->id],
+                  'id' => 'form',
               ]); ?>
 
         <?php
@@ -54,10 +55,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ['class' => 'yii\grid\SerialColumn'],
                                     // 'maquina_id',
                                     //'maquina_id',
-                                    'nombre',
-                                    'modelo',
-                                    'numero',
-                                    'local',
+                                    'name',
+                                    'surname',
+                                    'email',
+                                    'identificador',
                                     // array(
                                     // 'attribute' => 'local',
                                     // 'value'=> 'localname',
@@ -73,14 +74,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     //'estado',
                                     [
                                         'class' => 'yii\grid\RadioButtonColumn',
-                                        'radioOptions' => function ($machine, $key, $index, $column) {
-                                            return ['value' => $machine['maquina_id']];
-                                        }
+                                        'radioOptions' => function ($users, $key, $index, $column) {
+                                            return ['value' => $users['ut_id']];
+                                        },
                                     ],
-                                    // [
-                                    //
-                                    //     'class' => 'yii\grid\RadioButtonColumn',
-                                    // ],
                                 ],
                             ]); ?>
 
@@ -92,14 +89,61 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         <div class="form-group">
-            <?= Html::submitButton(Yii::t('app', 'Assign Machines'), ['class' => 'btn btn-info']) ?>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Transfer Machine</button>
         </div>
 
         <?php ActiveForm::end(); ?>
 
     </div>
 
-
-
-
 </div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Insert Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Password</label>
+            <input type="password" class="form-control" id="password">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id='btn_submit'>Transfer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#btn_submit').click(function (e) {
+            $.ajax({
+                url: '<?php echo Yii::$app->request->baseUrl. '/index.php?r=asignacion/confirm' ?>',
+                type: 'post',
+                data: {
+                    password: $('#password').val(),
+                    user_turno: $("input[type='radio']:checked").val(),
+                    _csrf : '<?=Yii::$app->request->getCsrfToken()?>'
+                },
+                success: function (data) {
+                    if(data == 1) {
+                        $('#form').submit();
+                    }
+                    else{
+                        alert('Incorrect Password');
+                    }
+                }
+            });
+        });
+    });
+</script>

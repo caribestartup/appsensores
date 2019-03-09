@@ -23,29 +23,33 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
         'columns' => [
-          'id',
-            'nombre',
+            'id',
+            'name',
             'fecha',
+            'lote',
+            'estado',
 
            [
             'class' => 'kartik\grid\ActionColumn',
             'dropdown' => false,
             'vAlign'=>'middle',
-            'template' => '{unassign}{edit}',
+            'template' => '{assign}{transfer}{unassign}',
             'urlCreator' => function($action, $model, $key, $index) {
                     return Url::to([$action,'id'=>$key]);
             },
             'buttons'=>[
-
+                'assign' => function ($url, $model, $key) {
+                    return Html::a('<span class="fa fa-cubes"></span>', ['update', 'id'=>$model["id"]],['title'=> Yii::t('app','Assign Lot')]);
+                },
+                'transfer' => function ($url, $model, $key) {
+                    return Html::a('<span class="fa fa-sign-out"></span>', ['transfer', 'id'=>$model["id"]],['title'=> Yii::t('app','Transfer')]);
+                },
                 'unassign' => function ($url, $model, $key) {
-                return Html::a('<span class="fa fa-sign-out"></span>', ['view', 'id'=>$model["id"]],['title'=> Yii::t('app','Transfer')]);
+                    return Html::a('<span class="fa fa-close "></span>', ['asignacion/delete', 'id'=>$model["id"]],['data' => [
+                        'confirm' => Yii::t('app','Do you want to unassign machine?'),
+                        'method' => 'post',
+                    ],'title'=>Yii::t('app', Yii::t('app','Unassign Machine'))]);
                 },
-                'edit' => function ($url, $model, $key) {
-                return Html::a('<span class="fa fa-close "></span>', ['update', 'id'=>$model["id"]],['title'=> Yii::t('app','Unassign')]);
-                },
-                // 'performance' => function ($url, $model, $key) {
-                // return Html::a('<span class="fa fa-bar-chart "></span>', ['turno/performance', 'id'=>$model->id],['title'=> Yii::t('app','Performance')]);
-                // },
             ],
 
         ]

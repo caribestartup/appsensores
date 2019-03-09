@@ -44,7 +44,7 @@ class PedidoController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                        $valid_roles = ['Production Manager'];
+                        $valid_roles = ['Production Manager', 'Shift Manager'];
                         return User::roleInArray($valid_roles) && User::isActive();
                         }
                     ],
