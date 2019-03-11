@@ -159,7 +159,9 @@ class MaquinaController extends Controller
     {
         $model = new Maquina();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->state = 'Creado';
+            $model->save();
             return $this->redirect(['view', 'id' => $model->maquina_id]);
         }
 

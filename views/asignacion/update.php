@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('app', 'Assign Machine to lot');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Order'), 'url' => ['pedido/view', 'id' => $lote->pedido]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Machines Assigned'), 'url' => ['asignacion/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $form = ActiveForm::begin([
                   'method' => 'post',
                   'action' => ['asignacion/update', 'id' => $tum->id],
+                  'id' => 'form',
               ]); ?>
 
         <?php
@@ -88,14 +89,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
         <div class="form-group">
-            <?= Html::submitButton(Yii::t('app', 'Assign Machines'), ['class' => 'btn btn-info']) ?>
+            <?= Html::Button(Yii::t('app', 'Assign Machines'), ['class' => 'btn btn-info', 'onClick' => "addQuestion()"]) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
 
     </div>
-
-
-
-
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+    function addQuestion(){
+        var selected = $('input[name=radioButtonSelection]:checked', '#form').val();
+        if (typeof(selected) !== "string"){
+            alert('Seleccione un Lote');
+        }
+        else{
+            $('#form').submit();
+        }
+    }
+</script>

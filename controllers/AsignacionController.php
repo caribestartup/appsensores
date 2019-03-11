@@ -19,6 +19,7 @@ use app\models\User;
 use app\models\UserSearch;
 use app\models\Turno;
 use app\models\Lote;
+use app\models\Genericos;
 use app\models\LoteSearch;
 
 /**
@@ -34,10 +35,10 @@ class AsignacionController extends Controller
         return [
              'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','view','create','update','delete','asignar','charts','performance'],
+                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'generico', 'states'],
                 'rules' => [
                     [
-                        'actions' => ['index','view','asignar','confirm'],
+                        'actions' => ['index','view','asignar','confirm', 'generico', 'states'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -83,6 +84,53 @@ class AsignacionController extends Controller
             'dataProvider' => $dataProvider,
             'model' => $order,
         ]);
+    }
+
+    public function actionStates($id)
+    {
+        $machine = Maquina::findOne($id);
+
+        if($machine->state == 'Activo'){
+            $machine->state = 'Pausado';
+            $machine->save();
+        } else {
+            $machine->state = 'Activo';
+            $machine->save();
+        }
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionGenerico()
+    {
+        if (Yii::$app->request->post()) {
+
+            $lote_id = Yii::$app->request->post('lote_id');
+            $lote = Lote::findOne($lote_id);
+            $lote->maquina_id = Yii::$app->request->post('maquina_id');
+            $lote->estado = 'Activo';
+
+            $maquina = Maquina::findOne(Yii::$app->request->post('maquina_id'));
+            $maquina->state = "Activo";
+
+            $lote->save();
+            $maquina->save();
+
+            $questions = $this->existQuestions($lote_id);
+            foreach ($questions as $question) {
+                $anwser = Yii::$app->request->post($question['id']);
+
+                $generic = Genericos::findOne($question['id']);
+                $generic->maquina_id = Yii::$app->request->post('maquina_id');
+                $generic->user_id = Yii::$app->user->identity->getId();
+                $generic->respuesta = $anwser;
+                $generic->fecha = date('Y-m-d');
+
+                $generic->save();
+            }
+
+            return $this->redirect(['index']);
+        }
     }
 
     public function actionTransfer($id)
@@ -142,6 +190,18 @@ class AsignacionController extends Controller
         else{
             return false;
         }
+    }
+
+    public function existQuestions($lote_id)
+    {
+        $genericis = (new \yii\db\Query())
+        ->from('genericos')
+        ->where([
+            'genericos.lote_id' => $lote_id,
+        ])
+        ->all();
+
+        return $genericis;
     }
 
     /**
@@ -214,12 +274,30 @@ class AsignacionController extends Controller
 
         if (Yii::$app->request->post()) {
             $lote_id = Yii::$app->request->post('radioButtonSelection');
-            $lote = Lote::findOne($lote_id);
-            $lote->maquina_id = $tum->maquina_id;
-            $lote->estado = 'Activo';
-            $lote->save();
+            $questions = $this->existQuestions($lote_id);
 
-            return $this->redirect(['index']);
+            if (sizeof($questions) > 0) {
+                return $this->render('questions', [
+                    'lote' => $lote_id,
+                    'maquina' => $tum->maquina_id,
+                    'questions' => $questions,
+                ]);
+            }
+            else {
+                $lote = Lote::findOne($lote_id);
+                $lote->maquina_id = $tum->maquina_id;
+                $lote->estado = 'Activo';
+
+                $maquina = Maquina::findOne($tum->maquina_id);
+                $maquina->state = "Activo";
+
+
+
+                $lote->save();
+                $maquina->save();
+                return $this->redirect(['index']);
+            }
+
         } else {
             return $this->render('update', [
                 'dataProvider' => $dataProvider,

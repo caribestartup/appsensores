@@ -71,12 +71,11 @@ class TurnoUsuarioMaquina extends \yii\db\ActiveRecord
     public function getMaquinaAssign()
     {
 
-        $maquina = (new \yii\db\Query())
-        ->select('maquina.maquina_id, maquina.nombre as name, turno_usuario_maquina.fecha, turno_usuario_maquina.id, lote.identificador as lote, lote.estado')
+        $maquinas = (new \yii\db\Query())
+        ->select('maquina.maquina_id, maquina.nombre as name, turno_usuario_maquina.fecha, maquina.state, turno_usuario_maquina.id')
         ->leftJoin('turno_usuario_maquina', 'turno_usuario_maquina.maquina_id = maquina.maquina_id')
         ->leftJoin('user_turno', 'user_turno.id = turno_usuario_maquina.turno_usuario_id')
         ->leftJoin('user', 'user.id = user_turno.user')
-        ->leftJoin('lote', 'lote.maquina_id = turno_usuario_maquina.maquina_id')
         ->from('maquina')
         ->where([
             'user.id' => Yii::$app->user->identity->getId(),
@@ -85,7 +84,27 @@ class TurnoUsuarioMaquina extends \yii\db\ActiveRecord
         ])
         ->all();
 
-        return $maquina;
+        $retMaquina = array();
+        foreach ($maquinas as $maquina) {
+            if($maquina['state'] == 'Activo' || $maquina['state'] == 'Pausado')
+            {
+                $lote = (new \yii\db\Query())
+                ->from('lote')
+                ->where([
+                    'lote.maquina_id' => $maquina['maquina_id'],
+                    'lote.estado' => 'Activo',
+                ])
+                ->all();
+
+                $maquina['lot'] = $lote[0]['identificador'];
+            }
+            else {
+                $maquina['lot'] = null;
+            }
+
+            array_push($retMaquina, $maquina);
+        }
+        return $retMaquina;
     }
 
 

@@ -19,6 +19,7 @@ use yii\data\ArrayDataProvider;
 use app\models\Drange;
 use yii\filters\AccessControl;
 use app\models\User;
+use app\models\Genericos;
 
 /**
  * TurnoController implements the CRUD actions for Turno model.
@@ -119,6 +120,17 @@ class LoteController extends Controller
             $model->estado = 'Activo';
             $model->maquina_id = 0;
             $model->save();
+            $loteID = Yii::$app->db->getLastInsertID();
+
+            if(Yii::$app->request->post('array') != ''){
+                $questions = split(',', Yii::$app->request->post('array'));
+                foreach ($questions as $question) {
+                    $generic = new Genericos();
+                    $generic->pregunta = Yii::$app->request->post($question);
+                    $generic->lote_id = $loteID;
+                    $generic->save();
+                }
+            }
             return $this->redirect(['pedido/view', 'id' => $pedido[0]->id]);
         } else {
             return $this->render('create', [
@@ -201,11 +213,24 @@ class LoteController extends Controller
 
 
         if (Yii::$app->request->post()) {
-           $lote->maquina_id = Yii::$app->request->post("radioButtonSelection");
-           $lote->estado = 'Activo';
-           $lote->save();
-           // echo Yii::$app->request->post("radioButtonSelection");
-           return $this->redirect(['pedido/view', 'id' => $lote->pedido]);
+
+            $questions = $this->existQuestions($id);
+
+            if (sizeof($questions) > 0) {
+                return $this->render('//asignacion/questions', [
+                    'lote' => $id,
+                    'maquina' => Yii::$app->request->post("radioButtonSelection"),
+                    'questions' => $questions,
+                ]);
+
+            } else {
+                $lote->maquina_id = Yii::$app->request->post("radioButtonSelection");
+                $lote->estado = 'Activo';
+                $lote->save();
+
+               return $this->redirect(['pedido/view', 'id' => $lote->pedido]);
+            }
+
         } else {
             return $this->render('assign', [
                 'dataProvider' => $dataProvider,
@@ -213,6 +238,18 @@ class LoteController extends Controller
                 'lote' => $lote
             ]);
         }
+    }
+
+    public function existQuestions($lote_id)
+    {
+        $genericis = (new \yii\db\Query())
+        ->from('genericos')
+        ->where([
+            'genericos.lote_id' => $lote_id,
+        ])
+        ->all();
+
+        return $genericis;
     }
 
     public function actionProceso()
