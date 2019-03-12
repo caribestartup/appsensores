@@ -35,10 +35,10 @@ class AsignacionController extends Controller
         return [
              'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'generico', 'states'],
+                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'generico', 'states', 'stop'],
                 'rules' => [
                     [
-                        'actions' => ['index','view','asignar','confirm', 'generico', 'states'],
+                        'actions' => ['index','view','asignar','confirm', 'generico', 'states', 'stop'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -99,6 +99,23 @@ class AsignacionController extends Controller
         }
 
         return $this->redirect(['index']);
+    }
+
+    public function actionStop()
+    {
+        if (Yii::$app->request->post()) {
+            $machine_id = Yii::$app->request->post('id');
+            $opcion = Yii::$app->request->post('opcion');
+            $descripcion = Yii::$app->request->post('descripcion');
+
+            // salvar el motivo y la descripcion
+
+            $machine = Maquina::findOne($machine_id);
+            $machine->state = 'Detenido';
+            $machine->save();
+
+            return $this->redirect(['index']);
+        }
     }
 
     public function actionGenerico()
