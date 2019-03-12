@@ -86,7 +86,7 @@ class TurnoUsuarioMaquina extends \yii\db\ActiveRecord
 
         $retMaquina = array();
         foreach ($maquinas as $maquina) {
-            if($maquina['state'] == 'Activo' || $maquina['state'] == 'Pausado')
+            if($maquina['state'] == 'Activo' || $maquina['state'] == 'Pausado' || $maquina['state'] == 'Detenido')
             {
                 $lote = (new \yii\db\Query())
                 ->from('lote')
