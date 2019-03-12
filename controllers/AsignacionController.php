@@ -20,6 +20,7 @@ use app\models\UserSearch;
 use app\models\Turno;
 use app\models\Lote;
 use app\models\Genericos;
+use app\models\Insidencia;
 use app\models\LoteSearch;
 
 /**
@@ -90,13 +91,20 @@ class AsignacionController extends Controller
     {
         $machine = Maquina::findOne($id);
 
-        if($machine->state == 'Activo'){
-            $machine->state = 'Pausado';
-            $machine->save();
-        } else {
-            $machine->state = 'Activo';
-            $machine->save();
-        }
+        $machine->state = 'Activo';
+        $machine->save();
+
+        $insidencia = (new \yii\db\Query())
+        ->from('insidencia')
+        ->where([
+            'insidencia.maquina_id' => $id,
+            'fin' => 0
+        ])
+        ->all();
+
+        $insi = Insidencia::findOne($insidencia[0]['id']);
+        $insi->fin = date('Y-m-d H:i:s');
+        $insi->save();
 
         return $this->redirect(['index']);
     }
@@ -104,11 +112,33 @@ class AsignacionController extends Controller
     public function actionStop()
     {
         if (Yii::$app->request->post()) {
+
             $machine_id = Yii::$app->request->post('id');
             $opcion = Yii::$app->request->post('opcion');
-            $descripcion = Yii::$app->request->post('descripcion');
 
-            // salvar el motivo y la descripcion
+            switch ($opcion) {
+                case '1':
+                    $descripcion = Yii::$app->request->post('descripcion');
+                    break;
+                case '2':
+                    $descripcion = 'Descanso';
+                    break;
+                case '3':
+                    $descripcion = 'Fin de lote';
+                    break;
+                default:
+                    $descripcion = 'Error de maquina';
+                    break;
+            }
+
+            $incidencia = new Insidencia();
+
+            $incidencia->maquina_id = $machine_id;
+            $incidencia->inicio = date('Y-m-d H:i:s');
+            $incidencia->descripcion = $descripcion;
+            $incidencia->value = $opcion;
+            $incidencia->usuario_id = Yii::$app->user->identity->getId();
+            $incidencia->save();
 
             $machine = Maquina::findOne($machine_id);
             $machine->state = 'Detenido';

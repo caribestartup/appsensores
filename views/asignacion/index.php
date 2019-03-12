@@ -54,24 +54,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'state' => function ($url, $model, $key) {
                     if($model["state"] == "Activo"){
-                        return Html::a('<span class="fa fa-pause "></span>', ['asignacion/states', 'id'=>$model["maquina_id"]],['data' => [
-                            'confirm' => Yii::t('app','Do you want to PAUSE machine?'),
-                            'method' => 'post',
-                        ],'title'=>Yii::t('app', Yii::t('app','Pause Machine'))]);
+                        if($model["state"] !== "Terminado"){
+                            return '<a id="'.$model["maquina_id"].'" href="" data-toggle="modal" data-target="#exampleModal" class="stop"><span class="fa fa-ban"></span></a>';
+                        }
+                        // return Html::a('<span class="fa fa-pause "></span>', ['asignacion/states', 'id'=>$model["maquina_id"]],['data' => [
+                        //     'confirm' => Yii::t('app','Do you want to PAUSE machine?'),
+                        //     'method' => 'post',
+                        // ],'title'=>Yii::t('app', Yii::t('app','Pause Machine'))]);
 
                     }
-                    else if($model["state"] == "Pausado" || $model["state"] == "Detenido") {
+                    else if($model["state"] == "Detenido") {
                         return Html::a('<span class="fa fa-play "></span>', ['asignacion/states', 'id'=>$model["maquina_id"]],['data' => [
                             'confirm' => Yii::t('app','Do you want to RESUME machine?'),
                             'method' => 'post',
                         ],'title'=>Yii::t('app', Yii::t('app','Resume Machine'))]);
                     }
                 },
-                'stop' => function ($url, $model, $key) {
-                    if($model["state"] !== "Terminado"){
-                        return '<a id="'.$model["maquina_id"].'" href="" data-toggle="modal" data-target="#exampleModal" class="stop"><span class="fa fa-ban"></span></a>';
-                    }
-                },
+                // 'stop' => function ($url, $model, $key) {
+                //
+                // },
             ],
 
         ]
@@ -92,14 +93,14 @@ $this->params['breadcrumbs'][] = $this->title;
             <form>
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Options</label>
-                    <select class="custom-select form-control" id='option'>
-                        <option value="1">Otro</option>
-                        <option value="2">Descanso</option>
-                        <option value="3" selected>Fin de lote</option>
-                        <option value="4">Máquina en error</option>
+                    <select class="custom-select form-control" onChange="showOther();" id='option'>
+                        <option value="1">Other</option>
+                        <option value="2">Rest</option>
+                        <option value="3" selected>Lot finish</option>
+                        <option value="4">Error machine</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div id="other" class="form-group" hidden>
                     <label for="recipient-name" class="col-form-label">Description</label>
                     <input type="text" class="form-control" id="description">
                 </div>
@@ -115,6 +116,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
+    function showOther() {
+        var select = document.getElementById("option");
+        var value = select.options[select.selectedIndex].value;
+
+        if (value == 1) {
+            document.getElementById("other").hidden = false;
+        }
+        else{
+            document.getElementById("other").hidden = true;
+        }
+    }
+
     $(document).ready(function () {
         var machine_id = -1;
         $('.stop').click(function (e) {
