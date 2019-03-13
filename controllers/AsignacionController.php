@@ -141,7 +141,7 @@ class AsignacionController extends Controller
             $incidencia->save();
 
             $machine = Maquina::findOne($machine_id);
-            $machine->state = 'Detenido';
+            $machine->state = $opcion == 4? 'Error' : 'Detenido';
             $machine->save();
 
             return $this->redirect(['index']);

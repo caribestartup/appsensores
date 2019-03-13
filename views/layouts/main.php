@@ -98,14 +98,17 @@ $turno = Maquina::getLasturno();
 
 		<?php foreach ($maquina as $maq) { ?>
 			<?php
-				switch ($maq->getRealstate()) {
-					case -1:
+				switch ($maq->state) {
+					case 'Error':
 						$error[] = $maq;
 						break;
-					case 0:
+					case 'Terminado':
 						$apagada[] = $maq;
 						break;
-					case 1:
+          case 'Detenido':
+						$apagada[] = $maq;
+						break;
+					case 'Activo':
 						$encendida[] = $maq;
 						break;
 
@@ -127,7 +130,10 @@ $turno = Maquina::getLasturno();
 						<img class="pull-left machine-img" src="<?= Url::to('res/icon_yes.png')?>">
 						<label><?= strtoupper($machine->nombre) ?></label>
 						<p class="text-primary"><?= $machine->getTotalprodn() ?>/<?= $machine->getTotalprodestn() ?></p>
-						<a href="<?= Url::toRoute(['/maquina/production', 'id' => $machine->maquina_id])?>"><img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_ok.png')?>"></a>
+						<a href="<?= Url::toRoute(['/maquina/production', 'id' => $machine->maquina_id])?>">
+
+              <img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_ok.png')?>"></a>
+
 					</div>
 				</div>
 

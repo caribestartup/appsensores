@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         // ],'title'=>Yii::t('app', Yii::t('app','Pause Machine'))]);
 
                     }
-                    else if($model["state"] == "Detenido") {
+                    else if($model["state"] == "Detenido" || $model["state"] == "Error") {
                         return Html::a('<span class="fa fa-play "></span>', ['asignacion/states', 'id'=>$model["maquina_id"]],['data' => [
                             'confirm' => Yii::t('app','Do you want to RESUME machine?'),
                             'method' => 'post',
