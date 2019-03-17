@@ -376,6 +376,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function getPartialerrors($sd, $ed)
     {
 
+
         $queryLast30 = "SELECT parciales.*, SUM(parciales.total_error) AS error, SUM(parciales.total) AS terror " . "FROM totales,parciales WHERE totales.operario ='".$this->id."' and totales.hora_inicio > '".$sd."' and totales.hora_inicio < '".$ed."' and parciales.id_totales=totales.id GROUP BY totales.fecha, parciales.ventana";
         $sql= Yii::$app->db->createCommand($queryLast30);
         $recordLast30 = $sql->queryAll();

@@ -132,17 +132,15 @@ class UserController extends Controller
 
 
         }else{
-            $tday = date('Y-m-d');
+            $tday = date('Y-m-d H:i:s');
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
             $last30 = strtotime ( '-30 day' , strtotime ( $tday ) ) ;
-            $last30 = date ( 'Y-m-d' , $last30 );
-            $today = date ( 'Y-m-d' , $today );
+            $last30 = date ( 'Y-m-d H:i:s' , $last30 );
+            $today = date ( 'Y-m-d H:i:s' , $today );
 
         }
         $maqref = new Maquina();
         $drange = new Drange();
-
-
 
         $last30Graph = [];
         $labelLast30Graph = [];
@@ -163,11 +161,9 @@ class UserController extends Controller
         }
 
         foreach($fechas as $date)
-            {
-
-                $labelLast30Graph[] = substr($date,5,5);
-
-            }
+        {
+            $labelLast30Graph[] = substr($date,5,5);
+        }
 
 
          $maquina = User::find()->where(['id' => $id])->all();
