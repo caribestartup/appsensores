@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('app', 'New Machine'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    
+
     <div class="box box-primary box-solid">
                 <div class="box-header with-border">
                     <h3 class="box-title"><?=Yii::t('app','Machines') ?></h3>
@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'filterModel' => $searchModel,
                             'columns' => [
                                 ['class' => 'yii\grid\SerialColumn'],
-                    
+
                                 //'maquina_id',
                                 'nombre',
                                 'modelo',
@@ -47,12 +47,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 //'intervalo',
                                 //'fecha',
                                 //'estado',
-                    
+
                                 [
                                     'class' => 'kartik\grid\ActionColumn',
                                     'dropdown' => false,
                                     'vAlign'=>'middle',
-                                    'template' => '{update}',
+                                    'template' => '{detail}{update}',
                                     'urlCreator' => function($action, $model, $key, $index) {
                                     return Url::to([$action,'id'=>$key]);
                                     },
@@ -60,19 +60,21 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'update' => function ($url, $model, $key) {
                                             return Html::a('<span class="fa fa-pencil"></span>', ['update', 'id'=>$model->maquina_id],['title'=> Yii::t('app','Update')]);
                                         },
-                                        
-                       
+                                        'detail' => function ($url, $model, $key) {
+                                            return Html::a('<span class="fa fa-eye"></span>', ['view', 'id'=>$model->maquina_id],['title'=> Yii::t('app','Detail')]);
+                                        },
+
                                         ],
                                         'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
-                                        
+
                                         ],
                             ],
                         ]); ?>
 
-                   
-                    
+
+
                 </div>
             </div>
 
-   
+
 </div>

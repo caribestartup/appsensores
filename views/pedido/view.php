@@ -38,25 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                              'estado',
                              'cantidad',
                              'Maquina',
-                             // 'surname',
-                            //  array(
-                            // 'attribute' => 'role',
-                            // 'value'=> 'r',
-                            // ),
-                            //  ['class' => '\kartik\grid\BooleanColumn',
-                            //  'attribute' => 'status',
-                            // 'trueLabel' => Yii::t('app','Yes'),
-                            // 'falseLabel' => Yii::t('app','No')
-                            // ],
-                            //'username',
-                            //'auth_key',
-                            //'password_hash',
-                            //'password_reset_token',
-                            // 'email:email',
-                            // 'status',
-                            // 'created_at',
-                            // 'updated_at',
-                            // 'avatar',
+
                             [
                             'class' => 'kartik\grid\ActionColumn',
                             'dropdown' => false,
@@ -94,7 +76,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]); ?>
 
                 </div>
-                <!-- <button type="button" class="btn btn-primary float-right ml-3 mb-3">Primary</button> -->
             </div>
 
 

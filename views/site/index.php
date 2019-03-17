@@ -61,6 +61,9 @@ $this->title = 'WELCOME';
 			<div class="col-md-2 col-md-offset-1">
 				<a class="option-reference" href="<?= Url::toRoute('/pedido/index')?>"><img class="img-responsive" src="<?= Url::to('res/icon_proccess.png')?>"><?php echo Yii::t('app','ORDES') ?></a>
 			</div>
+			<div class="col-md-2 col-md-offset-1">
+				<a class="option-reference" href="<?= Url::toRoute('/maquina/index')?>"><?php echo Yii::t('app','MACHINES') ?></a>
+			</div>
 
 		</div>
 

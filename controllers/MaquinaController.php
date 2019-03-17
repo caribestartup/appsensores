@@ -35,12 +35,12 @@ class MaquinaController extends Controller
                 'only' => ['index','view','create','update','delete','production','charts','performance', 'assigne'],
                 'rules' => [
                     [
-                        'actions' => ['index','view','production','performance', 'assigne'],
+                        'actions' => ['index','production','performance', 'assigne'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['charts','create','update','delete'],
+                        'actions' => ['charts','create','update','delete','view'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -83,18 +83,24 @@ class MaquinaController extends Controller
      */
     public function actionView($id)
     {
+        $ordenador = (new \yii\db\Query())
+        ->select('ordenador.*')
+        ->from('ordenador')
+        ->where([
+          'ordenador.maquina' => $id
+        ])
+        ->all();
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $ordenador,
+        ]);
+
         return $this->render('view', [
+            'dataProvider' => $dataProvider,
             'model' => $this->findModel($id),
+            'ordenador' => $ordenador,
         ]);
     }
-
-    // public function actionAssigne()
-    // {
-    //
-    //     return $this->render('assigne', [
-    //         'maquina' =>
-    //     ]);
-    // }
 
     public function actionAssigne()
     {
@@ -203,34 +209,6 @@ class MaquinaController extends Controller
 
         return $this->redirect(['index']);
     }
-
-    /*public function actionCharts()
-    {
-        $today = date('Y-m-d');
-        $last30 = strtotime ( '-30 day' , strtotime ( $today ) ) ;
-        $last30 = date ( 'Y-m-d' , $last30 );
-
-        $last30Graph = [];
-
-        $fechas = $this::fechas($last30, $today);
-
-         $maquina = Maquina::find()->all();
-
-         if (count($maquina) > 0) {
-             foreach ($maquina as $model) {
-                 $color = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
-                //Pushing data as string in graphs
-                array_push($last30Graph,['label' => ''.$model->nombre.'','data' => $model->getTotalerrors($last30,$today),'fill' => 'false', 'borderColor' => 'rgb('.$color.')', 'backgroundColor' => 'rgb('.$color.')']);
-             }
-         }
-         foreach($fechas as $date)
-            {
-
-                $labelLast30Graph[] = substr($date,5,5);
-
-            }
-        return $this->render('charts',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph]);
-    }*/
 
     public function actionCharts()
     {

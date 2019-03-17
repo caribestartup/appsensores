@@ -82,15 +82,8 @@ class PedidoController extends Controller
      */
     public function actionView($id)
     {
-        // $model = Pedido::findOne($id);
-
-        // $query = "SELECT user.*"
-        //        . " FROM user_turno,user WHERE user_turno.turno=".$id." AND user_turno.user=user.id";
-
         $query = "SELECT pedido.*"
                   . "FROM pedido WHERE pedido.id=".$id."";
-
-        // $users = User::findBySql($query)->all();
 
         $order = Pedido::findBySql($query)->all();
 
@@ -102,11 +95,6 @@ class PedidoController extends Controller
           'lote.pedido' => $id
         ])
         ->all();
-
-        // $query_lote = "SELECT lote.*"
-        //           . "FROM lote join maquina on  WHERE lote.pedido=".$id."";
-        //
-        // $lotes = Lote::findBySql($query_lote)->all();
 
         $dataProvider = new ArrayDataProvider([
             'allModels' => $lotes,

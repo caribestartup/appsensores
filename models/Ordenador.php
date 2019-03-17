@@ -28,9 +28,9 @@ class Ordenador extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['mac', 'maquina', 'estado'], 'required'],
-            [['maquina', 'estado'], 'integer'],
-            [['mac'], 'string', 'max' => 50],
+            [['uuid', 'maquina'], 'required'],
+            [['maquina'], 'integer'],
+            [['uuid'], 'string', 'max' => 200],
         ];
     }
 
@@ -41,9 +41,8 @@ class Ordenador extends \yii\db\ActiveRecord
     {
         return [
             'ordenador_id' => 'Ordenador ID',
-            'mac' => 'Mac',
-            'maquina' => 'Maquina',
-            'estado' => 'Estado',
+            'uuid' => 'UUID',
+            'maquina' => 'Machane',
         ];
     }
 }
