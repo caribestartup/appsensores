@@ -18,6 +18,7 @@ use app\models\User;
 use yii\filters\AccessControl;
 use app\models\Parciales;
 use yii\data\ArrayDataProvider;
+use app\helpers\UiHelper;
 
 /**
  * MaquinaController implements the CRUD actions for Maquina model.
@@ -121,10 +122,20 @@ class MaquinaController extends Controller
 
         $turnoUsuarioMaquina = new TurnoUsuarioMaquina();
 
-        if ($turnoUsuarioMaquina->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->post()) {
 
             $selection = Yii::$app->request->post()['selection'];
-            $tur = $turnoUsuarioMaquina->turno_usuario_id;
+            $tur = Yii::$app->request->post('turno_usuario_id');
+
+            if ($selection == null){
+                UiHelper::alert('<i class="icon fa fa-desktop"></i> Select a machine', UiHelper::DANGER);
+                return $this->render('assigne', [
+                    'dataProvider' => $dataProvider,
+                    'turnos' => $turno_user,
+                    'maquinas' => $maquinas,
+                    'turnoUsuarioMaquina' => $turnoUsuarioMaquina
+                ]);
+            }
 
             foreach ($selection as $maq) {
                 $turnoUsuarioMaquina->turno_usuario_id = $tur;
@@ -137,6 +148,7 @@ class MaquinaController extends Controller
                     $turnoUsuarioMaquina = new TurnoUsuarioMaquina();
                 }
             }
+            UiHelper::alert('<i class="icon fa fa-desktop"></i> Machine(s) assigned', UiHelper::SUCCESS);
             return $this->redirect(['asignacion/index']);
 
         } else {
@@ -168,6 +180,7 @@ class MaquinaController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->state = 'Creado';
             $model->save();
+            UiHelper::alert('<i class="icon fa fa-desktop"></i> Machine created successfully', UiHelper::SUCCESS);
             return $this->redirect(['view', 'id' => $model->maquina_id]);
         }
 
@@ -188,6 +201,7 @@ class MaquinaController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            UiHelper::alert('<i class="icon fa fa-desktop"></i> Machine updated successfully', UiHelper::SUCCESS);
             return $this->redirect(['view', 'id' => $model->maquina_id]);
         }
 
@@ -206,7 +220,7 @@ class MaquinaController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        UiHelper::alert('<i class="icon fa fa-desktop"></i> Machine deleted successfully', UiHelper::SUCCESS);
         return $this->redirect(['index']);
     }
 

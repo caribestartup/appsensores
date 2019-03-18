@@ -51,7 +51,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['get'],
                 ],
             ],
         ];
@@ -154,8 +154,8 @@ class SiteController extends Controller
                 $pin->user = $user->getId();
                 $pin->pin = 123456;
                 $pin->save();
-               UiHelper::alert('<i class="icon fa fa-user"></i> Nuevo usuario registrado', UiHelper::SUCCESS);
-                    return $this->redirect(['/user/index']);
+                UiHelper::alert('<i class="icon fa fa-user"></i> Nuevo usuario registrado', UiHelper::SUCCESS);
+                return $this->redirect(['/user/index']);
 
             }
         }

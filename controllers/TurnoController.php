@@ -109,6 +109,8 @@ class TurnoController extends Controller
         $model = new Turno();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            UiHelper::alert('<i class="icon fa fa-bell-o"></i> Work Shift created successfully', UiHelper::SUCCESS);
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -128,6 +130,8 @@ class TurnoController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            UiHelper::alert('<i class="icon fa fa-bell-o"></i> Work Shift updated successfully', UiHelper::SUCCESS);
+
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -145,6 +149,7 @@ class TurnoController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        UiHelper::alert('<i class="icon fa fa-bell-o"></i> Work Shift deleted successfully', UiHelper::SUCCESS);
 
         return $this->redirect(['index']);
     }
@@ -159,7 +164,7 @@ class TurnoController extends Controller
             $verify = UserTurno::find()->where(['user' => Yii::$app->request->post('UserTurno')['user'], 'turno' => Yii::$app->request->post('UserTurno')['turno']])->one();
 
             if ($verify != null) {
-                UiHelper::alert('<i class="icon fa fa-ban"></i>'. Yii::t('app','Work Shifts Assigned Previously'), UiHelper::DANGER);
+                UiHelper::alert('<i class="icon fa fa-bell-o"></i>'. Yii::t('app','Work Shifts assigned previously'), UiHelper::DANGER);
             }
             else{
                 $user_turno->user = Yii::$app->request->post('UserTurno')['user'];
@@ -167,7 +172,7 @@ class TurnoController extends Controller
                 $user_turno->save();
                 $user_turno = new UserTurno();
                 $user_turno->user = $id;
-                UiHelper::alert('<i class="icon fa fa-check"></i>'. Yii::t('app','Work Shifts Assigned'), UiHelper::SUCCESS);
+                UiHelper::alert('<i class="icon fa fa-bell-o"></i>'. Yii::t('app','Work Shift assigned successfully'), UiHelper::SUCCESS);
             }
         }
 

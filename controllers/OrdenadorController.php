@@ -100,6 +100,7 @@ class OrdenadorController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
+            UiHelper::alert('<i class="icon fa fa-laptop"></i> Computer created successfully', UiHelper::SUCCESS);
 
             return $this->redirect(['maquina/view', 'id' => $maquina[0]->maquina_id]);
         } else {
@@ -127,6 +128,8 @@ class OrdenadorController extends Controller
 
         if ($ordenador->load(Yii::$app->request->post())) {
             $ordenador->save();
+            UiHelper::alert('<i class="icon fa fa-laptop"></i> Computer updated successfully', UiHelper::SUCCESS);
+
             return $this->redirect(['maquina/view', 'id' => $maquina[0]->maquina_id]);
         } else {
             return $this->render('update', [
@@ -146,6 +149,7 @@ class OrdenadorController extends Controller
     {
         $ordenadorOld = $this->findModel($id);
         $this->findModel($id)->delete();
+        UiHelper::alert('<i class="icon fa fa-laptop"></i> Computer deleted successfully', UiHelper::SUCCESS);
 
         return $this->redirect(['maquina/view', 'id' => $ordenadorOld->maquina]);
     }

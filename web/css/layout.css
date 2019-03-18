@@ -3,7 +3,7 @@ body {
 }
 
 .container-main{
-	margin-top: 20px;
+	margin-top: 30px;
 	overflow: hidden;
 }
 
@@ -39,7 +39,7 @@ body {
 
 .menu-container {
 	position: absolute;
-	width: 90%;
+	width: 100%;
 	left: 5%;
 	transition: top 0.5s ease-in-out;
 }
@@ -149,11 +149,11 @@ body {
 }
 
 .sub-menu-title{
-	text-align: center;	
+	text-align: center;
 }
 
 .img-menu-item{
-	width: 10%;
+	width: 100%;
 }
 
 
@@ -186,4 +186,3 @@ body {
 }
 
 }
-

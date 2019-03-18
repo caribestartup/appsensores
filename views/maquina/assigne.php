@@ -16,59 +16,34 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="maquina-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <!-- <p>
-        <?= Html::a(Yii::t('app', 'New Machine'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p> -->
-
     <div class="maquina-form">
 
         <?php $form = ActiveForm::begin(); ?>
 
-        <?php
-            $var=array();
-            foreach ($turnos as $key => $value) {
-                // code...
-                $tur = [ $value['id'] => $value['identificador']];
-
-                array_push($var, $tur);
-            }
-        ?>
-
-
-        <?= $form->field($turnoUsuarioMaquina, 'turno_usuario_id')->dropDownList($var, ['prompt' => 'Seleccione Uno' ]); ?>
+        <div class="form-group">
+            <label class="control-label" for="turnousuariomaquina-turno_usuario_id">Turn User</label>
+            <select name="turno_usuario_id" id="locales" class="form-control" required>
+                <option></option>
+                <?php foreach ($turnos as $turno) {
+                    echo "<option value=".$turno['id'].">".$turno['identificador']."</option>";
+                } ?>
+            </select>
+        </div>
 
         <div class="box box-primary box-solid">
                     <div class="box-header with-border">
                         <h3 class="box-title"><?=Yii::t('app','Machines') ?></h3>
                     </div>
                     <div class="box-body">
-                          <?= GridView::widget([
+                        <?= GridView::widget([
                                 'dataProvider' => $dataProvider,
                                 //'filterModel' => $searchModel,
                                 'columns' => [
                                     ['class' => 'yii\grid\SerialColumn'],
-                                    // 'maquina_id',
-                                    //'maquina_id',
                                     'nombre',
                                     'modelo',
                                     'numero',
                                     'local',
-                                    // array(
-                                    // 'attribute' => 'local',
-                                    // 'value'=> 'localname',
-                                    // ),
-                                    //'imagen',
-                                    //'posx',
-                                    //'posy',
-                                    //'ancho',
-                                    //'largo',
-                                    //'mac',
-                                    //'intervalo',
-                                    //'fecha',
-                                    //'estado',
-
                                     [
                                         'class' => 'yii\grid\CheckboxColumn',
                                         'checkboxOptions' => function ($maquinas, $key, $index, $column) {
@@ -76,24 +51,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                         }
                                     ],
                                 ],
-                            ]); ?>
-
-
-
+                            ]);
+                        ?>
                     </div>
                 </div>
-
-
 
         <div class="form-group">
             <?= Html::submitButton(Yii::t('app', 'Assign Machines'), ['class' => 'btn btn-info']) ?>
         </div>
-
         <?php ActiveForm::end(); ?>
-
     </div>
-
-
-
-
 </div>

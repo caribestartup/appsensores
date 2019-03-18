@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use app\helpers\UiHelper;
 
 /**
  * ErrorController implements the CRUD actions for Error model.
@@ -27,10 +28,10 @@ class ErrorController extends Controller
                 'rules' => [
                     [
                         'actions' => ['index','view','create','update','delete'],
-                        'allow' => true,
+                        'allow' => false,
                         'roles' => ['@'],
                     ],
-                  
+
                 ],
             ],
             'verbs' => [
@@ -80,6 +81,8 @@ class ErrorController extends Controller
         $model = new Error();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            UiHelper::alert('<i class="icon fa fa-warning"></i> Error created successfully', UiHelper::SUCCESS);
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -100,6 +103,8 @@ class ErrorController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            UiHelper::alert('<i class="icon fa fa-warning"></i> Error updated successfully', UiHelper::SUCCESS);
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -118,6 +123,7 @@ class ErrorController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        UiHelper::alert('<i class="icon fa fa-warning"></i> Error deleted successfully', UiHelper::SUCCESS);
 
         return $this->redirect(['index']);
     }

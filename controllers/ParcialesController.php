@@ -27,10 +27,10 @@ class ParcialesController extends Controller
                 'rules' => [
                     [
                         'actions' => ['index','view','create','update','delete'],
-                        'allow' => true,
+                        'allow' => false,
                         'roles' => ['@'],
                     ],
-                  
+
                 ],
             ],
             'verbs' => [

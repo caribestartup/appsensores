@@ -13,6 +13,7 @@ use app\models\Maquina;
 use yii\web\UploadedFile;
 use yii\helpers\Url;
 use yii\filters\AccessControl;
+use app\helpers\UiHelper;
 
 /**
  * LocalController implements the CRUD actions for Local model.
@@ -38,7 +39,7 @@ class LocalController extends Controller
                         return User::roleInArray($valid_roles) && User::isActive();
                         }
                     ],
-                  
+
                 ],
             ],
             'verbs' => [
@@ -56,7 +57,7 @@ class LocalController extends Controller
      */
     public function actionIndex()
     {
-        
+
         $dataProvider = Local::find()->all();
         $maquina = Maquina::find()->all();
 
@@ -93,6 +94,8 @@ class LocalController extends Controller
             $model->plano->saveAs('plano/'.$imageName.'.'.$model->plano->extension);
             $model->plano = 'plano/'.$imageName.'.'.$model->plano->extension;
             $model->save();
+            UiHelper::alert('<i class="icon fa fa-sitemap"></i> Local created successfully', UiHelper::SUCCESS);
+
             return $this->redirect(['view', 'id' => $model->local_id]);
         } else {
             return $this->render('create', [
@@ -117,6 +120,8 @@ class LocalController extends Controller
             $model->plano->saveAs('plano/'.$imageName.'.'.$model->plano->extension);
             $model->plano = 'plano/'.$imageName.'.'.$model->plano->extension;
             $model->save();
+            UiHelper::alert('<i class="icon fa fa-sitemap"></i> Local updated successfully', UiHelper::SUCCESS);
+
             return $this->redirect(['view', 'id' => $model->local_id]);
         } else {
             return $this->render('update', [
@@ -134,6 +139,7 @@ class LocalController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        UiHelper::alert('<i class="icon fa fa-sitemap"></i> Local deleted successfully', UiHelper::SUCCESS);
 
         return $this->redirect(['index']);
     }
@@ -158,7 +164,7 @@ class LocalController extends Controller
     public function actionSaveimg($id, $posx, $posy, $width, $height, $matrix)
     {
 
-        
+
         $machine = Maquina::findOne($id);
         if ($machine){
             $machine->posx =substr($posx, 0, -2);
@@ -169,23 +175,23 @@ class LocalController extends Controller
             $machine->save();
             echo Yii::t('app','Machines\' Positions saved and recorded');
         }
-      
+
     }
 
      public function actionControl()
     {
        $machine = Maquina::findOne(Yii::$app->request->post('id'));
 
-        $json_vars["x"] = $machine->posx; 
+        $json_vars["x"] = $machine->posx;
         $json_vars["y"] = $machine->posy;
         $json_vars["w"] = $machine->ancho;
         $json_vars["h"] = $machine->largo;
-        $json_vars["m"] = $machine->matrix; 
-        $json_vars["i"] = $machine->maquina_id;   
+        $json_vars["m"] = $machine->matrix;
+        $json_vars["i"] = $machine->maquina_id;
 
         echo json_encode($json_vars);
 
-      
+
     }
 
     public function actionLoadlocal($id)
@@ -196,8 +202,8 @@ class LocalController extends Controller
 
             if ($maquina) {
                 foreach ($maquina as $machine) {
-                   /*echo '<div class="mecha draggable resizable" style="position:absolute; top:'.$machine->posy.'%; left:'.$machine->posx.'%; width:'.$machine->ancho.'%; height:'.$machine->largo.'%" value="'.$machine->maquina_id.'">'; 
-                   echo '<img style="width:100%; height:100%" src="'.Url::to("maquina/horizontal.png").'">';                
+                   /*echo '<div class="mecha draggable resizable" style="position:absolute; top:'.$machine->posy.'%; left:'.$machine->posx.'%; width:'.$machine->ancho.'%; height:'.$machine->largo.'%" value="'.$machine->maquina_id.'">';
+                   echo '<img style="width:100%; height:100%" src="'.Url::to("maquina/horizontal.png").'">';
                    echo "</div>"; */
                    echo '<img src="'.Url::to("maquina/horizontal.png").'" class="mecha" value="'.$machine->maquina_id.'"></img>';
                 }
