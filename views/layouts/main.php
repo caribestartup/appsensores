@@ -113,9 +113,20 @@ $turno = Maquina::getLasturno();
         <?php }?>
 
 		<div class="col-md-3 col-xs-4 menu-block hidden-xs">
-			<div><label><?php echo Yii::t('app','PRODUCTION') ?> </label><sub> <?php echo Yii::t('app','CURRENT SHIFT') ?></sub></div>
-			<div><b><?php echo Yii::t('app','ESTIMATED PRODUCTION') ?>:</b>  <?= Maquina::getTotalprodnall() ?> <img class="menu-img pull-right" src="<?= Url::to('res/eliminar_edicion.png')?>"></div>
-			<div style="margin-top: 2%"><b><?php echo Yii::t('app','PLANNED PRODUCTION') ?>:</b>  <?= Maquina::getTotalprodestnall() ?> <i class="pull-right" style="color:red"><?= Maquina::getTotalerrornall() ?></i></div>
+			<div>
+                <label><?php echo Yii::t('app','PRODUCTION') ?> </label>
+                <sub> <?php echo Yii::t('app','CURRENT SHIFT') ?></sub>
+            </div>
+			<div>
+                <b><?php echo Yii::t('app','PLANNED PRODUCTION') ?>: </b><?= Maquina::getTotalprodestnall() ?>
+
+            </div>
+			<div>
+                <b><?php echo Yii::t('app','REAL PRODUCTION TODAY') ?>: </b><?= Maquina::getTotalprodnall() ?>
+                <img class="menu-img pull-right" src="<?= Url::to('res/eliminar_edicion.png')?>">
+                <i class="pull-right" style="color:red">- <?= Maquina::getTotalerrornall() ?></i>
+
+            </div>
         </div>
 
         <div class="col-md-2 col-xs-12 buttons" style="top:10px">

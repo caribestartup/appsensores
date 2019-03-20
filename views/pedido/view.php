@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'buttons'=>[
                                 'assign' => function ($url, $lotes, $key) {
-                                    if( Yii::$app->user->identity->getRole() == 'Operator' ) {
+                                    if( Yii::$app->user->identity->getRole() == 'Operator' && $lotes["maquina_id"] == 0) {
                                         return Html::a('<span class="fa fa-desktop"></span>', ['lote/assign', 'id'=>$lotes["id"]],['title'=> Yii::t('app','Assign Machine')]);
                                     }
                                 },

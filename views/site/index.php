@@ -4,7 +4,7 @@ use yii\web\User;
 
 /* @var $this yii\web\View */
 
-$this->title = 'WELCOME';
+$this->title = 'Appsesores';
 ?>
 <div class="site-index">
 
