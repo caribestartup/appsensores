@@ -293,22 +293,22 @@ class Maquina extends \yii\db\ActiveRecord
     {
         $totales = (new \yii\db\Query())
                   ->select('totales.total, totales.total_error')
-                  ->leftJoin('maquina', 'maquina.maquina_id = lote.maquina_id')
                   ->leftJoin('totales', 'totales.mac = maquina.maquina_id')
+                  ->leftJoin('lote', 'lote.id = totales.lote_id')
                   ->where([
                   'lote.estado' => 'Activo',
                   'lote.maquina_id' => $this->maquina_id
                   ])
-                  ->from('lote')
+                  ->from('maquina')
                   ->all();
 
         if(sizeof($totales) > 0) {
-
             $result = 0;
             foreach ($totales as $total) {
-                $result += ($total['total'] - $total['total_error']);
-                return $result;
+                $real = $total['total'] - $total['total_error'];
+                $result += $real;
             }
+            return $result;
 
         } else {
             return 0;

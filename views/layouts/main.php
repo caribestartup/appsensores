@@ -99,7 +99,7 @@ $turno = Maquina::getLasturno();
         <?php if( Yii::$app->user->identity->getRole() != 'Operator' ) { ?>
     		<div class="col-md-5 col-xs-12 menu-block">
                 <a class="option-reference col-md-3 col-xs-3" href="<?= Url::toRoute('site/index')?>"><img class="img-menu-item" src="<?= Url::to('res/icon_home.png')?>"></a>
-                <a class="option-reference col-md-3 col-xs-3" href="<?= Url::toRoute('local/index')?>"><img class="img-menu-item" src="<?= Url::to('res/icon_map.png')?>"></a>
+                <a class="option-reference col-md-3 col-xs-3 hidden-xs" href="<?= Url::toRoute('local/index')?>"><img class="img-menu-item" src="<?= Url::to('res/icon_map.png')?>"></a>
                 <a class="option-reference col-md-3 col-xs-3" href="<?= Url::toRoute('/maquina/charts')?>"><img class="img-menu-item" src="<?= Url::to('res/icon_charts.png')?>"></a>
                 <a class="option-reference col-md-3 col-xs-3" href="<?= Url::toRoute('/site/proccess')?>"><img class="img-menu-item" src="<?= Url::to('res/icon_proccess.png')?>"></a>
             </div>

@@ -49,7 +49,7 @@ $this->title = 'Appsesores';
 				<a class="option-reference" href="<?= Url::toRoute('/maquina/charts')?>"><img class="img-responsive col-xs-12" src="<?= Url::to('res/icon_charts.png')?>"><?php echo Yii::t('app','GRAPHS') ?></a>
 			</div>
 
-			<div class="col-md-3 ">
+			<div class="col-md-3 hidden-xs">
 				<a class="option-reference" href="<?= Url::toRoute('/local/index')?>"><img class="img-responsive col-xs-12" src="<?= Url::to('res/icon_map.png')?>"><?php echo Yii::t('app','EDIT PLANE') ?></a>
 			</div>
 
