@@ -302,7 +302,7 @@ class Maquina extends \yii\db\ActiveRecord
                   ->from('lote')
                   ->all();
 
-        if(sizeof($lote) > 0) {
+        if(sizeof($totales) > 0) {
 
             $result = 0;
             foreach ($totales as $total) {
