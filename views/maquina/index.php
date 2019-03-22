@@ -35,16 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'modelo',
                                 'numero',
                                 'localName',
-                                //'imagen',
-                                //'posx',
-                                //'posy',
-                                //'ancho',
-                                //'largo',
-                                //'mac',
-                                //'intervalo',
-                                //'fecha',
-                                //'estado',
-
                                 [
                                     'class' => 'kartik\grid\ActionColumn',
                                     'dropdown' => false,
@@ -55,10 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     },
                                     'buttons'=>[
                                         'update' => function ($url, $model, $key) {
-                                            return Html::a('<span class="fa fa-pencil"></span>', ['update', 'id'=>$model->maquina_id],['title'=> Yii::t('app','Update')]);
+                                            return Html::a('<span class="fa fa-pencil"></span>', ['update', 'id'=>$model["maquina_id"]],['title'=> Yii::t('app','Update')]);
                                         },
                                         'detail' => function ($url, $model, $key) {
-                                            return Html::a('<span class="fa fa-eye"></span>', ['view', 'id'=>$model->maquina_id],['title'=> Yii::t('app','Detail')]);
+                                            return Html::a('<span class="fa fa-eye"></span>', ['view', 'id'=>$model["maquina_id"]],['title'=> Yii::t('app','Detail')]);
                                         },
                                         'unassign' => function ($url, $model, $key) {
                                             if($model["show"] == 0) {
