@@ -25,8 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
    <!-- <p>
         <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
     </p> -->
-    <!-------------------------- MODAL BEGIN--------------------------->             
-    
+    <!-------------------------- MODAL BEGIN--------------------------->
+
         <?php
           Modal::begin([
           'header' => '<h2 style="text-align:center">'.Yii::t('app','Select date to show').'</h2>',
@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
           'id' => 'modal-range-day'
           ]);
         ?>
-    
+
       <div class="row" style="margin-bottom: 8px">
         <div class="col-sm-6 col-sm-offset-3">
           <?php $form = ActiveForm::begin(); ?>
@@ -49,12 +49,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-sm-6 col-sm-offset-3 form-group btn-modal">
            <?= Html::submitButton(Yii::t('app', 'Find'), ['class' => 'btn btn-success']) ?>
         </div>
-        <?php ActiveForm::end(); ?> 
+        <?php ActiveForm::end(); ?>
       </div>
-    
+
         <?php Modal::end();?>
-    
-<!-------------------------- MODAL END---------------------------> 
+
+<!-------------------------- MODAL END--------------------------->
 
 <a href="<?php echo Url::toRoute(['user/performancebar','id' => $userref->id]) ?>">
   <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-bar-chart"></i></button>
@@ -93,23 +93,11 @@ $this->params['breadcrumbs'][] = $this->title;
 				                'fontColor' => "#425062",
 				            ]
 				        ],
-				       /* 'tooltips' => [
-				            'enabled' => true,
-				            'intersect' => true,
-				            'callbacks' => [
-						'label' => new JsExpression('function($tooltipItems, $data){
-							//sum += data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-							return $data;
-							}'),
-						],
-				        ],*/
 				        'hover' => [
 				            'mode' => 'y',
 				            'intersect' => true,
 				        ],
 				        'maintainAspectRatio' => false,
-				        
-
 				    ],
 					]);
 				?>

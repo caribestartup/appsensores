@@ -31,16 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'buttons'=>[
 
                 'view' => function ($url, $model, $key) {
-                return Html::a('<span class="fa fa-eye "></span>', ['view', 'id'=>$model->id],['title'=> Yii::t('app','Workers')]);
+                    return Html::a('<span class="fa fa-eye "></span>', ['view', 'id'=>$model->id],['title'=> Yii::t('app','Workers')]);
                 },
                 'edit' => function ($url, $model, $key) {
-                return Html::a('<span class="fa fa-pencil "></span>', ['update', 'id'=>$model->id],['title'=> Yii::t('app','Edit')]);
+                    return Html::a('<span class="fa fa-pencil "></span>', ['update', 'id'=>$model->id],['title'=> Yii::t('app','Edit')]);
                 },
                 // 'performance' => function ($url, $model, $key) {
                 // return Html::a('<span class="fa fa-bar-chart "></span>', ['turno/performance', 'id'=>$model->id],['title'=> Yii::t('app','Performance')]);
                 // },
             ],
-
         ]
         ],
     ]); ?>

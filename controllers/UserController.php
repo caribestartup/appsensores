@@ -31,7 +31,7 @@ class UserController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','view','create','update','delete','operarios','profile','errors','performance','changepass','resetpass'],
+                'only' => ['index','view','create','update','delete','operarios','profile','errors','performance','changepass','resetpass', 'machine'],
                 'rules' => [
                     [
                         'actions' => ['view','update','delete','operarios','profile','changepass','resetpass'],
@@ -48,7 +48,7 @@ class UserController extends Controller
                         }
                      ],
                      [
-                         'actions' => ['errors','performance','index'],
+                         'actions' => ['errors','performance','index', 'machine'],
                          'allow' => true,
                          'roles' => ['@'],
                          'matchCallback' => function ($rule, $action) {
@@ -367,12 +367,9 @@ class UserController extends Controller
             $tempErrors[$error->id] = [];
         }
 
-        foreach($fechas as $date)
-            {
-
-                $labelLast30Graph[] = substr($date,5,5);
-
-            }
+        foreach($fechas as $date) {
+            $labelLast30Graph[] = substr($date,5,5);
+        }
 
 
          $maquina = User::find()->where(['id' => $id])->all();
@@ -384,12 +381,12 @@ class UserController extends Controller
                 unset($toload);
                 $toload = [];
 
-                 foreach ($errors as $error) {
+                foreach ($errors as $error) {
                     $tempErrors[$error->id] = [];
                 }
 
                 foreach ($fechas as $fecha) {
-                        $values [] = 0 ;
+                    $values [] = 0 ;
                 }
 
                 foreach ($model->getPartialerrors($last30,$today) as $merr) {
@@ -422,6 +419,13 @@ class UserController extends Controller
 
          return $this->render('performancebar',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph,'errorsGraph' => $errorsGraph,'maqref' => $maqref,'drange' => $drange, 'userref' => $userref]);
 
+    }
+
+    public function actionMachine($id)
+    {
+        return $this->render('performanceMachine', [
+            
+        ]);
     }
 
     public function actionPerformanceall()

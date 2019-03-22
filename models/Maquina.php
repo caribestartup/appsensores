@@ -464,6 +464,14 @@ class Maquina extends \yii\db\ActiveRecord
         return $returnMaquina;
     }
 
+    public function getDistribution($id)
+    {
+        $maquina = Maquina::findOne($id);
+
+        // en la tabla totales cojer todos los row de esta maqui por mac
+        //  calculamos entre la
+    }
+
 
 
 }

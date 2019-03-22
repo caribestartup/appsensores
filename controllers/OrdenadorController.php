@@ -31,7 +31,7 @@ class OrdenadorController extends Controller
         return [
              'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['view','create','update','delete','charts','performance'],
+                'only' => ['view','create','update','delete','charts','performance', 'report'],
                 'rules' => [
                     [
                         'actions' => ['view'],
@@ -39,7 +39,7 @@ class OrdenadorController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['charts','performance','create','update','delete'],
+                        'actions' => ['charts','performance','create','update','delete', 'report'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {

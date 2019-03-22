@@ -162,6 +162,45 @@ class PedidoController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionPerformance($id)
+    {
+        $order = Pedido::findOne($id);
+        $lots = (new \yii\db\Query())
+                    ->select('pedido.*, lote.*, SUM(totales.total) as total, SUM(totales.total_error) as error')
+                    ->leftJoin('lote', 'lote.pedido = pedido.id')
+                    ->leftJoin('totales', 'totales.lote_id = lote.id')
+                    ->where([
+                        'pedido.id' => $id
+                    ])
+                    ->from('pedido')
+                    ->all();
+
+        $labels = [];
+        $data_prod = [];
+        $data_error = [];
+
+        foreach ($lots as $lot) {
+            array_push($labels, $lot['identificador']);
+            array_push($data_error, $lot['error']);
+            array_push($data_prod, $lot['total'] - $lot['error']);
+        }
+
+        // print_r($order->identificador);
+        return $this->render('performance',[
+            'order' => $order,
+            'labels' => $labels,
+            'data_prod' => $data_prod,
+            'data_error' => $data_error
+            // 'last30Graph' => $last30Graph,
+            // 'labelLast30Graph' => $labelLast30Graph,
+            // 'errorsGraph' => $errorsGraph,
+            // 'maqref' => $maqref,
+            // 'drange' => $drange,
+            // 'userref' => $userref
+        ]);
+
+    }
+
     /**
      * Finds the Pedido model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

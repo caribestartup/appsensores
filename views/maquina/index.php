@@ -34,10 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'nombre',
                                 'modelo',
                                 'numero',
-                                array(
-                                'attribute' => 'local',
-                                'value'=> 'localname',
-                                ),
+                                'localName',
                                 //'imagen',
                                 //'posx',
                                 //'posy',
@@ -52,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'kartik\grid\ActionColumn',
                                     'dropdown' => false,
                                     'vAlign'=>'middle',
-                                    'template' => '{detail}{update}',
+                                    'template' => '{detail}{update}{unassign}',
                                     'urlCreator' => function($action, $model, $key, $index) {
                                     return Url::to([$action,'id'=>$key]);
                                     },
@@ -63,10 +60,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'detail' => function ($url, $model, $key) {
                                             return Html::a('<span class="fa fa-eye"></span>', ['view', 'id'=>$model->maquina_id],['title'=> Yii::t('app','Detail')]);
                                         },
-
+                                        'unassign' => function ($url, $model, $key) {
+                                            if($model["show"] == 0) {
+                                                return Html::a('<span class="fa fa-close "></span>', ['unassigne', 'id'=>$model["tum"]],['data' => [
+                                                    'confirm' => Yii::t('app','Do you want to unassign machine?'),
+                                                    'method' => 'post',
+                                                ],'title'=>Yii::t('app', Yii::t('app','Unassign Machine'))]);
+                                            }
+                                        },
                                         ],
                                         'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
-
                                         ],
                             ],
                         ]); ?>

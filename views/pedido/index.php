@@ -31,8 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'kartik\grid\ActionColumn',
             'dropdown' => false,
             'vAlign'=>'middle',
-            // 'template' => '{view}{edit}{performance}',
-            'template' => '{view} {edit}',
+            'template' => '{view}{edit}{performance}',
+            // 'template' => '{view} {edit}',
             'urlCreator' => function($action, $model, $key, $index) {
                     return Url::to([$action,'id'=>$key]);
             },
@@ -45,6 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     if( Yii::$app->user->identity->getRole() != 'Operator' ) {
                         return Html::a('<span class="fa fa-pencil "></span>', ['update', 'id'=>$model->id],['title'=> Yii::t('app','Edit')]);
                     }
+                },
+                'performance' => function ($url, $model, $key) {
+                    return Html::a('<span class="fa fa-bar-chart "></span>', ['performance', 'id'=>$model->id],['title'=> Yii::t('app','Performance')]);
                 },
                 // 'performance' => function ($url, $model, $key) {
                 // return Html::a('<span class="fa fa-bar-chart "></span>', ['turno/performance', 'id'=>$model->id],['title'=> Yii::t('app','Performance')]);

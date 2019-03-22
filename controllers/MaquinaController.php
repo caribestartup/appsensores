@@ -33,7 +33,7 @@ class MaquinaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','view','create','update','delete','production','charts','performance', 'assigne'],
+                'only' => ['index','view','create','update','delete','production','charts','performance', 'assigne', 'unassigne'],
                 'rules' => [
                     [
                         'actions' => ['index','production','performance', 'assigne'],
@@ -41,7 +41,7 @@ class MaquinaController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['charts','create','update','delete','view'],
+                        'actions' => ['charts','create','update','delete','view', 'unassigne'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -67,11 +67,26 @@ class MaquinaController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new MaquinaSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        //$searchModel = new MaquinaSearch();
+        //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $maquinas = (new \yii\db\Query())
+                    ->select('maquina.*, turno_usuario_maquina.id as tum, turno_usuario_maquina.borrar as show, local.nombre as localName')
+                    ->leftJoin('turno_usuario_maquina', 'turno_usuario_maquina.maquina_id = maquina.maquina_id')
+                    ->leftJoin('local', 'local.local_id = maquina.local')
+                    ->where([
+                        'turno_usuario_maquina.fecha' => date('Y-m-d')
+                    ])
+                    ->from('maquina')
+                    ->all();
+
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $maquinas,
+        ]);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            //'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
@@ -221,6 +236,28 @@ class MaquinaController extends Controller
     {
         $this->findModel($id)->delete();
         UiHelper::alert('<i class="icon fa fa-desktop"></i> Machine deleted successfully', UiHelper::SUCCESS);
+        return $this->redirect(['index']);
+    }
+
+    //  funcion a completar para el calculo de las horas encendidas, apagadas y error por maquina
+    public function actionDistribution($id)
+    {
+        $distribution = Maquina::getDistribution($id);
+
+        if (Yii::$app->request->post()) {
+            $distribution = Maquina::getDistribution($id, $begin, $end);
+        }
+
+        return $distribution;
+    }
+
+    public function actionUnassigne($id)
+    {
+        $tum = TurnoUsuarioMaquina::findOne($id);
+        $tum->borrar = 1;
+        $tum->save();
+        UiHelper::alert('<i class="icon fa fa-desktop"></i> Machine unassigned successfully', UiHelper::SUCCESS);
+
         return $this->redirect(['index']);
     }
 
@@ -538,35 +575,27 @@ class MaquinaController extends Controller
     public function actionPerformanceall()
     {
         if (Yii::$app->request->post()) {
-
             $tday = date('Y-m-d', strtotime(substr(Yii::$app->request->post("Drange")["range"], -10)));
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
             $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
-
-
-
         }else{
             $tday = date('Y-m-d');
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
             $last30 = strtotime ( '-10 day' , strtotime ( $tday ) ) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
-
         }
         $drange = new Drange();
 
-
         $last30Graph = [];
         $labelLast30Graph = [];
-
 
         $errorsGraph = [];
         $tempErrors = [];
         $values = [];
         $toload = [];
-
 
         $fechas = $this::fechas($last30, $tday);
         $errors = Parciales::find()->groupBy('nombre_ventana')->all();
@@ -575,13 +604,9 @@ class MaquinaController extends Controller
             $tempErrors[strtolower($error->nombre_ventana)] = [];
         }
 
-        foreach($fechas as $date)
-        {
-
+        foreach($fechas as $date){
             $labelLast30Graph[] = substr($date,5,5);
-
         }
-
 
         $maquina = Maquina::find()->all();
 
@@ -625,10 +650,7 @@ class MaquinaController extends Controller
             }
 
         }
-
-
         return $this->render('performanceall',['last30Graph' => $last30Graph,'labelLast30Graph' => $labelLast30Graph,'errorsGraph' => $errorsGraph,'drange' => $drange]);
-
     }
 
     /**
@@ -643,7 +665,6 @@ class MaquinaController extends Controller
         if (($model = Maquina::findOne($id)) !== null) {
             return $model;
         }
-
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 

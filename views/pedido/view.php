@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'dropdown' => false,
                             'vAlign'=>'middle',
                             // 'template' => '{detail} {update}',
-                            'template' => '{update}{assign}{delete}',
+                            'template' => '{update}{assign}{delete}{performance}',
                             'urlCreator' => function($action, $lotes, $key, $index) {
                                     return Url::to([$action,'id'=>$key]);
                             },
@@ -66,6 +66,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'method' => 'post',
                                         ],'title'=>Yii::t('app', Yii::t('app','Delete Lot'))]);
                                     }
+                                },
+                                'performance' => function ($url, $lotes, $key) {
+                                    return Html::a('<span class="fa fa-bar-chart "></span>', ['lote/performance', 'id'=>$lotes["id"]],['title'=> Yii::t('app','Performance')]);
                                 },
                             ],
 

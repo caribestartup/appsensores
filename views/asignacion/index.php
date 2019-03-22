@@ -57,11 +57,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         if($model["state"] !== "Terminado"){
                             return '<a id="'.$model["maquina_id"].'" href="" data-toggle="modal" data-target="#exampleModal" class="stop"><span class="fa fa-ban"></span></a>';
                         }
-                        // return Html::a('<span class="fa fa-pause "></span>', ['asignacion/states', 'id'=>$model["maquina_id"]],['data' => [
-                        //     'confirm' => Yii::t('app','Do you want to PAUSE machine?'),
-                        //     'method' => 'post',
-                        // ],'title'=>Yii::t('app', Yii::t('app','Pause Machine'))]);
-
                     }
                     else if($model["state"] == "Detenido" || $model["state"] == "Error") {
                         return Html::a('<span class="fa fa-play "></span>', ['asignacion/states', 'id'=>$model["maquina_id"]],['data' => [

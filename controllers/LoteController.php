@@ -249,6 +249,79 @@ class LoteController extends Controller
         }
     }
 
+    public function actionPerformance($id)
+    {
+        if (Yii::$app->request->post()) {
+            $tday = date('Y-m-d', strtotime(substr(Yii::$app->request->post("Drange")["range"], -10)));
+            $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
+            $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
+            $last30 = date ( 'Y-m-d' , $last30 );
+            $today = date ( 'Y-m-d' , $today );
+        }else{
+            $tday = date('Y-m-d');
+            $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
+            $last30 = strtotime ( '-30 day' , strtotime ( $tday ) ) ;
+            $last30 = date ( 'Y-m-d' , $last30 );
+            $today = date ( 'Y-m-d' , $today );
+        }
+
+        $drange = new Drange();
+        $lot = Lote::findOne($id);
+
+        $query = "SELECT pedido.*"
+        . "FROM pedido WHERE pedido.id=".$lot->pedido."";
+        $pedido = Pedido::findBySql($query)->all();
+
+        $last30GraphError = [];
+        $last30GraphProd = [];
+        $labelLast30Graph = [];
+
+        $fechas = $this::fechas($last30, $tday);
+
+        foreach($fechas as $date) {
+            $labelLast30Graph[] = substr($date,5,5);
+        }
+
+        $lots = $lot->getProdNError($last30, $tday);
+        foreach ($fechas as $key => $fecha) {
+            $last30GraphError [$key] = 0;
+            $last30GraphProd [$key] = 0;
+        }
+
+        foreach ($lots as $merr) {
+           $hora = Totales::findOne($merr['id'])->hora_inicio;
+           $index = array_search(substr($hora, 0,10), $fechas);
+           // echo $index;
+           array_splice($last30GraphError, $index, 0, $merr['error']);
+           array_splice($last30GraphProd, $index, 0, $merr['total']);
+        }
+
+        return $this->render('performance',[
+            'pedido' => $pedido,
+            'order' => $lot,
+            'labels' => $labelLast30Graph,
+            'data_prod' => $last30GraphProd,
+            'data_error' => $last30GraphError,
+            'drange' => $drange
+        ]);
+    }
+
+    public function fechas($start, $end) {
+        $range = array();
+
+        if (is_string($start) === true) $start = strtotime($start);
+        if (is_string($end) === true ) $end = strtotime($end);
+
+        if ($start > $end) return createDateRangeArray($end, $start);
+
+        do {
+           $range[] = date('Y-m-d', $start);
+           $start = strtotime("+ 1 day", $start);
+        } while($start <= $end);
+
+        return $range;
+    }
+
     public function existQuestions($lote_id)
     {
         $genericis = (new \yii\db\Query())

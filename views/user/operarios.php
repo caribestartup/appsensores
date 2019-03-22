@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ),
              ['class' => '\kartik\grid\BooleanColumn',
              'attribute' => 'status',
-            'trueLabel' => Yii::t('app','Yes'), 
+            'trueLabel' => Yii::t('app','Yes'),
             'falseLabel' => Yii::t('app','No')
             ],
             //'username',
@@ -49,23 +49,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'kartik\grid\ActionColumn',
             'dropdown' => false,
             'vAlign'=>'middle',
-            'template' => '{performance} {error}',
-            'urlCreator' => function($action, $model, $key, $index) { 
+            'template' => '{performance} {error} {machine}',
+            'urlCreator' => function($action, $model, $key, $index) {
                     return Url::to([$action,'id'=>$key]);
             },
             'buttons'=>[
-            
+
                 'performance' => function ($url, $model, $key) {
                     return Html::a('<span class="fa fa-bar-chart "></span>', ['performance', 'id'=>$model->id],['title'=> Yii::t('app','Performance')]);
                 },
                 'error' => function ($url, $model, $key) {
-                return Html::a('<span class="fa fa-line-chart "></span>', ['errors', 'id'=>$model->id],['title'=> Yii::t('app','Errors')]);
+                    return Html::a('<span class="fa fa-line-chart "></span>', ['errors', 'id'=>$model->id],['title'=> Yii::t('app','Errors')]);
                 },
-            ],      
-          
+                'machine' => function ($url, $model, $key) {
+                    return Html::a('<span class="fa fa-pie-chart "></span>', ['machine', 'id'=>$model->id],['title'=> Yii::t('app','Performance by Machine')]);
+                },
+            ],
+
         ]
 
-           
+
         ],
     ]); ?>
 </div>
