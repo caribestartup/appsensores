@@ -25,8 +25,9 @@
         "kartik-v/yii2-grid": "^3.2",
         "kartik-v/yii2-mpdf": "^1.0",
         "2amigos/yii2-date-time-picker-widget": "~1.0",
-        "kartik-v/yii2-krajee-base": "1.9.*"
- 
+        "kartik-v/yii2-krajee-base": "1.9.*",
+        "miloschuman/yii2-highcharts-widget": "^7.0"
+
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
