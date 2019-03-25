@@ -17,7 +17,7 @@ $this->title = Yii::t('app', 'Plane Edit');
         <!-- <div class="sub-menu"> -->
             <div class="sub-menu-title"><h4><?php echo Yii::t('app','Plane Edit')?></h4></div>
             <div class="row sub-menu-options">
-                <div class="col-md-3 col-md-offset-6">
+                <div class="sub-menu-title">
                     <select id="locales"><option><?php echo Yii::t('app','Select')?></option>
                         <?php foreach ($dataProvider as $local) {
                             echo "<option value=".$local->local_id.">".$local->nombre."</option>";
