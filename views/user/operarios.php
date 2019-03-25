@@ -61,9 +61,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'error' => function ($url, $model, $key) {
                     return Html::a('<span class="fa fa-line-chart "></span>', ['errors', 'id'=>$model->id],['title'=> Yii::t('app','Errors')]);
                 },
-                'machine' => function ($url, $model, $key) {
-                    return Html::a('<span class="fa fa-pie-chart "></span>', ['machine', 'id'=>$model->id],['title'=> Yii::t('app','Performance by Machine')]);
-                },
+                // 'machine' => function ($url, $model, $key) {
+                //     return Html::a('<span class="fa fa-pie-chart "></span>', ['machine', 'id'=>$model->id],['title'=> Yii::t('app','Performance by Machine')]);
+                // },
             ],
 
         ]
