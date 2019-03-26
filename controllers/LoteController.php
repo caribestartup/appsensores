@@ -235,7 +235,7 @@ class LoteController extends Controller
 
                 $machine = Maquina::findOne(Yii::$app->request->post("radioButtonSelection"));
                 $machine->state = 'Activo';
-                $machine-save();
+                $machine->save();
 
                 return $this->redirect(['pedido/view', 'id' => $lote->pedido]);
             }

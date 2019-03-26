@@ -71,14 +71,41 @@ class MaquinaController extends Controller
         //$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $maquinas = (new \yii\db\Query())
-                    ->select('maquina.*, turno_usuario_maquina.id as tum, turno_usuario_maquina.borrar as show, local.nombre as localName')
-                    ->leftJoin('turno_usuario_maquina', 'turno_usuario_maquina.maquina_id = maquina.maquina_id')
+                    ->select('maquina.*,  local.nombre as localName')
+                    // ->leftJoin('turno_usuario_maquina', 'turno_usuario_maquina.maquina_id = maquina.maquina_id')
                     ->leftJoin('local', 'local.local_id = maquina.local')
-                    ->where([
-                        'turno_usuario_maquina.fecha' => date('Y-m-d')
-                    ])
+                    // ->where([
+                    //     'turno_usuario_maquina.fecha' => date('Y-m-d')
+                    // ])
                     ->from('maquina')
+                    ->groupBy('maquina.maquina_id')
                     ->all();
+
+
+
+        foreach ($maquinas as $key => $value) {
+          // code...
+          // turno_usuario_maquina.id as tum, turno_usuario_maquina.borrar as show,
+
+          $tum = (new \yii\db\Query())
+                      ->select('turno_usuario_maquina.*')
+                      ->where([
+                          'turno_usuario_maquina.maquina_id' => $value["maquina_id"],
+                          'turno_usuario_maquina.borrar' => 0,
+                          'turno_usuario_maquina.fecha' => date('Y-m-d')
+                      ])
+                      ->from('turno_usuario_maquina')
+                      ->all();
+
+          if(sizeof($tum) > 0) {
+
+            $maquinas[$key]["tum"] = $tum[0]["id"];
+            $maquinas[$key]["show"] = 0;
+          }
+          else {
+            $maquinas[$key]["show"] = 1;
+          }
+        }
 
 
         $dataProvider = new ArrayDataProvider([
@@ -271,8 +298,6 @@ class MaquinaController extends Controller
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
 
-
-
         }else{
             $tday = date('Y-m-d');
             $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
@@ -315,7 +340,6 @@ class MaquinaController extends Controller
                 $labelLast30Graph[] = substr($date,5,5);
 
             }
-
 
          $maquina = Maquina::find()->all();
 

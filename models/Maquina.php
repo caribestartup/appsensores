@@ -56,7 +56,7 @@ class Maquina extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'maquina_id' => 'Maquina ID',
+            'maquina_id' => 'Machine ID',
             'nombre' => 'Name',
             'modelo' => 'Model',
             'numero' => 'Number',
