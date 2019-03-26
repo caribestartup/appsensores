@@ -20,6 +20,7 @@ use app\models\Drange;
 use yii\filters\AccessControl;
 use app\models\User;
 use app\models\Genericos;
+use \Datetime;
 
 /**
  * TurnoController implements the CRUD actions for Turno model.
@@ -34,7 +35,7 @@ class LoteController extends Controller
         return [
              'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','view','create','update','delete','asignar','charts','performance'],
+                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'performancetime'],
                 'rules' => [
                     [
                         'actions' => ['index','view','asignar'],
@@ -42,7 +43,7 @@ class LoteController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['charts','performance','create','update','delete'],
+                        'actions' => ['charts','performance','create','update','delete', 'performancetime'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -303,6 +304,106 @@ class LoteController extends Controller
             'data_prod' => $last30GraphProd,
             'data_error' => $last30GraphError,
             'drange' => $drange
+        ]);
+    }
+
+    public function actionPerformancetime($id)
+    {
+        if (Yii::$app->request->post()) {
+            $tday = date('Y-m-d', strtotime(substr(Yii::$app->request->post("Drange")["range"], -10)));
+            $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
+            $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
+            $last30 = date ( 'Y-m-d' , $last30 );
+            $today = date ( 'Y-m-d' , $today );
+        }else{
+            $tday = date('Y-m-d');
+            $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
+            $last30 = strtotime ( '-30 day' , strtotime ( $tday ) ) ;
+            $last30 = date ( 'Y-m-d' , $last30 );
+            $today = date ( 'Y-m-d' , $today );
+        }
+
+        $drange = new Drange();
+        $lot = Lote::findOne($id);
+
+        $query = "SELECT pedido.*"
+        . "FROM pedido WHERE pedido.id=".$lot->pedido."";
+        $pedido = Pedido::findBySql($query)->all();
+
+        $theoricTime = ($lot->cantidad / $lot->velocidad)/60;
+
+        $incidensias = (new \yii\db\Query())
+                    ->select('insidencia.*, SUM(TIMESTAMPDIFF(MINUTE, `insidencia`.`inicio`, `insidencia`.`fin`)) as minutes')
+                    ->where([
+                        'insidencia.lote_id' => $id,
+                        'value' => [1, 2, 4]
+                    ])
+                    ->from('insidencia')
+                    ->groupby('insidencia.value')
+                    ->all();
+
+        $otherTime = 0;
+        $errorTime = 0;
+        $restTime = 0;
+
+        // print_r($incidensias);
+
+        foreach ($incidensias as $incidencia) {
+            if($incidencia['value'] == 1) {
+                $otherTime=$incidencia['minutes'];
+            }
+            else if($incidencia['value'] == 4){
+                $errorTime=$incidencia['minutes'];
+            }
+            else {
+                $restTime=$incidencia['minutes'];
+            }
+        }
+
+        $totales_start = (new \yii\db\Query())
+                    ->select('totales.*, MIN(`totales`.`hora_inicio`) as start')
+                    ->where([
+                        'totales.lote_id' => $id
+                    ])
+                    ->from('totales')
+                    ->all();
+
+        $start_date = $totales_start[0]['start'];
+        $end_date = 0;
+        $real_time = '';
+
+        // echo $lot->estado;
+
+        if($lot->estado == 'Terminado'){
+            $totales_end = (new \yii\db\Query())
+                        ->select('totales.*, MAX(`totales`.`hora_fin`) as end')
+                        ->where([
+                            'totales.lote_id' => $id
+                        ])
+                        ->from('totales')
+                        ->all();
+            $end_date = $totales_end[0]['end'];
+        }
+        else {
+            $end_date = date('Y-m-d H:i:s');
+            $real_time = '(NOW)';
+        }
+
+        $diff = (strtotime($start_date)-strtotime($end_date))/60;
+        $diff = abs($diff);
+        $diff = floor($diff);
+
+        $realTime = $diff/60;
+
+        return $this->render('performancetime',[
+            'pedido' => $pedido,
+            'order' => $lot,
+            'real' => $realTime,
+            'theoric' => $theoricTime,
+            'rest' => $restTime/60,
+            'other' => $otherTime/60,
+            'error' => $errorTime/60,
+            'time' => $real_time
         ]);
     }
 

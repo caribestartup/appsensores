@@ -134,15 +134,24 @@ class AsignacionController extends Controller
             }
 
             $incidencia = new Insidencia();
+            $machine = Maquina::findOne($machine_id);
+
+            $lote = (new \yii\db\Query())
+                    ->from('lote')
+                    ->where([
+                        'lote.maquina_id' => $machine_id,
+                        'lote.estado' => 'Activo',
+                    ])
+                    ->all();
 
             $incidencia->maquina_id = $machine_id;
             $incidencia->inicio = date('Y-m-d H:i:s');
             $incidencia->descripcion = $descripcion;
             $incidencia->value = $opcion;
             $incidencia->usuario_id = Yii::$app->user->identity->getId();
+            $incidencia->lote_id = $lote->id;
             $incidencia->save();
 
-            $machine = Maquina::findOne($machine_id);
             $machine->state = $opcion == 4? 'Error' : 'Detenido';
             $machine->save();
 

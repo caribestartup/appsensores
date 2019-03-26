@@ -18,6 +18,14 @@ $this->title = $userref->name.' '.$userref->surname.' - '.Yii::t('app', 'Perform
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
+<style media="screen">
+    @media only screen and (max-width: 768px) {
+      /* For mobile phones: */
+      .movil {
+        height: 400px;
+      }
+    }
+</style>
 <div class="user-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -72,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
               </div>
             </div>
             <div class="box-body">
-              <div id="weight-chart2" class="chart">
+              <div id="weight-chart2" class="chart movil">
                 <?= ChartJs::widget([
 					'type' => 'bar',
 					'options' => [

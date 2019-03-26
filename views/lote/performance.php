@@ -52,6 +52,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <!-------------------------- MODAL END--------------------------->
 
+<!-- <a href="<?php echo Url::toRoute(['lote/performance','id' => $order->id]) ?>">
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-line-chart"></i></button>
+</a> -->
+
+<a href="<?php echo Url::toRoute(['lote/performancetime','id' => $order->id]) ?>">
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-pie-chart"></i></button>
+</a>
+
      <div class="box box-primary">
             <div class="box-header with-border">
               <h3 id="weight-title2" class="box-title"><?php echo Yii::t('app', 'Performance') ?></h3>
