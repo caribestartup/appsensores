@@ -14,8 +14,8 @@ $this->title = Yii::t('app', 'Errors');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
- <!-------------------------- MODAL BEGIN--------------------------->             
-    
+ <!-------------------------- MODAL BEGIN--------------------------->
+
         <?php
           Modal::begin([
           'header' => '<h2 style="text-align:center">'.Yii::t('app','Select date to show').'</h2>',
@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
           'id' => 'modal-range-day'
           ]);
         ?>
-    
+
       <div class="row" style="margin-bottom: 8px">
         <div class="col-sm-6 col-sm-offset-3">
           <?php $form = ActiveForm::begin(); ?>
@@ -38,12 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-sm-6 col-sm-offset-3 form-group btn-modal">
            <?= Html::submitButton(Yii::t('app', 'Find'), ['class' => 'btn btn-success']) ?>
         </div>
-        <?php ActiveForm::end(); ?> 
+        <?php ActiveForm::end(); ?>
       </div>
-    
+
         <?php Modal::end();?>
-    
-<!-------------------------- MODAL END---------------------------> 
+
+<!-------------------------- MODAL END--------------------------->
 
 <a href="<?php echo Url::toRoute('maquina/charts') ?>"><?php echo Yii::t('app','Machines Errors |')?></a>
 <a href="<?php echo Url::toRoute('turno/charts') ?>"><?php echo Yii::t('app','Work Shifts Errors |')?></a>
@@ -59,15 +59,15 @@ $this->params['breadcrumbs'][] = $this->title;
     	<?php $count ++; ?>
     		<li class=""><a href="#timeline<?=$count; ?>" data-toggle="tab" aria-expanded="false"><?=$errorsName[$count-1]; ?></a>
     		</li>
-  
-         
+
+
     <?php } ?>
-              
+
             </ul>
             <div class="tab-content">
               <div class="tab-pane active" id="activity">
                 <!-- Post -->
-                
+
                 <div class="box box-primary">
 		            <div class="box-header with-border">
 		              <h3 id="weight-title2" class="box-title"><?php echo Yii::t('app','Total Errors')?></h3>
@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
 		              </div>
 		            </div>
-		            <div class="box-body">
+		            <div class="box-body hidden-xs">
 		              <div id="weight-chart2" class="chart">
 		                <?= ChartJs::widget([
 							'type' => 'line',
@@ -96,9 +96,27 @@ $this->params['breadcrumbs'][] = $this->title;
 						?>
 		              </div>
 		            </div>
+
+                    <div class="box-body hidden-md hidden-lg">
+		              <div id="weight-chart2" class="chart">
+		                <?= ChartJs::widget([
+							'type' => 'line',
+							'options' => [
+							'height' => 400,
+							'width' => 400,
+							'datasetFill' => false,
+							],
+							'data' => [
+							'labels' => $labelLast30Graph,
+							'datasets' => $last30Graph,
+							]
+							]);
+						?>
+		              </div>
+		            </div>
             <!-- /.box-body -->
    				 </div>
-               
+
                 <!-- /.post -->
               </div>
 
@@ -117,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
 					              </div>
 					            </div>
-					            <div class="box-body">
+					            <div class="box-body hidden-xs">
 					              <div id="weight-chart2" class="chart">
 					                <?= ChartJs::widget([
 										'type' => 'line',
@@ -134,12 +152,30 @@ $this->params['breadcrumbs'][] = $this->title;
 									?>
 					              </div>
 					            </div>
+
+                                <div class="box-body hidden-md hidden-lg">
+					              <div id="weight-chart2" class="chart">
+					                <?= ChartJs::widget([
+										'type' => 'line',
+										'options' => [
+										'height' => 400,
+										'width' => 400,
+										'datasetFill' => false,
+										],
+										'data' => [
+										'labels' => $labelLast30Graph,
+										'datasets' => $eg,
+										]
+										]);
+									?>
+					              </div>
+					            </div>
 					            <!-- /.box-body -->
 					    </div>
 					</div>
 			    <?php } ?>
-             
-           
+
+
               <!-- /.tab-pane -->
             </div>
             <!-- /.tab-content -->

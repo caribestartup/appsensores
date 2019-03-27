@@ -25,8 +25,8 @@ $this->params['breadcrumbs'][] = $this->title;
    <!-- <p>
         <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
     </p> -->
-    <!-------------------------- MODAL BEGIN--------------------------->             
-    
+    <!-------------------------- MODAL BEGIN--------------------------->
+
         <?php
           Modal::begin([
           'header' => '<h2 style="text-align:center">'.Yii::t('app','Select date to show').'</h2>',
@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
           'id' => 'modal-range-day'
           ]);
         ?>
-    
+
       <div class="row" style="margin-bottom: 8px">
         <div class="col-sm-6 col-sm-offset-3">
           <?php $form = ActiveForm::begin(); ?>
@@ -49,12 +49,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-sm-6 col-sm-offset-3 form-group btn-modal">
            <?= Html::submitButton(Yii::t('app', 'Find'), ['class' => 'btn btn-success']) ?>
         </div>
-        <?php ActiveForm::end(); ?> 
+        <?php ActiveForm::end(); ?>
       </div>
-    
+
         <?php Modal::end();?>
-    
-<!-------------------------- MODAL END--------------------------->  
+
+<!-------------------------- MODAL END--------------------------->
 
 <a href="<?php echo Url::toRoute('maquina/charts') ?>"><?php echo Yii::t('app','Machines Errors |')?></a>
 <a href="<?php echo Url::toRoute('turno/charts') ?>"><?php echo Yii::t('app','Work Shifts Errors |')?></a>
@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
             </div>
-            <div class="box-body">
+            <div class="box-body hidden-xs">
               <div id="weight-chart2" class="chart">
                 <?= ChartJs::widget([
 					'type' => 'bar',
@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					'data' => [
 					'labels' => $labelLast30Graph,
 					'datasets' => $last30Graph,
-					
+
 					],
 					'clientOptions' => [
 				        'legend' => [
@@ -98,22 +98,39 @@ $this->params['breadcrumbs'][] = $this->title;
 				        'scales'=> [
                         	//'xAxes'=> [ [ 'stacked'=>true,] ],
 				            //'yAxes'=> [ [ 'stacked'=>true,] ],
-                    	],	  
-                    	/* 'tooltips' => [
-				            'enabled' => true,
-				            'intersect' => true,
-				            'callbacks' => [
-						'label' => new JsExpression('function($tooltipItems, $data){
-								sum = $data.datasets[$tooltipItems.datasetIndex].data[$tooltipItems.index];
-							if($tooltipItems.datasetIndex < 1){
-								sum = $data.datasets[$tooltipItems.datasetIndex].data[$tooltipItems.index] * 100 / $data.datasets[2].data[$tooltipItems.index] ;
-								sum = sum + " %";
-							}
-							return sum;
-							}'),
-						],
-				        ], */     
+                    	],
+				    ],
+					]);
+				?>
+              </div>
+            </div>
 
+            <div class="box-body hidden-md hidden-lg">
+              <div id="weight-chart2" class="chart">
+                <?= ChartJs::widget([
+					'type' => 'bar',
+					'options' => [
+					'height' => 400,
+					'width' => 400,
+					],
+					'data' => [
+					'labels' => $labelLast30Graph,
+					'datasets' => $last30Graph,
+
+					],
+					'clientOptions' => [
+				        'legend' => [
+				            'display' => true,
+				            'position' => 'bottom',
+				            'labels' => [
+				                'fontSize' => 14,
+				                'fontColor' => "#425062",
+				            ],
+				        ],
+				        'scales'=> [
+                        	//'xAxes'=> [ [ 'stacked'=>true,] ],
+				            //'yAxes'=> [ [ 'stacked'=>true,] ],
+                    	],
 				    ],
 					]);
 				?>

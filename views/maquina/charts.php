@@ -87,12 +87,29 @@ $this->params['breadcrumbs'][] = $this->title;
                             <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                         </div>
 		            </div>
-		            <div class="box-body">
+		            <div class="box-body hidden-xs">
 		              <div id="weight-chart2" class="chart">
 		                <?= ChartJs::widget([
     							'type' => 'line',
     							'options' => [
-        							'height' => 250,
+        							'height' => 200,
+        							'width' => 400
+    							],
+    							'data' => [
+        							'labels' => $labelLast30Graph,
+        							'datasets' => $last30Graph,
+    							]
+							]);
+						?>
+		              </div>
+		            </div>
+
+                    <div class="box-body hidden-md hidden-lg">
+		              <div id="weight-chart2" class="chart">
+		                <?= ChartJs::widget([
+    							'type' => 'line',
+    							'options' => [
+        							'height' => 400,
         							'width' => 400
     							],
     							'data' => [
@@ -124,12 +141,30 @@ $this->params['breadcrumbs'][] = $this->title;
 					                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
 					              </div>
 					            </div>
-					            <div class="box-body">
+					            <div class="box-body hidden-xs">
 					              <div id="weight-chart2" class="chart movil">
 					                <?= ChartJs::widget([
     										'type' => 'line',
     										'options' => [
         										'height' => 200,
+        										'width' => 400,
+                                                'class' => 'movil',
+    										],
+    										'data' => [
+        										'labels' => $labelLast30Graph,
+        										'datasets' => $eg,
+    										]
+										]);
+									?>
+					              </div>
+					            </div>
+
+                                <div class="box-body hidden-md hidden-lg">
+					              <div id="weight-chart2" class="chart movil">
+					                <?= ChartJs::widget([
+    										'type' => 'line',
+    										'options' => [
+        										'height' => 400,
         										'width' => 400,
                                                 'class' => 'movil',
     										],

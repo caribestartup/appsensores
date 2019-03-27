@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
     @media only screen and (max-width: 768px) {
       /* For mobile phones: */
       .movil {
-        height: 400px;
+        height: 500px;
       }
     }
 </style>

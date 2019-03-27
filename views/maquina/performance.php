@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
             </div>
-            <div class="box-body">
+            <div class="box-body hidden-xs">
               <div id="weight-chart2" class="chart">
                 <?= ChartJs::widget([
 					'type' => 'bar',
@@ -97,23 +97,44 @@ $this->params['breadcrumbs'][] = $this->title;
 				                'fontColor' => "#425062",
 				            ]
 				        ],
-				       /* 'tooltips' => [
-				            'enabled' => true,
-				            'intersect' => true,
-				            'callbacks' => [
-						'label' => new JsExpression('function($tooltipItems, $data){
-							//sum += data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-							return $data;
-							}'),
-						],
-				        ],*/
 				        'hover' => [
 				            'mode' => 'y',
 				            'intersect' => true,
 				        ],
 				        'maintainAspectRatio' => false,
+				    ],
+					]);
+				?>
+              </div>
+            </div>
 
-
+            <div class="box-body hidden-md hidden-lg">
+              <div id="weight-chart2" class="chart">
+                <?= ChartJs::widget([
+					'type' => 'bar',
+					'options' => [
+					'height' => 500,
+					'width' => 400,
+					'datasetFill' => false,
+					],
+					'data' => [
+					'labels' => $labelLast30Graph,
+					'datasets' => $last30Graph,
+					],
+					'clientOptions' => [
+				        'legend' => [
+				            'display' => true,
+				            'position' => 'bottom',
+				            'labels' => [
+				                'fontSize' => 14,
+				                'fontColor' => "#425062",
+				            ]
+				        ],
+				        'hover' => [
+				            'mode' => 'y',
+				            'intersect' => true,
+				        ],
+				        'maintainAspectRatio' => false,
 				    ],
 					]);
 				?>

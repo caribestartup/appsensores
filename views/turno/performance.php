@@ -26,8 +26,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
     </p> -->
 
-     <!-------------------------- MODAL BEGIN--------------------------->             
-    
+     <!-------------------------- MODAL BEGIN--------------------------->
+
         <?php
           Modal::begin([
           'header' => '<h2 style="text-align:center">'.Yii::t('app','Select date to show').'</h2>',
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
           'id' => 'modal-range-day'
           ]);
         ?>
-    
+
       <div class="row" style="margin-bottom: 8px">
         <div class="col-sm-6 col-sm-offset-3">
           <?php $form = ActiveForm::begin(); ?>
@@ -50,12 +50,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-sm-6 col-sm-offset-3 form-group btn-modal">
            <?= Html::submitButton(Yii::t('app', 'Find'), ['class' => 'btn btn-success']) ?>
         </div>
-        <?php ActiveForm::end(); ?> 
+        <?php ActiveForm::end(); ?>
       </div>
-    
+
         <?php Modal::end();?>
-    
-<!-------------------------- MODAL END---------------------------> 
+
+<!-------------------------- MODAL END--------------------------->
 
 <a href="<?php echo Url::toRoute(['turno/performancebar','id' => $turnoref->id]) ?>">
   <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-bar-chart"></i></button>
@@ -72,12 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
             </div>
-            <div class="box-body">
+            <div class="box-body hidden-xs">
               <div id="weight-chart2" class="chart">
                 <?= ChartJs::widget([
 					'type' => 'bar',
 					'options' => [
-					'height' => 200,
+					'height' => 250,
 					'width' => 400,
 					'datasetFill' => false,
 					],
@@ -94,23 +94,44 @@ $this->params['breadcrumbs'][] = $this->title;
 				                'fontColor' => "#425062",
 				            ]
 				        ],
-				       /* 'tooltips' => [
-				            'enabled' => true,
-				            'intersect' => true,
-				            'callbacks' => [
-						'label' => new JsExpression('function($tooltipItems, $data){
-							//sum += data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-							return $data;
-							}'),
-						],
-				        ],*/
 				        'hover' => [
 				            'mode' => 'y',
 				            'intersect' => true,
 				        ],
 				        'maintainAspectRatio' => false,
-				        
+				    ],
+					]);
+				?>
+              </div>
+            </div>
 
+            <div class="box-body hidden-md hidden-lg">
+              <div id="weight-chart2" class="chart">
+                <?= ChartJs::widget([
+					'type' => 'bar',
+					'options' => [
+					'height' => 500,
+					'width' => 400,
+					'datasetFill' => false,
+					],
+					'data' => [
+					'labels' => $labelLast30Graph,
+					'datasets' => $last30Graph,
+					],
+					'clientOptions' => [
+				        'legend' => [
+				            'display' => true,
+				            'position' => 'bottom',
+				            'labels' => [
+				                'fontSize' => 14,
+				                'fontColor' => "#425062",
+				            ]
+				        ],
+				        'hover' => [
+				            'mode' => 'y',
+				            'intersect' => true,
+				        ],
+				        'maintainAspectRatio' => false,
 				    ],
 					]);
 				?>

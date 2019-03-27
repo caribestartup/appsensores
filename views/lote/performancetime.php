@@ -40,17 +40,41 @@ $this->params['breadcrumbs'][] = $this->title;
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
             </div>
-            <div class="box-body">
+            <div class="box-body hidden-xs">
               <div id="weight-chart2" class="chart">
                   <?= ChartJs::widget([
                       'type' => 'pie',
                       'options' => [
+                          'height' => 200,
+                          'width' => 400
                       ],
                       'data' => [
                           'labels' => ['Real Time '.$time, 'Theoric Time', 'Rest Time', 'Other Time', 'Error Time'],
                           'datasets' => [
                               [
-                                  // 'backgroundColor' => "rgba(92,184,92,0.75)"
+                                  'backgroundColor'=> ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
+                                  'data' => [$real, $theoric, $rest, $other, $error],
+                              ]
+                          ]
+                      ]
+                  ]);
+                  ?>
+
+              </div>
+            </div>
+
+            <div class="box-body hidden-md hidden-lg">
+              <div id="weight-chart2" class="chart">
+                  <?= ChartJs::widget([
+                      'type' => 'pie',
+                      'options' => [
+                          'height' => 500,
+                          'width' => 400
+                      ],
+                      'data' => [
+                          'labels' => ['Real Time '.$time, 'Theoric Time', 'Rest Time', 'Other Time', 'Error Time'],
+                          'datasets' => [
+                              [
                                   'backgroundColor'=> ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
                                   'data' => [$real, $theoric, $rest, $other, $error],
                               ]

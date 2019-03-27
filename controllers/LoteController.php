@@ -321,7 +321,7 @@ class LoteController extends Controller
            $index = array_search(substr($hora, 0,10), $fechas);
            // echo $index;
            array_splice($last30GraphError, $index, 0, $merr['error']);
-           array_splice($last30GraphProd, $index, 0, $merr['total']);
+           array_splice($last30GraphProd, $index, 0, $merr['total'] - $merr['error']);
         }
 
         return $this->render('performance',[

@@ -18,6 +18,16 @@ $this->title = Yii::t('app', 'Performance');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
+
+<style media="screen">
+    @media only screen and (max-width: 768px) {
+      /* For mobile phones: */
+      .movil {
+        height: 400px;
+      }
+    }
+</style>
+
 <div class="user-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -26,8 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('app', 'Create User'), ['create'], ['class' => 'btn btn-success']) ?>
     </p> -->
 
-     <!-------------------------- MODAL BEGIN--------------------------->             
-    
+     <!-------------------------- MODAL BEGIN--------------------------->
+
         <?php
           Modal::begin([
           'header' => '<h2 style="text-align:center">'.Yii::t('app','Select date to show').'</h2>',
@@ -35,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
           'id' => 'modal-range-day'
           ]);
         ?>
-    
+
       <div class="row" style="margin-bottom: 8px">
         <div class="col-sm-6 col-sm-offset-3">
           <?php $form = ActiveForm::begin(); ?>
@@ -50,12 +60,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-sm-6 col-sm-offset-3 form-group btn-modal">
            <?= Html::submitButton(Yii::t('app', 'Find'), ['class' => 'btn btn-success']) ?>
         </div>
-        <?php ActiveForm::end(); ?> 
+        <?php ActiveForm::end(); ?>
       </div>
-    
+
         <?php Modal::end();?>
-    
-<!-------------------------- MODAL END---------------------------> 
+
+<!-------------------------- MODAL END--------------------------->
 
 <a href="<?php echo Url::toRoute('maquina/charts') ?>"><?php echo Yii::t('app','Machines Errors |')?></a>
 <a href="<?php echo Url::toRoute('turno/charts') ?>"><?php echo Yii::t('app','Work Shifts Errors |')?></a>
@@ -75,11 +85,11 @@ $this->params['breadcrumbs'][] = $this->title;
               </div>
             </div>
             <div class="box-body">
-              <div id="weight-chart2" class="chart">
+              <div id="weight-chart2" class="chart movil">
                 <?= ChartJs::widget([
 					'type' => 'bar',
 					'options' => [
-					'height' => 200,
+					'height' => 250,
 					'width' => 400,
 					'datasetFill' => false,
 					],
@@ -96,28 +106,17 @@ $this->params['breadcrumbs'][] = $this->title;
 				                'fontColor' => "#425062",
 				            ]
 				        ],
-				       /* 'tooltips' => [
-				            'enabled' => true,
-				            'intersect' => true,
-				            'callbacks' => [
-						'label' => new JsExpression('function($tooltipItems, $data){
-							//sum += data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-							return $data;
-							}'),
-						],
-				        ],*/
 				        'hover' => [
 				            'mode' => 'y',
 				            'intersect' => true,
 				        ],
 				        'maintainAspectRatio' => false,
-				        
-
 				    ],
 					]);
 				?>
               </div>
             </div>
+
             <!-- /.box-body -->
     </div>
 </div>

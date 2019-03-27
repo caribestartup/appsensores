@@ -33,12 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
               </div>
             </div>
-            <div class="box-body">
+            <div class="box-body hidden-xs">
               <div id="weight-chart2" class="chart">
                 <?= ChartJs::widget([
                         'type' => 'bar',
                         'options' => [
-
+                            'height' => 200,
+        					'width' => 400
                         ],
                         'data' => [
                             // 'labels' => ['2016', '2017', '2018', '2019'],
@@ -57,23 +58,64 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'backgroundColor' => "rgba(92,184,92,0.75)",
                                     'data' => $data_prod
                                 ],
-                                // [
-                                //     'type'=>'line',
-                                //     'fill'=>false,
-                                //     'label'=> 'c',
-                                //     'yAxisID'=>"y-axis-0",
-                                //     'backgroundColor' =>"rgba(51,51,51,0.5)",
-                                //
-                                //     'data' => [150, 200, 400, 500]
-                                // ],
-                                // [
-                                //     'type'=>'line',
-                                //     'fill'=>false,
-                                //     'label'=> 'd',
-                                //     'yAxisID'=>"y-axis-1",
-                                //     'backgroundColor' => "rgba(151,187,205,0.5)",
-                                //     'data' => [500, 300, 100, 0]
-                                // ]
+                            ]
+                        ],
+                        'clientOptions' => [
+                            'options' => [
+                                'title'=>[
+                                    'display' => true,
+                                ],
+                                'tooltips'=>[
+                                    'mode'=> 'label'
+                                ],
+                                'responsive'=> true,
+                            ],
+                            'scales'=> [
+                                'xAxes'=> [
+                                    [
+                                        'stacked'=>true,
+                                    ],
+                                ],
+                                'yAxes'=>[
+                                    [
+                                        'stacked'=>true,
+                                        'position'=>'left',
+                                        'id'=> "y-axis-0",
+                                    ],
+                                ]
+                            ],
+                        ],
+                    ]);
+                ?>
+
+              </div>
+            </div>
+
+            <div class="box-body hidden-md hidden-lg">
+              <div id="weight-chart2" class="chart">
+                <?= ChartJs::widget([
+                        'type' => 'bar',
+                        'options' => [
+                            'height' => 500,
+        					'width' => 400
+                        ],
+                        'data' => [
+                            // 'labels' => ['2016', '2017', '2018', '2019'],
+                            'labels' => $labels,
+                            'datasets' => [[
+                                    'type'=>'bar',
+                                    'label'=> 'Error',
+                                    'yAxisID'=>"y-axis-0",
+                                    'backgroundColor' => "rgba(217,83,79,0.75)",
+                                    'data' => $data_error
+                                ],
+                                [
+                                    'type'=>'bar',
+                                    'label'=> 'Production',
+                                    'yAxisID'=>"y-axis-0",
+                                    'backgroundColor' => "rgba(92,184,92,0.75)",
+                                    'data' => $data_prod
+                                ],
                             ]
                         ],
                         'clientOptions' => [
