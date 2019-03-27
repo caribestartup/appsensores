@@ -22,10 +22,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </p>
     </div>
 <div class="maquina-view row">
-   
 
-   <div class="col-md-12">
-      
+
+   <div class="col-md-12" hidden>
+
 
         <div class="col-md-6 lined-top">
             <div class="row">
@@ -65,15 +65,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $errores = $model->todayErrors()?>
         <?php if (count($errores) == 0) {
-            echo '<h1 style="text-align:center;margin-top:20px;color:red"> There are no error records today</h1>';
+            // echo '<h1 style="text-align:center;margin-top:20px;color:red"> There are no error records today</h1>';
         }?>
         <?php foreach ($errores as $error) { ?>
 
-            <div class="col-md-6" style="margin-top: 20px">
+            <div class="col-md-6" style="margin-top: 20px" hidden>
                  <img class="img-border-detail" src="<?= Url::to('res/detalles.png') ?>">
                 <div class="row">
                     <div class="col-md-3">
-                        <img class="img-responsive img-y185" src="<?= Url::to('res/ampolla.png') ?>"> 
+                        <img class="img-responsive img-y185" src="<?= Url::to('res/ampolla.png') ?>">
                     </div>
                     <div class="col-md-9 lined-top">
                         <h3 style="margin-top: 10%"><?= strtoupper($error['nombre_ventana'])?> ERROR</h3>
@@ -87,12 +87,12 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
         <?php } ?>
-        
+
    </div>
 
-        
 
-       
+
+
 
 
 </div>

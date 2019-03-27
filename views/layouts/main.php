@@ -264,7 +264,7 @@ $turno = Maquina::getLasturno();
 						<img class="pull-left machine-img" src="<?= Url::to('res/icon_yes.png')?>">
 						<label><?= strtoupper($machine->nombre) ?></label>
 						<p class="text-primary"><?= $machine->getTotalprodn() ?>/<?= $machine->getTotalprodestn() ?></p>
-						<a href="<?= Url::toRoute(['/maquina/production', 'id' => $machine->maquina_id])?>">
+						<a href="<?= Url::toRoute(['/maquina/performance', 'id' => $machine->maquina_id])?>">
 
               <img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_ok.png')?>"></a>
 
@@ -284,7 +284,7 @@ $turno = Maquina::getLasturno();
 						<img class="pull-left machine-img" src="<?= Url::to('res/icon_no.png')?>">
 						<label><?= strtoupper($machine->nombre) ?></label>
 						<p class="text-danger"><?php echo Yii::t('app','OFF') ?></p>
-						<a href="<?= Url::toRoute(['/maquina/production', 'id' => $machine->maquina_id])?>"><img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_login.png')?>"></a>
+						<a href="<?= Url::toRoute(['/maquina/performance', 'id' => $machine->maquina_id])?>"><img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_login.png')?>"></a>
 					</div>
 				</div>
 
@@ -305,7 +305,7 @@ $turno = Maquina::getLasturno();
 						<img class="machine-img" src="<?= Url::to('res/icon_no.png')?>">
 						<label><?= strtoupper($machine->nombre) ?></label>
 						<p class="text-danger"><?= $machine->getTotalprodn() ?>/<?= $machine->getTotalprodestn() ?></p>
-						<a href="<?= Url::toRoute(['/maquina/production', 'id' => $machine->maquina_id])?>"><img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_error.png')?>"></a>
+						<a href="<?= Url::toRoute(['/maquina/performance', 'id' => $machine->maquina_id])?>"><img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_error.png')?>"></a>
 					</div>
 				</div>
 

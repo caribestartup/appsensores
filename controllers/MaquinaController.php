@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Maquina;
 use app\models\UserTurno;
+use app\models\Insidencia;
 use app\models\Turno;
 use app\models\TurnoUsuarioMaquina;
 use app\models\MaquinaSearch;
@@ -33,7 +34,7 @@ class MaquinaController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','view','create','update','delete','production','charts','performance', 'assigne', 'unassigne'],
+                'only' => ['index','view','create','update','delete','production','charts','performance', 'assigne', 'unassigne', 'performancetime'],
                 'rules' => [
                     [
                         'actions' => ['index','production','performance', 'assigne'],
@@ -41,7 +42,7 @@ class MaquinaController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['charts','create','update','delete','view', 'unassigne'],
+                        'actions' => ['charts','create','update','delete','view', 'unassigne', 'performancetime'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -116,6 +117,73 @@ class MaquinaController extends Controller
             //'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionPerformancetime($id)
+    {
+      $incidensias = (new \yii\db\Query())
+                  ->select('insidencia.*, SUM(TIMESTAMPDIFF(MINUTE, `insidencia`.`inicio`, `insidencia`.`fin`)) as minutes')
+                  ->where([
+                      'insidencia.maquina_id' => $id,
+                      'value' => [1, 2, 4]
+                  ])
+                  ->from('insidencia')
+                  ->groupby('insidencia.value')
+                  ->all();
+
+      $otherTime = 0;
+      $errorTime = 0;
+      $restTime = 0;
+
+      foreach ($incidensias as $incidencia) {
+          if($incidencia['value'] == 1) {
+              $otherTime=$incidencia['minutes'];
+          }
+          else if($incidencia['value'] == 4){
+              $errorTime=$incidencia['minutes'];
+          }
+          else {
+              $restTime=$incidencia['minutes'];
+          }
+      }
+
+
+      $maquina = Maquina::findOne($id);
+
+      // inicio
+      $totales_start = (new \yii\db\Query())
+                  ->select('totales.*, MIN(`totales`.`hora_inicio`) as start')
+                  ->where([
+                      'totales.mac' => $id
+                  ])
+                  ->from('totales')
+                  ->all();
+      // fin
+      $totales_end = (new \yii\db\Query())
+                  ->select('totales.*, MAX(`totales`.`hora_fin`) as end')
+                  ->where([
+                      'totales.lote_id' => $id
+                  ])
+                  ->from('totales')
+                  ->all();
+      $end_date = $totales_end[0]['end'];
+
+      $start_date = $totales_start[0]['start'];
+      $end_date = 0;
+
+      $diff = (strtotime($start_date)-strtotime($end_date))/60;
+      $diff = abs($diff);
+      $diff = floor($diff);
+
+      $realTime = $diff/60;
+
+      return $this->render('performancetime',[
+          'maquina' => $maquina,
+          'real' => $realTime,
+          'rest' => round($restTime/60, 2),
+          'other' => round($otherTime/60, 2),
+          'error' => round($errorTime/60, 2)
+      ]);
     }
 
     /**
@@ -585,7 +653,6 @@ class MaquinaController extends Controller
                 array_push($last30Graph,['label' => Yii::t('app','Deviation %'),'data' => $model->getTotalrech($last30,$today), 'borderColor' => 'rgb(216,76,26)', 'backgroundColor' => 'rgb(216,76,26)']);
                 array_push($last30Graph,['label' => Yii::t('app','Real Production'),'data' => $model->getTotalprod($last30,$today), 'borderColor' => 'rgb(40,45,250)', 'backgroundColor' => 'rgb(40,45,250)']);
                 array_push($last30Graph,['label' => Yii::t('app','Estimated Production'),'data' => $model->getTotalprodest($last30,$today), 'borderColor' => 'rgb(40,250,40)', 'backgroundColor' => 'rgb(40,250,40)']);
-
 
              }
 

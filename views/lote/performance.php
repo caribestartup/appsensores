@@ -60,6 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
   <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-pie-chart"></i></button>
 </a>
 
+<a href="<?php echo Url::toRoute(['lote/report','id' => $order->id]) ?>">
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-file-o"></i></button>
+</a>
+
      <div class="box box-primary">
             <div class="box-header with-border">
               <h3 id="weight-title2" class="box-title"><?php echo Yii::t('app', 'Performance') ?></h3>

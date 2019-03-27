@@ -33,6 +33,10 @@ class Insidencia extends \yii\db\ActiveRecord
             [['maquina_id'], 'required'],
             [['descripcion'], 'string', 'max' => 255],
             [['inicio'], 'required'],
+            [['value'], 'integer'],
+            [['lote_id'], 'required'],
+            [['lote_id'], 'integer'],
+            [['value'], 'required'],
             [['value'], 'integer']
         ];
     }
@@ -45,11 +49,13 @@ class Insidencia extends \yii\db\ActiveRecord
 
         return [
             'id' => Yii::t('app', 'Lot ID'),
-            'maquina_id' => Yii::t('app', 'Machine'),
-            'value' => Yii::t('app', ''),
+            'maquina_id' => Yii::t('app', 'Machine ID'),
+            'usuario_id' => Yii::t('app', 'User'),
+            'inicio' => Yii::t('app', 'Start'),
+            'fin' => Yii::t('app', 'End'),
             'descripcion' => Yii::t('app', 'Description'),
-            'inicio' => Yii::t('app', 'Inicio'),
-            'fin' => Yii::t('app', 'Fin'),
+            'value' => Yii::t('app', 'Value'),
+            'lote_id' => Yii::t('app', 'Lot'),
         ];
     }
 

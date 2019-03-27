@@ -7,6 +7,7 @@ use app\models\Parciales;
 use app\models\Pedido;
 use app\models\Lote;
 use app\models\LoteSearch;
+use app\models\Insidencia;
 use app\models\Maquina;
 use app\models\MaquinaSearch;
 use app\models\Error;
@@ -35,7 +36,7 @@ class LoteController extends Controller
         return [
              'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'performancetime'],
+                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'performancetime', 'report'],
                 'rules' => [
                     [
                         'actions' => ['index','view','asignar'],
@@ -43,7 +44,7 @@ class LoteController extends Controller
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['charts','performance','create','update','delete', 'performancetime'],
+                        'actions' => ['charts','performance','create','update','delete', 'performancetime', 'report'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -76,6 +77,32 @@ class LoteController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionReport($id)
+    {
+      $insidencia = (new \yii\db\Query())
+                  ->select('insidencia.*, user.name, user.surname, maquina.nombre , TIMESTAMPDIFF(MINUTE, `insidencia`.`inicio`, `insidencia`.`fin`) as time_min')
+                  ->leftJoin('user', 'user.id = insidencia.usuario_id')
+                  ->leftJoin('maquina', 'maquina.maquina_id = insidencia.maquina_id')
+                  ->from('insidencia')
+                  ->where([
+                      'insidencia.lote_id' => $id
+                  ])
+                  ->all();
+
+
+      $dataProvider = new ArrayDataProvider([
+          'allModels' => $insidencia,
+      ]);
+
+      $lote = Lote::findOne($id);
+
+      return $this->render('report', [
+          'dataProvider' => $dataProvider,
+          'lote' => $id,
+          'model' => $lote,
+      ]);
     }
 
     /**
@@ -254,13 +281,13 @@ class LoteController extends Controller
     {
         if (Yii::$app->request->post()) {
             $tday = date('Y-m-d', strtotime(substr(Yii::$app->request->post("Drange")["range"], -10)));
-            $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
+            $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;
             $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );
         }else{
             $tday = date('Y-m-d');
-            $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
+            $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;
             $last30 = strtotime ( '-30 day' , strtotime ( $tday ) ) ;
             $last30 = date ( 'Y-m-d' , $last30 );
             $today = date ( 'Y-m-d' , $today );

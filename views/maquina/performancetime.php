@@ -14,19 +14,19 @@ use kartik\daterange\DateRangePicker;
 /* @var $searchModel app\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', $order->identificador);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Order '.$pedido[0]->identificador), 'url' => ['pedido/view', 'id'=>$pedido[0]->id]];
+$this->title = Yii::t('app', $maquina->nombre);
+// $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Performance Time for'.$maquina->nombre), 'url' => ['pedido/view', 'id'=>$pedido[0]->id]];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <div class="user-index">
 
-<a href="<?php echo Url::toRoute(['lote/performance','id' => $order->id]) ?>">
-  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-bar-chart"></i></button>
+<a href="<?php echo Url::toRoute(['maquina/performance','id' => $maquina->maquina_id]) ?>">
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-line-chart"></i></button>
 </a>
 
-<a href="<?php echo Url::toRoute(['lote/report','id' => $order->id]) ?>">
-  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-file-o"></i></button>
+<a href="<?php echo Url::toRoute(['maquina/performancebar','id' => $maquina->maquina_id]) ?>">
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-bar-chart"></i></button>
 </a>
 
      <div class="box box-primary">
@@ -47,12 +47,12 @@ $this->params['breadcrumbs'][] = $this->title;
                       'options' => [
                       ],
                       'data' => [
-                          'labels' => ['Real Time '.$time, 'Theoric Time', 'Rest Time', 'Other Time', 'Error Time'],
+                          'labels' => ['Real Time', 'Rest Time', 'Other Time', 'Error Time'],
                           'datasets' => [
                               [
                                   // 'backgroundColor' => "rgba(92,184,92,0.75)"
-                                  'backgroundColor'=> ['#ff6384', '#36a2eb', '#cc65fe', '#ffce56'],
-                                  'data' => [$real, $theoric, $rest, $other, $error],
+                                  'backgroundColor'=> ['#ff6384', '#cc65fe', '#ffce56'],
+                                  'data' => [$real, $rest, $other, $error],
                               ]
                           ]
                       ]
