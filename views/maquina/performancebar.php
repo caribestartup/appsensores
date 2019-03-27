@@ -13,8 +13,10 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->params['breadcrumbs'][] = ['label' => $maqref->nombre, 'url' => ['user/operarios']];
-$this->title = Yii::t('app', 'Performance ');
+if( Yii::$app->user->identity->getRole() != 'Operator' ) {
+  $this->params['breadcrumbs'][] = ['label' => 'Machines', 'url' => ['maquina/index']];
+}
+$this->title = Yii::t('app', 'Performance '.$maqref->nombre);
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -40,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
           <?php $form = ActiveForm::begin(); ?>
 
             <?= $form->field($drange, 'range', [
-                'addon'=>['prepend'=>['content'=>'<i class="fas fa-calendar-alt"></i>']],
+                'addon'=>['prepend'=>['content'=>'<i class="fas fa-calendar-alt" title="Rank of Time"></i>']],
                 'options'=>['class'=>'drp-container form-group']
             ])->widget(DateRangePicker::classname(), [
                 'useWithAddon'=>false
@@ -57,11 +59,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-------------------------- MODAL END--------------------------->
 
 <a href="<?php echo Url::toRoute(['maquina/performance','id' => $maqref->maquina_id]) ?>">
-  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-line-chart"></i></button>
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-line-chart" title="Performance & Errors"></i></button>
 </a>
 
 <a href="<?php echo Url::toRoute(['maquina/performancetime','id' => $maqref->maquina_id]) ?>">
-  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-pie-chart"></i></button>
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-pie-chart" title="Performance on Times"></i></button>
 </a>
 
      <div class="box box-primary">

@@ -39,12 +39,12 @@ class LoteController extends Controller
                 'only' => ['index','view','create','update','delete','asignar','charts','performance', 'performancetime', 'report'],
                 'rules' => [
                     [
-                        'actions' => ['index','view','asignar'],
+                        'actions' => ['index','view','asignar', 'performancetime', 'report', 'charts','performance'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['charts','performance','create','update','delete', 'performancetime', 'report'],
+                        'actions' => ['create','update','delete'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -112,23 +112,25 @@ class LoteController extends Controller
      */
     public function actionView($id)
     {
-        $query = "SELECT lote.*"
-                  . "FROM lote WHERE lote.id=".$id."";
+        $genericos = (new \yii\db\Query())
+        ->select('genericos.*, user.name, user.surname, maquina.nombre')
+        ->leftJoin('user', 'user.id = genericos.user_id')
+        ->leftJoin('maquina', 'maquina.maquina_id = genericos.maquina_id')
+        ->from('genericos')
+        ->where([
+            'genericos.lote_id' => $id,
+        ])
+        ->all();
 
-        $order = Lote::findBySql($query)->all();
-
-        $queryOrder = "SELECT pedido.*"
-                  . "FROM pedido WHERE pedido.id=".$order[0]->pedido."";
-        $pedido = Pedido::findBySql($queryOrder)->all();
+        $lote = Lote::findOne($id);
 
         $dataProvider = new ArrayDataProvider([
-            'allModels' => $order,
+            'allModels' => $genericos,
         ]);
 
         return $this->render('view', [
             'dataProvider' => $dataProvider,
-            'model' => $order,
-            'pedido' => $pedido,
+            'lote' => $lote,
         ]);
     }
 
@@ -151,7 +153,7 @@ class LoteController extends Controller
             $loteID = Yii::$app->db->getLastInsertID();
 
             if(Yii::$app->request->post('array') != ''){
-                $questions = split(',', Yii::$app->request->post('array'));
+                $questions = mb_split(',', Yii::$app->request->post('array'));
                 foreach ($questions as $question) {
                     $generic = new Genericos();
                     $generic->pregunta = Yii::$app->request->post($question);

@@ -13,7 +13,9 @@ use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Machines'), 'url' => ['maquina/index']];
+if( Yii::$app->user->identity->getRole() != 'Operator' ) {
+  $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Machines'), 'url' => ['maquina/index']];
+}
 $this->title = Yii::t('app', 'Performance');
 $this->params['breadcrumbs'][] = $this->title;
 

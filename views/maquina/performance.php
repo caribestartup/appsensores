@@ -57,11 +57,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <!-------------------------- MODAL END--------------------------->
 
 <a href="<?php echo Url::toRoute(['maquina/performancebar','id' => $maqref->maquina_id]) ?>">
-  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-bar-chart"></i></button>
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-bar-chart" title="Performance Chart Bar"></i></button>
 </a>
 
 <a href="<?php echo Url::toRoute(['maquina/performancetime','id' => $maqref->maquina_id]) ?>">
-  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-pie-chart"></i></button>
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-pie-chart" title="Performance on Times"></i></button>
 </a>
 
      <div class="box box-primary">

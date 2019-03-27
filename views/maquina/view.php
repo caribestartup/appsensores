@@ -14,11 +14,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="maquina-view">
 
+  <?php if( Yii::$app->user->identity->getRole() != 'Operator' ) { ?>
     <p>
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->maquina_id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'New PC'), ['ordenador/create', 'id' => $model->maquina_id], ['class' => 'btn btn-info']) ?>
     </p>
-
+  <?php } ?>
     <div class="box box-primary box-solid">
                 <div class="box-header with-border">
                     <h3 class="box-title"><?= Html::encode($this->title) ?></h3>
@@ -33,8 +34,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'localname',
                             ],
                         ]) ?>
-
-
                 </div>
 
                 <div class="box-body">

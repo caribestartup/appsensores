@@ -35,12 +35,12 @@ class PedidoController extends Controller
                 'only' => ['index','view','create','update','delete','asignar','charts','performance'],
                 'rules' => [
                     [
-                        'actions' => ['index','view','asignar'],
+                        'actions' => ['charts','performance','index','view','asignar'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['charts','performance','create','update','delete'],
+                        'actions' => ['create','update','delete'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {

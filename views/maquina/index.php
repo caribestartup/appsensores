@@ -13,11 +13,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="maquina-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php if( Yii::$app->user->identity->getRole() != 'Operator' ) { ?>
 
     <p>
         <?= Html::a(Yii::t('app', 'New Machine'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
+  <?php } ?>
 
     <div class="box box-primary box-solid">
                 <div class="box-header with-border">

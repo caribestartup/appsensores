@@ -37,12 +37,12 @@ class MaquinaController extends Controller
                 'only' => ['index','view','create','update','delete','production','charts','performance', 'assigne', 'unassigne', 'performancetime'],
                 'rules' => [
                     [
-                        'actions' => ['index','production','performance', 'assigne'],
+                        'actions' => ['production','performance', 'assigne', 'performancetime'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                     [
-                        'actions' => ['charts','create','update','delete','view', 'unassigne', 'performancetime'],
+                        'actions' => ['index','charts','create','update','delete','view', 'unassigne'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {

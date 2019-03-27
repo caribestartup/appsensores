@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'dropdown' => false,
                             'vAlign'=>'middle',
                             // 'template' => '{detail} {update}',
-                            'template' => '{update}{assign}{delete}{performance}',
+                            'template' => '{detail}{update}{assign}{performance}',
                             'urlCreator' => function($action, $lotes, $key, $index) {
                                     return Url::to([$action,'id'=>$key]);
                             },
@@ -54,19 +54,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return Html::a('<span class="fa fa-desktop"></span>', ['lote/assign', 'id'=>$lotes["id"]],['title'=> Yii::t('app','Assign Machine')]);
                                     }
                                 },
+                                'detail' => function ($url, $lotes, $key) {
+                                    if( Yii::$app->user->identity->getRole() != 'Operator' ) {
+                                        return Html::a('<span class="fa fa-eye"></span>', ['lote/view', 'id'=>$lotes["id"]],['title'=> Yii::t('app','Detail')]);
+                                    }
+                                },
                                 'update' => function ($url, $lotes, $key) {
                                     if( Yii::$app->user->identity->getRole() != 'Operator' ) {
                                         return Html::a('<span class="fa fa-pencil"></span>', ['lote/update', 'id'=>$lotes["id"]],['title'=> Yii::t('app','Update')]);
                                     }
                                 },
-                                'delete' => function ($url, $lotes, $key) {
-                                    if( Yii::$app->user->identity->getRole() != 'Operator' ) {
-                                        return Html::a('<span class="fa fa-trash "></span>', ['lote/delete', 'id'=>$lotes["id"]],['data' => [
-                                            'confirm' => Yii::t('app','Do you want to delete lot?'),
-                                            'method' => 'post',
-                                        ],'title'=>Yii::t('app', Yii::t('app','Delete Lot'))]);
-                                    }
-                                },
+                                // 'delete' => function ($url, $lotes, $key) {
+                                //     if( Yii::$app->user->identity->getRole() != 'Operator' ) {
+                                //         return Html::a('<span class="fa fa-trash "></span>', ['lote/delete', 'id'=>$lotes["id"]],['data' => [
+                                //             'confirm' => Yii::t('app','Do you want to delete lot?'),
+                                //             'method' => 'post',
+                                //         ],'title'=>Yii::t('app', Yii::t('app','Delete Lot'))]);
+                                //     }
+                                // },
                                 'performance' => function ($url, $lotes, $key) {
                                     return Html::a('<span class="fa fa-bar-chart "></span>', ['lote/performance', 'id'=>$lotes["id"]],['title'=> Yii::t('app','Performance')]);
                                 },
