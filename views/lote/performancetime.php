@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
      <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 id="weight-title2" class="box-title"><?php echo Yii::t('app', 'Performance') ?></h3>
+              <h3 id="weight-title2" class="box-title"><?php echo Yii::t('app', 'Performance/Hours') ?></h3>
 
               <div class="box-tools pull-right">
 

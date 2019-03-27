@@ -427,9 +427,9 @@ class LoteController extends Controller
             'order' => $lot,
             'real' => $realTime,
             'theoric' => $theoricTime,
-            'rest' => $restTime/60,
-            'other' => $otherTime/60,
-            'error' => $errorTime/60,
+            'rest' => round($restTime/60, 2),
+            'other' => round($otherTime/60, 2),
+            'error' => round($errorTime/60, 2),
             'time' => $real_time
         ]);
     }
