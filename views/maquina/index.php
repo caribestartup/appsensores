@@ -39,8 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 [
                                     'class' => 'kartik\grid\ActionColumn',
                                     'dropdown' => false,
+                                    'options'=> ['style'=>'width:8.92%;'],
                                     'vAlign'=>'middle',
-                                    'template' => '{detail}{update}{unassign}',
+                                    'template' => '{detail}{update}{performance}{unassign}',
                                     'urlCreator' => function($action, $model, $key, $index) {
                                     return Url::to([$action,'id'=>$key]);
                                     },
@@ -59,9 +60,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 ],'title'=>Yii::t('app', Yii::t('app','Unassign Machine'))]);
                                             }
                                         },
-                                        ],
-                                        'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
-                                        ],
+                                        'performance' => function ($url, $model, $key) {
+                                            return Html::a('<span class="fa fa-bar-chart "></span>', ['/maquina/performance', 'id'=>$model["maquina_id"]],['title'=> Yii::t('app','Performance')]);
+                                        },
+                                    ],
+                                    'updateOptions'=>['role'=>'modal-remote','title'=>'Update', 'data-toggle'=>'tooltip'],
+                                ],
                             ],
                         ]); ?>
 

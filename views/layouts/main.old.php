@@ -65,7 +65,7 @@ $turno = Maquina::getLasturno();
 
     </div>
 
-  
+
   <a class="option-reference pull-right" style="position: absolute; width: 5%; right: -9%; text-align: center;"  href="<?= Url::toRoute('/user/profile')?>"><img class="img-responsive" src="<?= Url::to('res/icon_profile.png')?>">PERFIL</a>
 
 </div>
@@ -73,11 +73,11 @@ $turno = Maquina::getLasturno();
 
 
 <div class="wrap">
-   
+
     <div clas="row">
 
         <?php foreach ($maquina as $maq) { ?>
-            <?php 
+            <?php
                 switch ($maq->getRealstate()) {
                     case -1:
                         $error[] = $maq;
@@ -88,7 +88,7 @@ $turno = Maquina::getLasturno();
                     case 1:
                         $encendida[] = $maq;
                         break;
-                    
+
                     default:
                         break;
                 }
@@ -110,9 +110,9 @@ $turno = Maquina::getLasturno();
                         <a href="<?= Url::toRoute(['/maquina/production', 'id' => $machine->maquina_id])?>"><img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_ok.png')?>"></a>
                     </div>
                 </div>
-                
+
             <?php } ?>
-            
+
 
             <?php if($apagada){ ?>
                 <label style="margin-top:10px">MÁQUINAS APAGADAS</label>
@@ -127,12 +127,12 @@ $turno = Maquina::getLasturno();
                         <a href="<?= Url::toRoute(['/maquina/production', 'id' => $machine->maquina_id])?>"><img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_login.png')?>"></a>
                     </div>
                 </div>
-                
+
             <?php } ?>
 
         </div>
 
-        
+
         <div class="col-md-2 machine-container-right pull-right">
 
             <?php if($error){ ?>
@@ -148,7 +148,7 @@ $turno = Maquina::getLasturno();
                         <a href="<?= Url::toRoute(['/maquina/production', 'id' => $machine->maquina_id])?>"><img class="img-responsive machine-back-img" src="<?= Url::to('res/machine_error.png')?>"></a>
                     </div>
                 </div>
-                
+
             <?php } ?>
 
         </div>
@@ -189,11 +189,11 @@ setInterval(function() {
 
 function hasScrolled() {
     var st = $(this).scrollTop();
-    
+
     // Make sure they scroll more than delta
     if(Math.abs(lastScrollTop - st) <= delta)
         return;
-    
+
     // If they scrolled down and are past the navbar, add class .nav-up.
     // This is necessary so you never see what is "behind" the navbar.
     if (st > lastScrollTop && st > navbarHeight){
@@ -207,7 +207,7 @@ function hasScrolled() {
             $('.menu-container').removeClass('nav-up').addClass('nav-showed');
         }
     }
-    
+
     lastScrollTop = st;
 }
 
@@ -233,7 +233,7 @@ $('#plan-save').click(function(){
       height = ($(this).height() * 100) / heightB;
       matrix = $(this).css('transform');
 
-      
+
 
       var param = {"id" :id,
               "posx" : posx,
@@ -250,14 +250,14 @@ $('#plan-save').click(function(){
           url:"<?php echo $url;?>",
           type:"get",
           success: function(info){
-           alert(info);    
-        },  
-       
+           alert(info);
+        },
+
        });
 
     });
-   
- 
+
+
  });
 
 
@@ -289,8 +289,8 @@ $(document).ready(function(){
                   $('.mecha[value='+info["i"]+']').css('width', width);
                   $('.mecha[value='+info["i"]+']').css('height', height);
                    //$('.mecha[value='+info["i"]+']').css('top', vy);
-                  //$('.mecha[value='+info["i"]+']').css('left', vx); 
-                  
+                  //$('.mecha[value='+info["i"]+']').css('left', vx);
+
 
                   var m = getRotationDegrees(info["m"]);
                   alert(info["m"]);
@@ -298,24 +298,24 @@ $(document).ready(function(){
                   $('.mecha[value='+info["i"]+']').freetrans({
                   x: vx,
                   y: vy,
-                  angle: m, 
+                  angle: m,
 
-                  })  
-                  
-                  //$('.mecha[value='+info["i"]+']').css('transform', info["m"]); 
-              },  
+                  })
+
+                  //$('.mecha[value='+info["i"]+']').css('transform', info["m"]);
+              },
               dataType:"json",
              });
-        
 
-             
-              
+
+
+
 
         });
 });
 
 function getRotationDegrees(matrix) {
-  
+
         var values = matrix.split('(')[1].split(')')[0].split(',');
         var a = values[0];
         var b = values[1];
