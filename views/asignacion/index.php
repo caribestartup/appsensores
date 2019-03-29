@@ -31,16 +31,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
            [
             'class' => 'kartik\grid\ActionColumn',
+            'options'=> ['style'=>'width:8.92%;'],
             'dropdown' => false,
             'vAlign'=>'middle',
-            'template' => '{assign}{transfer}{unassign}{state}{stop}',
+            'template' => '{unassignlot}{assign}{transfer}{unassign}{state}{stop}',
             'urlCreator' => function($action, $model, $key, $index) {
                     return Url::to([$action,'id'=>$key]);
             },
             'buttons'=>[
+                'unassignlot' => function ($url, $model, $key) {
+                    if($model["lot"] != null){
+                        return Html::a('<span class="fa fa-toggle-on "></span>', ['unassignlot', 'id'=>$model["maquina_id"]],['data' => [
+                            'confirm' => Yii::t('app','Do you want to unassign lot?'),
+                            'method' => 'post',
+                        ],'title'=>Yii::t('app', Yii::t('app','Unassign Lot'))]);
+                    }
+                },
                 'assign' => function ($url, $model, $key) {
                     if($model["lot"] == null){
-                        return Html::a('<span class="fa fa-cubes"></span>', ['update', 'id'=>$model["id"]],['title'=> Yii::t('app','Assign Lot')]);
+                        return Html::a('<span class="fa fa-toggle-off"></span>', ['update', 'id'=>$model["id"]],['title'=> Yii::t('app','Assign Lot')]);
                     }
                 },
                 'transfer' => function ($url, $model, $key) {
@@ -55,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'state' => function ($url, $model, $key) {
                     if($model["state"] == "Activo"){
                         if($model["state"] !== "Terminado"){
-                            return '<a id="'.$model["maquina_id"].'" href="" data-toggle="modal" data-target="#exampleModal" class="stop"><span class="fa fa-ban"></span></a>';
+                            return '<a id="'.$model["maquina_id"].'" title="Stop Machine" href="" data-toggle="modal" data-target="#exampleModal" class="stop"><span class="fa fa-ban"></span></a>';
                         }
                     }
                     else if($model["state"] == "Detenido" || $model["state"] == "Error") {
@@ -79,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Insert Password</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Select Option</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -144,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         _csrf : '<?=Yii::$app->request->getCsrfToken()?>'
                     },
                     success: function (data) {
-
+                        // alert(data);
                     }
                 });
                 machine_id = -1;

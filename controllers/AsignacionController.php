@@ -36,10 +36,10 @@ class AsignacionController extends Controller
         return [
              'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'generico', 'states', 'stop'],
+                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'generico', 'states', 'stop', 'unassignlot'],
                 'rules' => [
                     [
-                        'actions' => ['index','view','asignar','confirm', 'generico', 'states', 'stop'],
+                        'actions' => ['index','view','asignar','confirm', 'generico', 'states', 'stop', 'unassignlot'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -113,10 +113,14 @@ class AsignacionController extends Controller
 
     public function actionStop()
     {
+
+
         if (Yii::$app->request->post()) {
 
             $machine_id = Yii::$app->request->post('id');
             $opcion = Yii::$app->request->post('opcion');
+
+            // print_r(Yii::$app->request->post);
 
             switch ($opcion) {
                 case '1':
@@ -149,7 +153,7 @@ class AsignacionController extends Controller
             $incidencia->descripcion = $descripcion;
             $incidencia->value = $opcion;
             $incidencia->usuario_id = Yii::$app->user->identity->getId();
-            $incidencia->lote_id = $lote->id;
+            $incidencia->lote_id = $lote[0]['id'];
             $incidencia->save();
 
             $machine->state = $opcion == 4? 'Error' : 'Detenido';
@@ -372,6 +376,40 @@ class AsignacionController extends Controller
                 'tum' => $tum,
             ]);
         }
+    }
+
+    public function actionUnassignlot($id)
+    {
+        $machine = (new \yii\db\Query())
+                    ->from('maquina')
+                    ->where([
+                        'maquina.maquina_id' => $id,
+                        // 'lote.estado' => 'Activo',
+                    ])
+                    ->all();
+
+        $lote = (new \yii\db\Query())
+                    ->from('lote')
+                    ->where([
+                        'lote.maquina_id' => $id,
+                        'lote.estado' => 'Activo',
+                    ])
+                    ->all();
+
+        $machine = Maquina::findOne($id);
+
+        $queryLote = "SELECT lote.*"
+                  . "FROM lote WHERE lote.maquina_id=".$id." AND lote.estado = 'Activo'";
+        $lote = Lote::findBySql($queryLote)->all();
+
+        $machine->state = 'Terminado';
+        $machine->save();
+        $lote[0]->maquina_id = 0;
+        $lote[0]->save();
+
+        UiHelper::alert('<i class="icon fa fa-cubes"></i> Lot unassigned successfully', UiHelper::SUCCESS);
+
+        return $this->redirect(['index']);
     }
 
     /**

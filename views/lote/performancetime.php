@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                       'type' => 'pie',
                       'options' => [
                           'height' => 200,
-                          'width' => 400
+                          'width' => 400,
                       ],
                       'data' => [
                           'labels' => ['Real Time '.$time, 'Theoric Time', 'Rest Time', 'Other Time', 'Error Time'],
@@ -56,7 +56,31 @@ $this->params['breadcrumbs'][] = $this->title;
                                   'data' => [$real, $theoric, $rest, $other, $error],
                               ]
                           ]
-                      ]
+                      ],
+                      'clientOptions' => [
+                            'tooltips'=> [
+                                 'callbacks'=> [
+                                     'label'=> new JsExpression("
+                                        function(t, d) {
+                                             var label = d.labels[t.index];
+                                             var data = d.datasets[t.datasetIndex].data[t.index];
+                                             var minutes = Math.floor(data);
+                                             var seconds = parseInt((data-Math.floor(data))*60);
+                                             if (seconds < 10) {
+                                                 seconds = '0'+seconds;
+                                             }
+                                             if (minutes < 10) {
+                                                 minutes = '0'+minutes;
+                                             }
+                                             if (t.datasetIndex === 0)
+                                             return label + ': ' + minutes +':'+ seconds;
+                                             else if (t.datasetIndex === 1)
+                                             return label + ': $' + data.toLocaleString();
+                                      }")
+                                  ]
+                             ],
+                        ],
+
                   ]);
                   ?>
 
@@ -79,7 +103,30 @@ $this->params['breadcrumbs'][] = $this->title;
                                   'data' => [$real, $theoric, $rest, $other, $error],
                               ]
                           ]
-                      ]
+                      ],
+                      'clientOptions' => [
+                            'tooltips'=> [
+                                 'callbacks'=> [
+                                     'label'=> new JsExpression("
+                                        function(t, d) {
+                                             var label = d.labels[t.index];
+                                             var data = d.datasets[t.datasetIndex].data[t.index];
+                                             var minutes = Math.floor(data);
+                                             var seconds = parseInt((data-Math.floor(data))*60);
+                                             if (seconds < 10) {
+                                                 seconds = '0'+seconds;
+                                             }
+                                             if (minutes < 10) {
+                                                 minutes = '0'+minutes;
+                                             }
+                                             if (t.datasetIndex === 0)
+                                             return label + ': ' + minutes +':'+ seconds;
+                                             else if (t.datasetIndex === 1)
+                                             return label + ': $' + data.toLocaleString();
+                                      }")
+                                  ]
+                             ],
+                        ],
                   ]);
                   ?>
 
