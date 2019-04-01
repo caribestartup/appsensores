@@ -33,11 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'columns' => [
                             ['class' => 'kartik\grid\SerialColumn'],
                             //'id',
-                             'identificador',
-                             'velocidad',
-                             'estado',
-                             'cantidad',
-                             'Maquina',
+                             'name',
+                             'speed',
+                             'state',
+                             'amount',
+                             'machine',
 
                             [
                             'class' => 'kartik\grid\ActionColumn',

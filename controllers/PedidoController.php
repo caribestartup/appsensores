@@ -88,7 +88,7 @@ class PedidoController extends Controller
         $order = Pedido::findBySql($query)->all();
 
         $lotes = (new \yii\db\Query())
-        ->select('lote.id, lote.pedido, lote.identificador, lote.velocidad, lote.cantidad, lote.estado, lote.maquina_id, maquina.nombre as Maquina')
+        ->select('lote.id, lote.pedido, lote.identificador as name, lote.velocidad as speed, lote.cantidad amount, lote.estado as state, lote.maquina_id, maquina.nombre as machine')
         ->leftJoin('maquina', 'maquina.maquina_id = lote.maquina_id')
         ->from('lote')
         ->where([
