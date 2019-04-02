@@ -317,17 +317,18 @@ class Maquina extends \yii\db\ActiveRecord
 
      public function getTotalprodestnall()
     {
-        $queryLast30 = "";
 
         if( Yii::$app->user->identity->getRole() != 'Operator' ) {
-            $queryLast30 = "SELECT SUM(DISTINCT(programa)) AS totalprev " . "FROM totales WHERE hora_inicio = '".date('Y-m-d')."' GROUP BY lote_id";
+            $queryLast30 = "SELECT SUM(DISTINCT(programa)) AS totalprev " . "FROM totales WHERE hora_inicio like '".date('Y-m-d')."%' GROUP BY DATE(fecha) ORDER BY DATE(hora_inicio)";
         }
         else{
-            $queryLast30 = "SELECT SUM(DISTINCT(programa)) AS totalprev " . "FROM totales WHERE hora_inicio = '".date('Y-m-d')."'AND operario ='".Yii::$app->user->identity->getId()."' GROUP BY lote_id";
+            $queryLast30 = "SELECT SUM(DISTINCT(programa)) AS totalprev " . "FROM totales WHERE hora_inicio like '".date('Y-m-d')."%'AND operario ='".Yii::$app->user->identity->getId()."' GROUP BY DATE(fecha) ORDER BY DATE(hora_inicio)";
         }
 
         $sql= Yii::$app->db->createCommand($queryLast30);
         $recordLast30 = $sql->queryAll();
+
+        // print_r($recordLast30);
 
         if (count($recordLast30) != 0) {
             $result = 0;
@@ -343,13 +344,12 @@ class Maquina extends \yii\db\ActiveRecord
 
     public function getTotalprodnall()
     {
-        $queryLast30 = "";
 
         if( Yii::$app->user->identity->getRole() != 'Operator' ) {
-            $queryLast30 = "SELECT SUM(total) AS totalprev " . "FROM totales WHERE hora_inicio = '".date('Y-m-d')."'";
+            $queryLast30 = "SELECT SUM(total) AS totalprev " . "FROM totales WHERE hora_inicio > '".date('Y-m-d')."%' GROUP BY DATE(fecha) ORDER BY DATE(hora_inicio)";
         }
         else{
-            $queryLast30 = "SELECT SUM(total) AS totalprev " . "FROM totales WHERE hora_inicio = '".date('Y-m-d')."'AND operario ='".Yii::$app->user->identity->getId()."'";
+            $queryLast30 = "SELECT SUM(total) AS totalprev " . "FROM totales WHERE hora_inicio > '".date('Y-m-d')."%' AND operario ='".Yii::$app->user->identity->getId()."' GROUP BY DATE(fecha) ORDER BY DATE(hora_inicio)";
         }
 
         $sql= Yii::$app->db->createCommand($queryLast30);
@@ -365,13 +365,12 @@ class Maquina extends \yii\db\ActiveRecord
 
     public function getTotalerrornall()
     {
-        $queryLast30 = "";
 
         if( Yii::$app->user->identity->getRole() != 'Operator' ) {
-            $queryLast30 = "SELECT SUM(total_error) AS totalprev " . "FROM totales WHERE hora_inicio = '".date('Y-m-d')."'GROUP BY DATE(fecha) ORDER BY DATE(hora_inicio)";
+            $queryLast30 = "SELECT SUM(total_error) AS totalprev " . "FROM totales WHERE hora_inicio > '".date('Y-m-d')."%'GROUP BY DATE(fecha) ORDER BY DATE(hora_inicio)";
         }
         else{
-            $queryLast30 = "SELECT SUM(total_error) AS totalprev " . "FROM totales WHERE hora_inicio = '".date('Y-m-d')."'AND operario ='".Yii::$app->user->identity->getId()."'GROUP BY DATE(fecha) ORDER BY DATE(hora_inicio)";
+            $queryLast30 = "SELECT SUM(total_error) AS totalprev " . "FROM totales WHERE hora_inicio > '".date('Y-m-d')."%'AND operario ='".Yii::$app->user->identity->getId()."'GROUP BY DATE(fecha) ORDER BY DATE(hora_inicio)";
 
         }
         $sql= Yii::$app->db->createCommand($queryLast30);

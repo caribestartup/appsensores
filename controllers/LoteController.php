@@ -306,13 +306,13 @@ class LoteController extends Controller
         $last30GraphProd = [];
         $labelLast30Graph = [];
 
-        $fechas = $this::fechas($last30, $tday);
+        $fechas = $this::fechas($last30, $today);
 
         foreach($fechas as $date) {
             $labelLast30Graph[] = substr($date,5,5);
         }
 
-        $lots = $lot->getProdNError($last30, $tday);
+        $lots = $lot->getProdNError($last30, $today);
         foreach ($fechas as $key => $fecha) {
             $last30GraphError [$key] = 0;
             $last30GraphProd [$key] = 0;

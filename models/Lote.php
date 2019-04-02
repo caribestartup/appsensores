@@ -76,7 +76,7 @@ class Lote extends \yii\db\ActiveRecord
     public function getProdNError($sd, $ed)
     {
 
-        $queryLast30 = "SELECT totales.*, SUM(totales.total_error) AS error, SUM(totales.total) AS total " . "FROM totales WHERE totales.lote_id ='".$this->id."' and totales.hora_inicio > '".$sd."' and totales.hora_inicio < '".$ed."' GROUP BY lote_id";
+        $queryLast30 = "SELECT totales.*, SUM(totales.total_error) AS error, SUM(totales.total) AS total " . "FROM totales WHERE totales.lote_id ='".$this->id."' and totales.hora_inicio > '".$sd."' and totales.hora_inicio <= '".$ed."' GROUP BY lote_id";
         $sql= Yii::$app->db->createCommand($queryLast30);
         $recordLast30 = $sql->queryAll();
 
