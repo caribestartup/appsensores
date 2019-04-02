@@ -173,7 +173,7 @@ class LocalController extends Controller
             $machine->largo = substr($height, 0, -2);
             $machine->matrix = $matrix;
             $machine->save();
-            return Yii::t('app','Machines\' Positions saved and recorded');
+            echo Yii::t('app','Machines\' Positions saved and recorded');
         }
 
     }
@@ -189,7 +189,7 @@ class LocalController extends Controller
         $json_vars["m"] = $machine->matrix;
         $json_vars["i"] = $machine->maquina_id;
 
-        return json_encode($json_vars);
+        echo json_encode($json_vars);
 
 
     }
@@ -198,17 +198,16 @@ class LocalController extends Controller
     {
         $model = Local::findOne($id);
         $maquina = Maquina::find()->where(['local'=>$model->local_id])->all();
-        $html = '<img id="plan-back" class="img-all-width" src="'.Url::to($model->plano).'">';
+        echo '<img id="plan-back" class="img-all-width" src="'.Url::to($model->plano).'">';
 
             if ($maquina) {
                 foreach ($maquina as $machine) {
                    /*echo '<div class="mecha draggable resizable" style="position:absolute; top:'.$machine->posy.'%; left:'.$machine->posx.'%; width:'.$machine->ancho.'%; height:'.$machine->largo.'%" value="'.$machine->maquina_id.'">';
                    echo '<img style="width:100%; height:100%" src="'.Url::to("maquina/horizontal.png").'">';
                    echo "</div>"; */
-                   $html = $html.'<img src="'.Url::to("maquina/horizontal.png").'" class="mecha" value="'.$machine->maquina_id.'"></img>';
+                   echo '<img src="'.Url::to("maquina/horizontal.png").'" class="mecha" value="'.$machine->maquina_id.'"></img>';
                 }
             }
-            return $html;
     }
 
 
