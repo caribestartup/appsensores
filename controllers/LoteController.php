@@ -36,10 +36,10 @@ class LoteController extends Controller
         return [
              'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'performancetime', 'report', 'charttotales'],
+                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'performancetime', 'report', 'charttotales', 'production'],
                 'rules' => [
                     [
-                        'actions' => ['index','view','asignar', 'performancetime', 'report', 'charts','performance', 'charttotales'],
+                        'actions' => ['index','view','asignar', 'performancetime', 'report', 'charts','performance', 'charttotales', 'production'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -77,6 +77,45 @@ class LoteController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionProduction($id)
+    {
+        $lot = Lote::findOne($id);
+
+        $query = "SELECT pedido.*"
+        . "FROM pedido WHERE pedido.id=".$lot->pedido."";
+        $pedido = Pedido::findBySql($query)->all();
+
+        $totales = (new \yii\db\Query())
+                    ->select('SUM(totales.total) as total_real, totales.programa as total_theoric')
+                    ->where([
+                        'totales.lote_id' => $id
+                    ])
+                    ->from('totales')
+                    ->groupby('totales.lote_id')
+                    ->all();
+
+        $prod_theoric = $totales['total_theoric'];
+        $prod_real = $totales['total_real'];
+
+        $tube_theoric = ceil($prod_theoric/$lot->ampolla);
+        $tube_real = ceil($prod_real/$lot->ampolla);
+
+        $realTime = '';
+        if($lot->estado == 'Activo'){
+            $realTime = '(NOW)';
+        }
+
+        return $this->render('production',[
+            'pedido' => $pedido,
+            'order' => $lot,
+            'prod_theoric' => $prod_theoric,
+            'prod_real' => $prod_real,
+            'tube_theoric' => $tube_theoric,
+            'tube_real' => $tube_real
+        ]);
+
     }
 
     public function actionCharttotales($id)
@@ -134,20 +173,6 @@ class LoteController extends Controller
 
         $data = [];
 
-        $teoric = mb_split('.', $theoricTime);
-
-        $hours = (int) $teoric[0];
-        $minutes = ($theoricTime - $hours)*60;
-
-        if ($minutes < 10) {
-            $minutes = '0'.$minutes;
-        }
-        if ($hours < 10) {
-            $hours = '0'.$hours;
-        }
-
-        $theoricTimelabel = $hours.':'.$minutes;
-
         $color1 = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
         $color2 = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
         array_push($data, ['type'=>'bar', 'label' => 'Theoric Time','data' => [$theoricTime],'fill' => 'false', 'borderColor' => 'rgb('.$color1.')', 'backgroundColor' => 'rgb('.$color1.')']);
@@ -161,9 +186,7 @@ class LoteController extends Controller
         return $this->render('charttotales',[
             'pedido' => $pedido,
             'order' => $lot,
-            'data' => $data,
-            'theoricTimelabel' => $theoricTimelabel
-            // 'max' => $max
+            'data' => $data
         ]);
     }
 
