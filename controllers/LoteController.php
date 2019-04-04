@@ -134,6 +134,20 @@ class LoteController extends Controller
 
         $data = [];
 
+        $teoric = mb_split('.', $theoricTime);
+
+        $hours = (int) $teoric[0];
+        $minutes = ($theoricTime - $hours)*60;
+
+        if ($minutes < 10) {
+            $minutes = '0'.$minutes;
+        }
+        if ($hours < 10) {
+            $hours = '0'.$hours;
+        }
+
+        $theoricTimelabel = $hours.':'.$minutes;
+
         $color1 = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
         $color2 = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
         array_push($data, ['type'=>'bar', 'label' => 'Theoric Time','data' => [$theoricTime],'fill' => 'false', 'borderColor' => 'rgb('.$color1.')', 'backgroundColor' => 'rgb('.$color1.')']);
@@ -148,7 +162,8 @@ class LoteController extends Controller
             'pedido' => $pedido,
             'order' => $lot,
             'data' => $data,
-            'max' => $max
+            'theoricTimelabel' => $theoricTimelabel
+            // 'max' => $max
         ]);
     }
 

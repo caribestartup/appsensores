@@ -49,27 +49,61 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body hidden-xs">
               <div id="weight-chart2" class="chart">
                 <?= ChartJs::widget([
-                    'type' => 'bar',
-                    'options' => [
-                        'height' => 200,
-                        'width' => 400,
-                        'datasetFill' => false,
-                    ],
-                    'data' => [
-                        'labels' => [''],
-                        'datasets' => $data,
-                    ],
-                    'clientOptions' => [
-				        'legend' => [
-				            'display' => true,
-				            'position' => 'bottom',
-				            'labels' => [
-				                'fontSize' => 14,
-				                'fontColor' => "#425062",
-				            ]
-				        ],
-				        'maintainAspectRatio' => true,
-                    ],
+                      'type' => 'bar',
+                      'options' => [
+                          'height' => 200,
+                          'width' => 400,
+                          'datasetFill' => false,
+                      ],
+                      'data' => [
+                          'labels' => [''],
+                          'datasets' => $data,
+                      ],
+                      'clientOptions' => [
+                        'tooltips'=> [
+                             'callbacks'=> [
+                                 'label'=> new JsExpression("
+                                    function(t, d) {
+                                         var label = d.labels[t.index];
+                                         var data = d.datasets[t.datasetIndex].data[t.index];
+                                         var labels = d.datasets[t.datasetIndex].label
+                                         //return t.datasetIndex;
+                                         if (labels.includes('Real Time')) {
+                                            var minutes = Math.floor(data);
+                                            var seconds = parseInt((data-Math.floor(data))*60);
+                                            if (seconds < 10) {
+                                                seconds = '0'+seconds;
+                                            }
+                                            if (minutes < 10) {
+                                                minutes = '0'+minutes;
+                                            }
+                                            return labels + ': ' + minutes +':'+ seconds;
+                                         }
+                                         if (labels.includes('Theoric Time')) {
+                                            var minutes = Math.floor(data);
+                                            var seconds = parseInt((data-Math.floor(data))*60);
+                                            if (seconds < 10) {
+                                                seconds = '0'+seconds;
+                                            }
+                                            if (minutes < 10) {
+                                                minutes = '0'+minutes;
+                                            }
+                                            return labels + ': ' + minutes +':'+ seconds;
+                                         }
+                                         return labels + data;
+                                  }")
+                              ]
+                         ],
+        				        'legend' => [
+        				            'display' => true,
+        				            'position' => 'bottom',
+        				            'labels' => [
+        				                'fontSize' => 14,
+        				                'fontColor' => "#425062",
+        				            ]
+        				        ],
+        				        'maintainAspectRatio' => true,
+                      ],
                     ]);
                 ?>
 
