@@ -15,7 +15,7 @@ use kartik\daterange\DateRangePicker;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = $order->identificador;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Orders'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Clients'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

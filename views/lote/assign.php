@@ -9,8 +9,8 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel app\models\MaquinaSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Assign Machine to lot');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Order'), 'url' => ['pedido/view', 'id' => $lote->pedido]];
+$this->title = Yii::t('app', 'Assign Machine to order');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Client'), 'url' => ['pedido/view', 'id' => $lote->pedido]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

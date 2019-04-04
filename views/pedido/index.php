@@ -8,7 +8,7 @@ use yii\helpers\Url;
 /* @var $searchModel app\models\TurnoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Orders');
+$this->title = Yii::t('app', 'Clients');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="turno-index">
@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?php
             if( Yii::$app->user->identity->getRole() != 'Operator' ) {
-                echo Html::a(Yii::t('app', 'New Order'), ['pedido/create'], ['class' => 'btn btn-success']);
+                echo Html::a(Yii::t('app', 'New Client'), ['pedido/create'], ['class' => 'btn btn-success']);
             }
         ?>
     </p>

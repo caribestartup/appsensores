@@ -117,7 +117,7 @@ class PedidoController extends Controller
         $model = new Pedido();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            UiHelper::alert('<i class="icon fa fa-headphones"></i> Order created successfully', UiHelper::SUCCESS);
+            UiHelper::alert('<i class="icon fa fa-headphones"></i> Client created successfully', UiHelper::SUCCESS);
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -138,7 +138,7 @@ class PedidoController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            UiHelper::alert('<i class="icon fa fa-headphones"></i> Order updated successfully', UiHelper::SUCCESS);
+            UiHelper::alert('<i class="icon fa fa-headphones"></i> Client updated successfully', UiHelper::SUCCESS);
 
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
@@ -157,7 +157,7 @@ class PedidoController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-        UiHelper::alert('<i class="icon fa fa-headphones"></i> Order deleted successfully', UiHelper::SUCCESS);
+        UiHelper::alert('<i class="icon fa fa-headphones"></i> Client deleted successfully', UiHelper::SUCCESS);
 
         return $this->redirect(['index']);
     }

@@ -36,10 +36,10 @@ class LoteController extends Controller
         return [
              'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'performancetime', 'report'],
+                'only' => ['index','view','create','update','delete','asignar','charts','performance', 'performancetime', 'report', 'charttotales'],
                 'rules' => [
                     [
-                        'actions' => ['index','view','asignar', 'performancetime', 'report', 'charts','performance'],
+                        'actions' => ['index','view','asignar', 'performancetime', 'report', 'charts','performance', 'charttotales'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -76,6 +76,79 @@ class LoteController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionCharttotales($id)
+    {
+        $lot = Lote::findOne($id);
+
+        $query = "SELECT pedido.*"
+        . "FROM pedido WHERE pedido.id=".$lot->pedido."";
+        $pedido = Pedido::findBySql($query)->all();
+
+        $theoricTime = ($lot->cantidad / $lot->velocidad)/60;
+
+        $errores = (new \yii\db\Query())
+                    ->select('SUM(parciales.total_error) as total, parciales.nombre_ventana')
+                    ->leftJoin('totales', 'totales.id = parciales.id_totales')
+                    ->where([
+                        'totales.lote_id' => $id
+                    ])
+                    ->from('parciales')
+                    ->groupby('parciales.nombre_ventana')
+                    ->all();
+
+        $totales_start = (new \yii\db\Query())
+                    ->select('totales.*, MIN(`totales`.`hora_inicio`) as start')
+                    ->where([
+                        'totales.lote_id' => $id
+                    ])
+                    ->from('totales')
+                    ->all();
+
+        $start_date = $totales_start[0]['start'];
+        $end_date = 0;
+        $real_time = '';
+
+        if($lot->estado == 'Terminado'){
+            $totales_end = (new \yii\db\Query())
+                        ->select('totales.*, MAX(`totales`.`hora_fin`) as end')
+                        ->where([
+                            'totales.lote_id' => $id
+                        ])
+                        ->from('totales')
+                        ->all();
+            $end_date = $totales_end[0]['end'];
+        }
+        else {
+            $end_date = date('Y-m-d H:i:s');
+            $real_time = '(NOW)';
+        }
+
+        $diff = (strtotime($start_date)-strtotime($end_date))/60;
+        $diff = abs($diff);
+        $diff = floor($diff);
+
+        $realTime = $diff/60;
+
+        $data = [];
+
+        $color1 = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
+        $color2 = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
+        array_push($data, ['type'=>'bar', 'label' => 'Theoric Time','data' => [$theoricTime],'fill' => 'false', 'borderColor' => 'rgb('.$color1.')', 'backgroundColor' => 'rgb('.$color1.')']);
+        array_push($data, ['type'=>'bar', 'label' => 'Real Time '.$real_time,'data' => [$realTime], 'borderColor' => 'rgb('.$color2.')', 'backgroundColor' => 'rgb('.$color2.')']);
+
+        foreach ($errores as $key => $error) {
+            $color = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
+            array_push($data, ['type'=>'bar', 'label' => [''.$error['nombre_ventana'].''],'data' => [$error['total']], 'borderColor' => 'rgb('.$color.')', 'backgroundColor' => 'rgb('.$color.')']);
+        }
+
+        return $this->render('charttotales',[
+            'pedido' => $pedido,
+            'order' => $lot,
+            'data' => $data,
+            'max' => $max
         ]);
     }
 
@@ -161,7 +234,7 @@ class LoteController extends Controller
                     $generic->save();
                 }
             }
-            UiHelper::alert('<i class="icon fa fa-cubes"></i> Lot created successfully', UiHelper::SUCCESS);
+            UiHelper::alert('<i class="icon fa fa-cubes"></i> Order created successfully', UiHelper::SUCCESS);
 
             return $this->redirect(['pedido/view', 'id' => $pedido[0]->id]);
         } else {
@@ -191,7 +264,7 @@ class LoteController extends Controller
 
         if ($lote->load(Yii::$app->request->post())) {
             $lote->save();
-            UiHelper::alert('<i class="icon fa fa-cubes"></i> Lot updated successfully', UiHelper::SUCCESS);
+            UiHelper::alert('<i class="icon fa fa-cubes"></i> Order updated successfully', UiHelper::SUCCESS);
 
             return $this->redirect(['pedido/view', 'id' => $pedido[0]->id]);
         } else {
@@ -212,7 +285,7 @@ class LoteController extends Controller
     {
         $loteOld = $this->findModel($id);
         $this->findModel($id)->delete();
-        UiHelper::alert('<i class="icon fa fa-cubes"></i> Lot deleted successfully', UiHelper::SUCCESS);
+        UiHelper::alert('<i class="icon fa fa-cubes"></i> Order deleted successfully', UiHelper::SUCCESS);
 
         return $this->redirect(['pedido/view', 'id' => $loteOld->pedido]);
     }
@@ -338,21 +411,6 @@ class LoteController extends Controller
 
     public function actionPerformancetime($id)
     {
-        if (Yii::$app->request->post()) {
-            $tday = date('Y-m-d', strtotime(substr(Yii::$app->request->post("Drange")["range"], -10)));
-            $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
-            $last30 = strtotime (substr(Yii::$app->request->post("Drange")["range"], 0,10)) ;
-            $last30 = date ( 'Y-m-d' , $last30 );
-            $today = date ( 'Y-m-d' , $today );
-        }else{
-            $tday = date('Y-m-d');
-            $today = strtotime ( '+1 day' , strtotime ( $tday ) ) ;;
-            $last30 = strtotime ( '-30 day' , strtotime ( $tday ) ) ;
-            $last30 = date ( 'Y-m-d' , $last30 );
-            $today = date ( 'Y-m-d' , $today );
-        }
-
-        $drange = new Drange();
         $lot = Lote::findOne($id);
 
         $query = "SELECT pedido.*"

@@ -82,13 +82,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= ChartJs::widget([
 					'type' => 'bar',
 					'options' => [
-					'height' => 200,
-					'width' => 400,
-					'datasetFill' => false,
+    					'height' => 200,
+    					'width' => 400,
+    					'datasetFill' => false,
 					],
 					'data' => [
-					'labels' => $labelLast30Graph,
-					'datasets' => $last30Graph,
+    					'labels' => $labelLast30Graph,
+    					'datasets' => $last30Graph,
 					],
 					'clientOptions' => [
 				        'legend' => [

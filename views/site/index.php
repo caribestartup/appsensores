@@ -54,7 +54,7 @@ $this->title = 'Appsesores';
 			</div>
 
 			<div class="col-md-3 ">
-				<a class="option-reference" href="<?= Url::toRoute('/pedido/index')?>"><img class="img-responsive col-xs-12" src="<?= Url::to('res/menuOrder.png')?>"><?php echo Yii::t('app','ORDES') ?></a>
+				<a class="option-reference" href="<?= Url::toRoute('/pedido/index')?>"><img class="img-responsive col-xs-12" src="<?= Url::to('res/menuOrder.png')?>"><?php echo Yii::t('app','CLIENTS') ?></a>
 			</div>
 			<div class="col-md-3 ">
 				<a class="option-reference" href="<?= Url::toRoute('/maquina/index')?>"><img class="img-responsive col-xs-12" src="<?= Url::to('res/menuMaquina.png')?>"><?php echo Yii::t('app','MACHINES') ?></a>

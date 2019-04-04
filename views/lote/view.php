@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $model app\models\Turno */
 
 $this->title = $lote->identificador;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Orders: '.$lote->identificador), 'url' => ['pedido/view', 'id'=>$lote->pedido]];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Clients: '.$lote->identificador), 'url' => ['pedido/view', 'id'=>$lote->pedido]];
 $this->params['breadcrumbs'][] = $this->title;
 
 // print_r($lotes);
@@ -18,9 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <p>
     <?= Html::a(Yii::t('app', 'Delete'), ['lote/delete', 'id'=>$lote->id],['class' => 'btn btn-danger','data' => [
-        'confirm' => Yii::t('app','Do you want to delete lot?'),
+        'confirm' => Yii::t('app','Do you want to delete order?'),
         'method' => 'post',
-    ],'title'=>Yii::t('app', Yii::t('app','Delete Lot'))]); ?>
+    ],'title'=>Yii::t('app', Yii::t('app','Delete Order'))]); ?>
 </p>
     <div class="box box-primary box-solid">
                 <div class="box-header with-border">

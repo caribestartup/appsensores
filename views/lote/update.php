@@ -9,8 +9,8 @@ $this->title = Yii::t('app', 'Update {modelClass}: ', [
     'modelClass' => 'Lot',
 ]) . $lote->id;
 
-$this->title = Yii::t('app', 'Update Lot for '.$pedido[0]->identificador);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'order '.$pedido[0]->identificador), 'url' => ['pedido/view', 'id'=>$pedido[0]->id]];
+$this->title = Yii::t('app', 'Update Order for '.$pedido[0]->identificador);
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Client '.$pedido[0]->identificador), 'url' => ['pedido/view', 'id'=>$pedido[0]->id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="turno-update">

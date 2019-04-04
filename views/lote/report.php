@@ -8,7 +8,7 @@ use yii\helpers\Url;
 /* @var $searchModel app\models\TurnoSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('app', 'Report Lot by Incidencs');
+$this->title = Yii::t('app', 'Report Order by Incidences');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="turno-index">

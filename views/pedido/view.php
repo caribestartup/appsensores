@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $model app\models\Turno */
 
 $this->title = $model[0]->identificador;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Orders'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Clients'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?php
             if( Yii::$app->user->identity->getRole() != 'Operator' ) {
-                echo Html::a(Yii::t('app', 'New Lot'), ['lote/create', 'id' => $model[0]->id], ['class' => 'btn btn-success']);
+                echo Html::a(Yii::t('app', 'New Order'), ['lote/create', 'id' => $model[0]->id], ['class' => 'btn btn-success']);
             }
         ?>
     </p>
