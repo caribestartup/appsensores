@@ -31,6 +31,10 @@ $this->params['breadcrumbs'][] = $this->title;
   <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-bar-chart" title="Performance Chart Bar"></i></button>
 </a>
 
+<a href="<?php echo Url::toRoute(['maquina/performancetime','id' => $maquina->maquina_id]) ?>">
+  <button type="button" class="btn btn-default" style="margin-bottom: 10px"><i class="fa fa-pie-chart" title="Performance on Times"></i></button>
+</a>
+
      <div class="box box-primary">
             <div class="box-header with-border">
               <h3 id="weight-title2" class="box-title"><?php echo Yii::t('app', 'Performance/Hours') ?></h3>

@@ -64,14 +64,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return Html::a('<span class="fa fa-pencil"></span>', ['lote/update', 'id'=>$lotes["id"]],['title'=> Yii::t('app','Update')]);
                                     }
                                 },
-                                // 'delete' => function ($url, $lotes, $key) {
-                                //     if( Yii::$app->user->identity->getRole() != 'Operator' ) {
-                                //         return Html::a('<span class="fa fa-trash "></span>', ['lote/delete', 'id'=>$lotes["id"]],['data' => [
-                                //             'confirm' => Yii::t('app','Do you want to delete lot?'),
-                                //             'method' => 'post',
-                                //         ],'title'=>Yii::t('app', Yii::t('app','Delete Lot'))]);
-                                //     }
-                                // },
                                 'performance' => function ($url, $lotes, $key) {
                                     return Html::a('<span class="fa fa-bar-chart "></span>', ['lote/performance', 'id'=>$lotes["id"]],['title'=> Yii::t('app','Performance')]);
                                 },

@@ -18,6 +18,7 @@ use kartik\time\TimePicker;
     <?= $form->field($model, 'identificador')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'cantidad')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'velocidad')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'ampolla')->textInput(['maxlength' => true])->label('Ampoules per tube') ?>
     <input type="hidden" id="hidden_array" name="array" value="">
 
     <div class="box box-primary box-solid" id='box'>

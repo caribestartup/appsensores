@@ -52,15 +52,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <!-------------------------- MODAL END--------------------------->
 
-<!-- <a href="<?php echo Url::toRoute(['lote/performance','id' => $order->id]) ?>">
-  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-line-chart"></i></button>
-</a> -->
+<a href="<?php echo Url::toRoute(['lote/performance','id' => $order->id]) ?>" title="Performance">
+  <button type="button" class="btn btn-default" style="margin-bottom: 10px"><i class="fa fa-line-chart"></i></button>
+</a>
 
-<a href="<?php echo Url::toRoute(['lote/performancetime','id' => $order->id]) ?>">
+<a href="<?php echo Url::toRoute(['lote/production','id' => $order->id]) ?>" title="Productions vs Spends">
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-bar-chart"></i></button>
+</a>
+
+<a href="<?php echo Url::toRoute(['lote/performancetime','id' => $order->id]) ?>" title="Performance/Hours">
   <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-pie-chart"></i></button>
 </a>
 
-<a href="<?php echo Url::toRoute(['lote/report','id' => $order->id]) ?>">
+<a href="<?php echo Url::toRoute(['lote/charttotales','id' => $order->id]) ?>" title="Timing & Error">
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-area-chart"></i></button>
+</a>
+
+<a href="<?php echo Url::toRoute(['lote/report','id' => $order->id]) ?>" title="Report">
   <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-file-o"></i></button>
 </a>
 

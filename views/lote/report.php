@@ -13,15 +13,25 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="turno-index">
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<a href="<?php echo Url::toRoute(['lote/performance','id' => $lote]) ?>" title="Performance">
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-line-chart"></i></button>
+</a>
 
-    <a href="<?php echo Url::toRoute(['lote/performance','id' => $lote]) ?>">
-      <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-line-chart"></i></button>
-    </a>
+<a href="<?php echo Url::toRoute(['lote/production','id' => $lote]) ?>" title="Productions vs Spends">
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-bar-chart"></i></button>
+</a>
 
-    <a href="<?php echo Url::toRoute(['lote/performancetime','id' => $lote]) ?>">
-      <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-pie-chart"></i></button>
-    </a>
+<a href="<?php echo Url::toRoute(['lote/performancetime','id' => $lote]) ?>" title="Performance/Hours">
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-pie-chart"></i></button>
+</a>
+
+<a href="<?php echo Url::toRoute(['lote/charttotales','id' => $lote]) ?>" title="Timing & Error">
+  <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-area-chart"></i></button>
+</a>
+
+<a href="<?php echo Url::toRoute(['lote/report','id' => $lote]) ?>" title="Report">
+  <button type="button" class="btn btn-default" style="margin-bottom: 10px"><i class="fa fa-file-o"></i></button>
+</a>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

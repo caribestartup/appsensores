@@ -96,8 +96,14 @@ class LoteController extends Controller
                     ->groupby('totales.lote_id')
                     ->all();
 
-        $prod_theoric = $totales['total_theoric'];
-        $prod_real = $totales['total_real'];
+        $prod_theoric = 0;
+        $prod_real = 0;
+
+        if(count($totales) > 0) {
+
+          $prod_theoric = $totales[0]['total_theoric'];
+          $prod_real = $totales[0]['total_real'];
+        }
 
         $tube_theoric = ceil($prod_theoric/$lot->ampolla);
         $tube_real = ceil($prod_real/$lot->ampolla);
@@ -182,6 +188,8 @@ class LoteController extends Controller
             $color = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
             array_push($data, ['type'=>'bar', 'label' => [''.$error['nombre_ventana'].''],'data' => [$error['total']], 'borderColor' => 'rgb('.$color.')', 'backgroundColor' => 'rgb('.$color.')']);
         }
+
+        // print_r($data);
 
         return $this->render('charttotales',[
             'pedido' => $pedido,

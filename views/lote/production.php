@@ -21,27 +21,29 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
-
-
-<!-- <a href="<?php echo Url::toRoute(['lote/performance','id' => $order->id]) ?>">
+<a href="<?php echo Url::toRoute(['lote/performance','id' => $order->id]) ?>" title="Performance">
   <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-line-chart"></i></button>
-</a> -->
+</a>
+
+<a href="<?php echo Url::toRoute(['lote/production','id' => $order->id]) ?>" title="Productions vs Spends">
+  <button type="button" class="btn btn-default" style="margin-bottom: 10px"><i class="fa fa-bar-chart"></i></button>
+</a>
 
 <a href="<?php echo Url::toRoute(['lote/performancetime','id' => $order->id]) ?>" title="Performance/Hours">
   <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-pie-chart"></i></button>
 </a>
 
-<a href="<?php echo Url::toRoute(['lote/charttotales','id' => $order->id]) ?>" title="">
+<a href="<?php echo Url::toRoute(['lote/charttotales','id' => $order->id]) ?>" title="Timing & Error">
   <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-area-chart"></i></button>
 </a>
 
-<a href="<?php echo Url::toRoute(['lote/report','id' => $order->id]) ?>">
+<a href="<?php echo Url::toRoute(['lote/report','id' => $order->id]) ?>" title="Report">
   <button type="button" class="btn btn-primary" style="margin-bottom: 10px"><i class="fa fa-file-o"></i></button>
 </a>
 
      <div class="box box-primary">
             <div class="box-header with-border">
-              <h3 id="weight-title2" class="box-title"><?php echo Yii::t('app', 'Productions vs spends') ?></h3>
+              <h3 id="weight-title2" class="box-title"><?php echo Yii::t('app', 'Productions vs Spends') ?></h3>
 
               <div class="box-tools pull-right">
 
@@ -107,20 +109,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]
                         ],
                         'maintainAspectRatio' => true,
-                        // 'scales'=> [
-                        //     'xAxes'=> [
-                        //         [
-                        //             'stacked'=>true,
-                        //         ],
-                        //     ],
-                        //     'yAxes'=>[
-                        //         [
-                        //             'stacked'=>true,
-                        //             'position'=>'left',
-                        //             'id'=> "y-axis-0",
-                        //         ],
-                        //     ]
-                        // ],
                     ],
                     ]);
                 ?>
@@ -129,7 +117,67 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <div class="box-body hidden-md hidden-lg">
+              <div id="weight-chart2" class="chart">
+                <?= ChartJs::widget([
+                    'type' => 'bar',
+                    'options' => [
+                        'height' => 200,
+                        'width' => 400,
+                        'datasetFill' => false,
+                    ],
+                    'data' => [
+                        'labels' => ['Ampullas', 'Tube'],
+                        'datasets' => [
+                            [
+                                'type'=>'bar',
+                                'label'=> 'Production Theoric',
+                                'backgroundColor' => "rgba(92,184,92,0.75)",
+                                'data' => [20, 0]
+                            ],
+                            [
+                                'type'=>'bar',
+                                'label'=> 'Tube Theoric',
+                                'backgroundColor' => "rgba(0,14,92,0.75)",
+                                'data' => [0, 10]
+                            ],
+                            [
+                                'type'=>'bar',
+                                'label'=> 'Production Real',
+                                'backgroundColor' => "rgba(92,184,255,0.75)",
+                                'data' => [30, 0]
+                            ],
+                            [
+                                'type'=>'bar',
+                                'label'=> 'Tube Real',
+                                'backgroundColor' => "rgba(0,125,232,0.75)",
+                                'data' => [0, 20]
+                            ]
+                        ],
+                    ],
+                    'clientOptions' => [
+                        'options' => [
+                            'title'=>[
+                                'display' => true,
+                            ],
+                            'tooltips'=>[
+                                'mode'=> 'label'
+                            ],
+                            'responsive'=> true,
+                        ],
+                        'legend' => [
+                            'display' => true,
+                            'position' => 'bottom',
+                            'labels' => [
+                                'fontSize' => 14,
+                                'fontColor' => "#425062",
+                            ]
+                        ],
+                        'maintainAspectRatio' => true,
+                    ],
+                    ]);
+                ?>
 
+              </div>
             </div>
 
             <!-- /.box-body -->

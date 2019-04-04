@@ -35,6 +35,7 @@ class Lote extends \yii\db\ActiveRecord
             [['pedido'], 'required'],
             [['pedido'], 'integer'],
             [['velocidad'], 'required'],
+            [['ampolla'], 'required'],
             [['cantidad'], 'required'],
             [['estado'], 'required']
         ];
@@ -53,6 +54,7 @@ class Lote extends \yii\db\ActiveRecord
             'cantidad' => Yii::t('app', 'Amount'),
             'velocidad' => Yii::t('app', 'Speed'),
             'maquina_id' => Yii::t('app', 'Machine'),
+            'ampolla' => Yii::t('app', 'Ampoules per tube'),
             'estado' => Yii::t('app', 'Status'),
         ];
     }

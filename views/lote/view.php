@@ -34,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'identificador',
                                 'velocidad',
                                 'cantidad',
+                                'ampolla',
                                 'estado',
                             ],
                         ]) ?>
