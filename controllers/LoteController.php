@@ -113,13 +113,27 @@ class LoteController extends Controller
             $realTime = '(NOW)';
         }
 
+        $excess_production = $prod_real - $prod_theoric;
+
+        if($excess_production < 0) {
+          $excess_production = 0;
+        }
+
+        $excess_tube = $tube_real - $tube_theoric;
+        if($excess_tube < 0) {
+          $excess_tube = 0;
+        }
+
         return $this->render('production',[
             'pedido' => $pedido,
             'order' => $lot,
             'prod_theoric' => $prod_theoric,
             'prod_real' => $prod_real,
             'tube_theoric' => $tube_theoric,
-            'tube_real' => $tube_real
+            'tube_real' => $tube_real,
+            'realTime' => $realTime,
+            'excess_production' => $excess_production,
+            'excess_tube' => $excess_tube
         ]);
 
     }
@@ -188,8 +202,6 @@ class LoteController extends Controller
             $color = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
             array_push($data, ['type'=>'bar', 'label' => [''.$error['nombre_ventana'].''],'data' => [$error['total']], 'borderColor' => 'rgb('.$color.')', 'backgroundColor' => 'rgb('.$color.')']);
         }
-
-        // print_r($data);
 
         return $this->render('charttotales',[
             'pedido' => $pedido,

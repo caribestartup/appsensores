@@ -68,25 +68,37 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'type'=>'bar',
                                 'label'=> 'Production Theoric',
                                 'backgroundColor' => "rgba(92,184,92,0.75)",
-                                'data' => [20, 0]
+                                'data' => [$prod_theoric, 0, 0]
                             ],
                             [
                                 'type'=>'bar',
                                 'label'=> 'Tube Theoric',
                                 'backgroundColor' => "rgba(0,14,92,0.75)",
-                                'data' => [0, 10]
+                                'data' => [0, $tube_theoric, 0]
                             ],
                             [
                                 'type'=>'bar',
-                                'label'=> 'Production Real',
+                                'label'=> 'Production Real'.$realTime,
                                 'backgroundColor' => "rgba(92,184,255,0.75)",
-                                'data' => [30, 0]
+                                'data' => [$prod_real, 0, 0]
                             ],
                             [
                                 'type'=>'bar',
-                                'label'=> 'Tube Real',
+                                'label'=> 'Tube Real'.$realTime,
                                 'backgroundColor' => "rgba(0,125,232,0.75)",
-                                'data' => [0, 20]
+                                'data' => [0, $tube_real, 0]
+                            ],
+                            [
+                                'type'=>'bar',
+                                'label'=> 'Excess Production',
+                                'backgroundColor' => "rgba(247,83,79,0.75)",
+                                'data' => [$excess_production, 0, 0]
+                            ],
+                            [
+                                'type'=>'bar',
+                                'label'=> 'Excess Tube',
+                                'backgroundColor' => "rgba(247,83,79,0.75)",
+                                'data' => [0, $excess_production, 0]
                             ]
                         ],
                     ],
