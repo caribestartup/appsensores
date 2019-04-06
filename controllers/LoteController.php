@@ -191,22 +191,43 @@ class LoteController extends Controller
 
         $realTime = $diff/60;
 
-        $data = [];
+        $data_time = [];
 
-        $color1 = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
-        $color2 = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
-        array_push($data, ['type'=>'bar', 'label' => 'Theoric Time','data' => [$theoricTime],'fill' => 'false', 'borderColor' => 'rgb('.$color1.')', 'backgroundColor' => 'rgb('.$color1.')']);
-        array_push($data, ['type'=>'bar', 'label' => 'Real Time '.$real_time,'data' => [$realTime], 'borderColor' => 'rgb('.$color2.')', 'backgroundColor' => 'rgb('.$color2.')']);
+        $color1 = '63, 191, 112, 1';
+        $color2 = '63, 191, 112, 0.6';
+        $color3 = '217, 83, 79, 0.75';
 
+        array_push($data_time, ['type'=>'bar', 'label' => 'Theoric Time','data' => [$theoricTime],'fill' => 'false', 'borderColor' => 'rgba('.$color1.')', 'backgroundColor' => 'rgba('.$color1.')']);
+        array_push($data_time, ['type'=>'bar', 'label' => 'Real Time '.$real_time,'data' => [$realTime], 'borderColor' => 'rgba('.$color2.')', 'backgroundColor' => 'rgba('.$color2.')']);
+
+        $excess_time = $realTime - $theoricTime;
+        if($excess_time < 0) {
+            $excess_time = 0;
+        }
+        else {
+            array_push($data_time, ['type'=>'bar', 'label' => 'Excess Time '.$real_time,'data' => [$excess_time], 'borderColor' => 'rgba('.$color3.')', 'backgroundColor' => 'rgba('.$color3.')']);
+        }
+        
+        $data_error = [];
+        $label_error = [];
+        $label_color = [];
         foreach ($errores as $key => $error) {
-            $color = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
-            array_push($data, ['type'=>'bar', 'label' => [''.$error['nombre_ventana'].''],'data' => [$error['total']], 'borderColor' => 'rgb('.$color.')', 'backgroundColor' => 'rgb('.$color.')']);
+
+            if ($error['total'] > 0) {
+                $color = ''.rand(0,255).','.rand(0,255).','.rand(0,255).'';
+                array_push($label_color, 'rgb('.$color.')');
+                array_push($label_error, $error['nombre_ventana']);
+                array_push($data_error, $error['total']);
+            }
         }
 
         return $this->render('charttotales',[
             'pedido' => $pedido,
             'order' => $lot,
-            'data' => $data
+            'data_error' => $data_error,
+            'label_error' => $label_error,
+            'label_color' => $label_color,
+            'data_time' => $data_time
         ]);
     }
 

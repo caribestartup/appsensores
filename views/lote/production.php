@@ -91,13 +91,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'type'=>'bar',
                                 'label'=> 'Excess Production',
-                                'backgroundColor' => "rgba(247,83,79,0.75)",
+                                'backgroundColor' => "rgba(217,83,79,0.75)",
                                 'data' => [$excess_production, 0, 0]
                             ],
                             [
                                 'type'=>'bar',
                                 'label'=> 'Excess Tube',
-                                'backgroundColor' => "rgba(247,83,79,0.75)",
+                                'backgroundColor' => "rgba(217,83,79,0.75)",
                                 'data' => [0, $excess_production, 0]
                             ]
                         ],
@@ -130,64 +130,76 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="box-body hidden-md hidden-lg">
               <div id="weight-chart2" class="chart">
-                <?= ChartJs::widget([
-                    'type' => 'bar',
-                    'options' => [
-                        'height' => 200,
-                        'width' => 400,
-                        'datasetFill' => false,
-                    ],
-                    'data' => [
-                        'labels' => ['Ampullas', 'Tube'],
-                        'datasets' => [
-                            [
-                                'type'=>'bar',
-                                'label'=> 'Production Theoric',
-                                'backgroundColor' => "rgba(92,184,92,0.75)",
-                                'data' => [20, 0]
-                            ],
-                            [
-                                'type'=>'bar',
-                                'label'=> 'Tube Theoric',
-                                'backgroundColor' => "rgba(0,14,92,0.75)",
-                                'data' => [0, 10]
-                            ],
-                            [
-                                'type'=>'bar',
-                                'label'=> 'Production Real',
-                                'backgroundColor' => "rgba(92,184,255,0.75)",
-                                'data' => [30, 0]
-                            ],
-                            [
-                                'type'=>'bar',
-                                'label'=> 'Tube Real',
-                                'backgroundColor' => "rgba(0,125,232,0.75)",
-                                'data' => [0, 20]
-                            ]
-                        ],
-                    ],
-                    'clientOptions' => [
-                        'options' => [
-                            'title'=>[
-                                'display' => true,
-                            ],
-                            'tooltips'=>[
-                                'mode'=> 'label'
-                            ],
-                            'responsive'=> true,
-                        ],
-                        'legend' => [
-                            'display' => true,
-                            'position' => 'bottom',
-                            'labels' => [
-                                'fontSize' => 14,
-                                'fontColor' => "#425062",
-                            ]
-                        ],
-                        'maintainAspectRatio' => true,
-                    ],
-                    ]);
-                ?>
+                  <?= ChartJs::widget([
+                      'type' => 'bar',
+                      'options' => [
+                          'height' => 200,
+                          'width' => 400,
+                          'datasetFill' => false,
+                      ],
+                      'data' => [
+                          'labels' => ['Ampullas', 'Tube'],
+                          'datasets' => [
+                              [
+                                  'type'=>'bar',
+                                  'label'=> 'Production Theoric',
+                                  'backgroundColor' => "rgba(92,184,92,0.75)",
+                                  'data' => [$prod_theoric, 0, 0]
+                              ],
+                              [
+                                  'type'=>'bar',
+                                  'label'=> 'Tube Theoric',
+                                  'backgroundColor' => "rgba(0,14,92,0.75)",
+                                  'data' => [0, $tube_theoric, 0]
+                              ],
+                              [
+                                  'type'=>'bar',
+                                  'label'=> 'Production Real'.$realTime,
+                                  'backgroundColor' => "rgba(92,184,255,0.75)",
+                                  'data' => [$prod_real, 0, 0]
+                              ],
+                              [
+                                  'type'=>'bar',
+                                  'label'=> 'Tube Real'.$realTime,
+                                  'backgroundColor' => "rgba(0,125,232,0.75)",
+                                  'data' => [0, $tube_real, 0]
+                              ],
+                              [
+                                  'type'=>'bar',
+                                  'label'=> 'Excess Production',
+                                  'backgroundColor' => "rgba(217,83,79,0.75)",
+                                  'data' => [$excess_production, 0, 0]
+                              ],
+                              [
+                                  'type'=>'bar',
+                                  'label'=> 'Excess Tube',
+                                  'backgroundColor' => "rgba(217,83,79,0.75)",
+                                  'data' => [0, $excess_production, 0]
+                              ]
+                          ],
+                      ],
+                      'clientOptions' => [
+                          'options' => [
+                              'title'=>[
+                                  'display' => true,
+                              ],
+                              'tooltips'=>[
+                                  'mode'=> 'label'
+                              ],
+                              'responsive'=> true,
+                          ],
+                          'legend' => [
+                              'display' => true,
+                              'position' => 'bottom',
+                              'labels' => [
+                                  'fontSize' => 14,
+                                  'fontColor' => "#425062",
+                              ]
+                          ],
+                          'maintainAspectRatio' => true,
+                      ],
+                      ]);
+                  ?>
 
               </div>
             </div>
