@@ -207,7 +207,7 @@ class LoteController extends Controller
         else {
             array_push($data_time, ['type'=>'bar', 'label' => 'Excess Time '.$real_time,'data' => [$excess_time], 'borderColor' => 'rgba('.$color3.')', 'backgroundColor' => 'rgba('.$color3.')']);
         }
-        
+
         $data_error = [];
         $label_error = [];
         $label_color = [];
@@ -398,8 +398,16 @@ class LoteController extends Controller
 
         // print_r($dataProvider);
 
-
         if (Yii::$app->request->post()) {
+
+            if (Yii::$app->request->post("radioButtonSelection") == null){
+                UiHelper::alert('<i class="icon fa fa-desktop"></i> Select a machine', UiHelper::DANGER);
+                return $this->render('assign', [
+                    'dataProvider' => $dataProvider,
+                    'machine' => $machines,
+                    'lote' => $lote
+                ]);
+            }
 
             $questions = $this->existQuestions($id);
 
@@ -409,7 +417,6 @@ class LoteController extends Controller
                     'maquina' => Yii::$app->request->post("radioButtonSelection"),
                     'questions' => $questions,
                 ]);
-
             } else {
                 $lote->maquina_id = Yii::$app->request->post("radioButtonSelection");
                 $lote->estado = 'Activo';
